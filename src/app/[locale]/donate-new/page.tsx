@@ -1,0 +1,233 @@
+'use client';
+
+import { useState } from 'react';
+import { useTranslations, useLocale } from 'next-intl';
+import { motion } from 'framer-motion';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Heart, CreditCard, CheckCircle2, UserX } from 'lucide-react';
+import { Switch } from '@/components/ui/switch';
+import Image from 'next/image';
+
+const donationAmounts = [50000, 100000, 250000, 500000, 1000000];
+
+export default function DonateNewPage() {
+  const t = useTranslations('donate');
+  const locale = useLocale();
+  const isRtl = locale === 'fa';
+
+  const [selectedAmount, setSelectedAmount] = useState<number | null>(100000);
+  const [customAmount, setCustomAmount] = useState('');
+  const [donorName, setDonorName] = useState('');
+  const [donorEmail, setDonorEmail] = useState('');
+  const [donorPhone, setDonorPhone] = useState('');
+  const [isAnonymous, setIsAnonymous] = useState(false);
+
+  const formatCurrency = (amount: number) => {
+    return new Intl.NumberFormat(locale === 'fa' ? 'fa-IR' : 'en-US').format(amount);
+  };
+
+  const handleAmountSelect = (amount: number) => {
+    setSelectedAmount(amount);
+    setCustomAmount('');
+  };
+
+  const handleCustomAmountChange = (value: string) => {
+    setCustomAmount(value);
+    setSelectedAmount(null);
+  };
+
+  const getFinalAmount = () => {
+    if (customAmount) return parseInt(customAmount) || 0;
+    return selectedAmount || 0;
+  };
+
+  return (
+    <div className={`min-h-screen flex ${isRtl ? 'flex-row-reverse' : 'flex-row'}`}>
+      {/* Left Side - Form */}
+      <div className="w-full lg:w-1/2 min-h-screen flex items-center justify-center bg-gradient-to-b from-orange-50 to-white p-8 lg:p-16">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="w-full max-w-xl relative"
+        >
+          {/* Decorative Frame */}
+          <div className="absolute -inset-4 sm:-inset-8 border border-neutral-200 pointer-events-none" />
+          
+          {/* Corner Marks */}
+          <div className="absolute -top-4 -left-4 sm:-top-8 sm:-left-8 w-3 h-3 border-t-2 border-l-2 border-neutral-300 pointer-events-none" />
+          <div className="absolute -top-4 -right-4 sm:-top-8 sm:-right-8 w-3 h-3 border-t-2 border-r-2 border-neutral-300 pointer-events-none" />
+          <div className="absolute -bottom-4 -right-4 sm:-bottom-8 sm:-right-8 w-3 h-3 border-b-2 border-r-2 border-neutral-300 pointer-events-none" />
+          <div className="absolute -bottom-4 -left-4 sm:-bottom-8 sm:-left-8 w-3 h-3 border-b-2 border-l-2 border-neutral-300 pointer-events-none" />
+
+          <div className="space-y-10">
+            {/* Logo & Header */}
+          <div className="text-center space-y-4">
+            <div className="flex justify-center">
+              <div className="w-20 h-20 bg-gradient-to-br from-[#FF6B35] to-[#FF8F65] rounded-2xl flex items-center justify-center shadow-lg">
+                <Heart className="w-10 h-10 text-white" fill="white" />
+              </div>
+            </div>
+            <div>
+              <h1 className="text-4xl font-bold text-gray-900">
+                {locale === 'fa' ? 'کمک به کانون هموفیلی' : 'Support Hemophilia Society'}
+              </h1>
+              <p className="text-gray-500 mt-3 text-lg">
+                {locale === 'fa' 
+                  ? 'با کمک شما، زندگی بیماران را تغییر می‌دهیم'
+                  : 'Your donation changes lives'}
+              </p>
+            </div>
+          </div>
+
+          {/* Amount Selection */}
+          <div className="space-y-3">
+            <Label className="text-gray-700 font-medium">
+              {locale === 'fa' ? 'مبلغ کمک (تومان)' : 'Donation Amount'}
+            </Label>
+            <div className="grid grid-cols-3 gap-3">
+              {donationAmounts.map((amount) => (
+                <button
+                  key={amount}
+                  onClick={() => handleAmountSelect(amount)}
+                  className={`py-3 px-4 rounded-xl text-sm font-medium transition-all border-2 ${
+                    selectedAmount === amount
+                      ? 'border-[#FF6B35] bg-orange-50 text-[#FF6B35]'
+                      : 'border-gray-200 hover:border-gray-300 text-gray-700'
+                  }`}
+                >
+                  {formatCurrency(amount)}
+                </button>
+              ))}
+              <div className="col-span-3">
+                <Input
+                  type="number"
+                  placeholder={locale === 'fa' ? 'مبلغ دلخواه...' : 'Custom amount...'}
+                  value={customAmount}
+                  onChange={(e) => handleCustomAmountChange(e.target.value)}
+                  className="h-14 text-center text-lg border-2 border-gray-200 focus:border-[#FF6B35] rounded-xl"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Anonymous Donation Toggle */}
+          <div className="flex items-center justify-between p-4 bg-gray-50 rounded-xl border-2 border-gray-100">
+            <div className="flex items-center gap-3">
+              <div className={`p-2 rounded-lg ${isAnonymous ? 'bg-[#FF6B35]/10' : 'bg-gray-200'}`}>
+                <UserX className={`w-5 h-5 ${isAnonymous ? 'text-[#FF6B35]' : 'text-gray-500'}`} />
+              </div>
+              <div>
+                <p className="font-medium text-gray-900">
+                  {locale === 'fa' ? 'کمک ناشناس' : 'Anonymous Donation'}
+                </p>
+                <p className="text-sm text-gray-500">
+                  {locale === 'fa' ? 'اطلاعات شما نمایش داده نمی‌شود' : 'Your info will be hidden'}
+                </p>
+              </div>
+            </div>
+            <Switch
+              checked={isAnonymous}
+              onCheckedChange={setIsAnonymous}
+              className="data-[state=checked]:bg-[#FF6B35]"
+            />
+          </div>
+
+          {/* Donor Info - Hidden when anonymous */}
+          {!isAnonymous && (
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Label className="text-gray-700 font-medium">
+                  {locale === 'fa' ? 'نام و نام خانوادگی' : 'Full Name'}
+                </Label>
+                <Input
+                  type="text"
+                  placeholder={locale === 'fa' ? 'نام شما...' : 'Your name...'}
+                  value={donorName}
+                  onChange={(e) => setDonorName(e.target.value)}
+                  className="h-12 border-2 border-gray-200 focus:border-[#FF6B35] rounded-xl"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label className="text-gray-700 font-medium">
+                  {locale === 'fa' ? 'شماره تماس' : 'Phone Number'}
+                </Label>
+                <Input
+                  type="tel"
+                  placeholder={locale === 'fa' ? '09123456789' : '+1234567890'}
+                  value={donorPhone}
+                  onChange={(e) => setDonorPhone(e.target.value)}
+                  className="h-12 border-2 border-gray-200 focus:border-[#FF6B35] rounded-xl"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label className="text-gray-700 font-medium">
+                  {locale === 'fa' ? 'ایمیل (اختیاری)' : 'Email (optional)'}
+                </Label>
+                <Input
+                  type="email"
+                  placeholder={locale === 'fa' ? 'email@example.com' : 'email@example.com'}
+                  value={donorEmail}
+                  onChange={(e) => setDonorEmail(e.target.value)}
+                  className="h-12 border-2 border-gray-200 focus:border-[#FF6B35] rounded-xl"
+                />
+              </div>
+            </div>
+          )}
+
+          {/* Submit Button */}
+          <Button
+            className="w-full h-16 text-xl font-semibold bg-gradient-to-r from-[#FF6B35] to-[#FF8F65] hover:from-[#E55A2B] hover:to-[#FF6B35] rounded-xl shadow-lg shadow-orange-200"
+            disabled={getFinalAmount() === 0}
+          >
+            <CreditCard className="w-5 h-5 ml-2" />
+            {locale === 'fa' 
+              ? `پرداخت ${formatCurrency(getFinalAmount())} تومان`
+              : `Donate ${formatCurrency(getFinalAmount())}`
+            }
+          </Button>
+
+          {/* Trust Badges */}
+          <div className="flex items-center justify-center gap-6 pt-4 text-gray-400 text-sm">
+            <div className="flex items-center gap-1">
+              <CheckCircle2 className="w-4 h-4" />
+              <span>{locale === 'fa' ? 'پرداخت امن' : 'Secure'}</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <CheckCircle2 className="w-4 h-4" />
+              <span>{locale === 'fa' ? 'رسید آنلاین' : 'Receipt'}</span>
+            </div>
+          </div>
+          </div>
+        </motion.div>
+      </div>
+
+      {/* Right Side - Image */}
+      <div className="hidden lg:block w-1/2 relative">
+        <Image
+          src="/images/donate-hero.png"
+          alt="Donation"
+          fill
+          className="object-cover"
+          priority
+        />
+        {/* Liquid Glass Quote Card */}
+        <div className="absolute bottom-12 right-12 flex justify-end">
+          <div className="backdrop-blur-xl bg-white/10 border border-white/20 rounded-2xl p-6 shadow-2xl max-w-md">
+            <p className="text-xl font-light text-white leading-relaxed mb-3 text-right">
+              {locale === 'fa' 
+                ? '"کمک شما، امید را در دل بیماران زنده نگه می‌دارد"'
+                : '"Your support keeps hope alive in patients\' hearts"'
+              }
+            </p>
+            <p className="text-white/70 text-sm text-right">
+              {locale === 'fa' ? '— کانون هموفیلی بیرجند' : '— Hemophilia Society'}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

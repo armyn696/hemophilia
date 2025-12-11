@@ -1,0 +1,272 @@
+{
+  "nav": {
+    "home": "Home",
+    "about": "About Us",
+    "services": "Services",
+    "education": "Education",
+    "support": "Support",
+    "news": "News",
+    "gallery": "Gallery",
+    "contact": "Contact",
+    "donate": "Donate"
+  },
+  "hero": {
+    "badge": "Hope & Support",
+    "title": "Your Support is Really Powerful",
+    "subtitle": "Providing Hope And Help During Challenging Times",
+    "description": "Together we can make a real difference in the lives of hemophilia patients and their families through compassion and care.",
+    "cta_donate": "Donate Now",
+    "cta_learn_more": "Learn More",
+    "cta_need_help": "Get Support",
+    "scroll_down": "Scroll Down"
+  },
+  "whatwedo": {
+    "badge": "What We Do",
+    "title": "Providing Hope And Help During Challenging Times",
+    "learn_more": "Learn More",
+    "services": {
+      "patient_care": {
+        "title": "Patient Registration",
+        "description": "Register and manage patient information for comprehensive care."
+      },
+      "medical": {
+        "title": "Medical Support",
+        "description": "Providing medications and specialized medical services."
+      },
+      "education": {
+        "title": "Education",
+        "description": "Educational workshops for patients and families."
+      },
+      "support": {
+        "title": "Support Services",
+        "description": "Psychological and social counseling for patients."
+      }
+    },
+    "donation": {
+      "title": "Make a Donation",
+      "description": "Contribute today to help fund treatments, research, and essential services for those battling hemophilia.",
+      "payment_options": "Payment Options"
+    },
+    "support_old": {
+      "title": "Get Support",
+      "description": "Access vital resources, financial aid, and counseling for hemophilia patients and their families in their time of need.",
+      "financial_aid": "Financial Aid",
+      "therapy": "Therapy"
+    },
+    "volunteer": {
+      "title": "Become a Volunteer",
+      "description": "Join our team of volunteers to support hemophilia patients, assist with community outreach, and make a positive impact.",
+      "join_team": "Join Our Team"
+    }
+  },
+  "about": {
+    "badge": "About Us",
+    "title": "Every Patient Deserves a Better Future!",
+    "description": "The Birjand Hemophilia Society has been working since 1967 to improve the quality of life for hemophilia patients and their families through medical, educational, and support services.",
+    "mission": "We provide comprehensive care including medications, counseling, and educational programs to ensure patients live healthy and fulfilling lives.",
+    "cta": "More About Us",
+    "mission_old": "Our Mission",
+    "mission_text": "Improving the quality of life for hemophilia patients through pharmaceutical, medical, social, educational, and preventive support",
+    "vision": "Our Vision",
+    "vision_text": "A society where all hemophilia patients have access to quality medical services and necessary support"
+  },
+  "services": {
+    "title": "Our Services",
+    "medical": "Medical Services",
+    "medical_desc": "Providing anti-hemophilia medications and specialized medical services",
+    "education": "Education",
+    "education_desc": "Organizing educational classes and workshops for patients and families",
+    "support": "Social Support",
+    "support_desc": "Psychological and social counseling and support for patients",
+    "prevention": "Prevention",
+    "prevention_desc": "Screening programs and genetic counseling"
+  },
+  "stats": {
+    "badge": "Our Impact",
+    "title": "How We Support Hemophilia Patients",
+    "description": "We have been providing comprehensive care and support to hemophilia patients in Birjand region for over 50 years, ensuring access to medications, education, and counseling services.",
+    "people_helped": "People Received Help",
+    "events_organized": "Events Organized",
+    "donations_raised": "Raised in Donations",
+    "patients": "Patients",
+    "years": "Years of Activity",
+    "volunteers": "Active Volunteers",
+    "provinces": "Provinces"
+  },
+  "programs": {
+    "badge": "Support Our Programs",
+    "title": "They Need Helping",
+    "program1": {
+      "badge": "HEALTH",
+      "title": "Medical Treatment Support",
+      "description": "Providing essential medications and medical supplies for hemophilia patients."
+    },
+    "program2": {
+      "badge": "HEALTH",
+      "title": "Patient Education Programs",
+      "description": "Educational workshops and training sessions for patients and families."
+    },
+    "program3": {
+      "badge": "HEALTH",
+      "title": "Psychological Support Services",
+      "description": "Counseling and mental health support for patients and their families."
+    }
+  },
+  "donate": {
+    "badge": "Donation",
+    "title_new": "Building a Better Future",
+    "title": "Choose amount",
+    "one_time": "One-Time Donation",
+    "monthly": "Monthly Support",
+    "custom_amount": "Custom Amount",
+    "currency": "USD",
+    "donate_anonymously": "Donate Anonymously",
+    "full_name": "Full Name",
+    "agree_terms": "I Agree To The Terms",
+    "donate_button": "Donate",
+    "qr_code": "Use QR Code",
+    "payment_trouble": "Trouble with payment?"
+  },
+  "news": {
+    "badge": "News & Updates",
+    "title": "Latest News",
+    "page_title": "News & Updates",
+    "page_description": "Stay informed about the latest news, events, and updates from Birjand Hemophilia Society",
+    "view_all": "View All News",
+    "read_more": "Read More",
+    "admin": "Admin",
+    "search_placeholder": "Search news...",
+    "no_results": "No news found matching your criteria.",
+    "category": {
+      "all": "All",
+      "events": "Events",
+      "medical": "Medical",
+      "education": "Education",
+      "research": "Research"
+    },
+    "item1": {
+      "title": "World Hemophilia Day Celebration 2024",
+      "excerpt": "Join us in celebrating World Hemophilia Day with special events and activities for patients and families.",
+      "content": "We are thrilled to announce our upcoming World Hemophilia Day celebration! This year, our focus is on 'Equitable Access for All', emphasizing the importance of ensuring that every person with a bleeding disorder has access to proper care and treatment.\n\nThe event will feature a series of engaging activities, including:\n- Educational seminars led by top hematologists\n- Interactive workshops for children and parents\n- A community walk to raise awareness\n- Storytelling sessions where patients share their inspiring journeys\n\nJoin us on April 17th at the Main Conference Hall. Together, we can build a stronger, more supportive community. Your presence matters!"
+    },
+    "item2": {
+      "title": "New Treatment Program Launched",
+      "excerpt": "We are excited to announce a new comprehensive treatment program for hemophilia patients across all provinces.",
+      "content": "The Birjand Hemophilia Society is proud to launch a groundbreaking treatment program designed to improve the quality of life for patients nationwide. This initiative aims to bridge the gap in medical services between major cities and remote provinces.\n\nKey features of the program include:\n- Mobile clinics visiting underserved areas\n- Subsidized access to the latest clotting factor concentrates\n- Telemedicine consultations for patients in rural regions\n- Specialized training for local healthcare providers\n\nThis program represents a significant milestone in our mission to provide comprehensive care. We are committed to ensuring that no patient is left behind due to geographical or financial barriers."
+    },
+    "item3": {
+      "title": "Educational Workshop for Families",
+      "excerpt": "Learn about hemophilia management and care techniques in our upcoming educational workshop series.",
+      "content": "Empowering families is at the heart of what we do. We are organizing a series of educational workshops specifically designed for parents and caregivers of children with hemophilia.\n\nThese workshops will cover essential topics such as:\n- Home infusion techniques and safety\n- Managing bleeds and emergencies\n- Psychological support and coping strategies\n- Nutrition and physical therapy\n\nExpert nurses and counselors will be available to answer your questions and provide hands-on training. Don't miss this opportunity to gain valuable knowledge and connect with other families facing similar challenges."
+    },
+    "item4": {
+      "title": "Breakthrough in Hemophilia Research",
+      "excerpt": "Recent research shows promising results in new treatment methods for hemophilia patients.",
+      "content": "A recent study published in the Journal of Hematology has unveiled promising new developments in hemophilia gene therapy. The research, which included participants from our own registry, indicates that a single treatment could potentially provide long-term protection against bleeding episodes.\n\nThis breakthrough offers hope for a functional cure, reducing the need for frequent factor replacement therapy. While further trials are needed, these initial results are a beacon of hope for the entire community.\n\nWe will continue to monitor these developments closely and advocate for the accessibility of these cutting-edge treatments as they become available."
+    },
+    "item5": {
+      "title": "Annual Patient Support Conference",
+      "excerpt": "Join us for our annual conference dedicated to supporting hemophilia patients and their families.",
+      "content": "Our Annual Patient Support Conference is back! This two-day event brings together patients, healthcare professionals, and advocates from across the country to discuss the latest advancements in care and share experiences.\n\nHighlights of the conference include:\n- Keynote speeches by renowned international experts\n- Panel discussions on patient rights and advocacy\n- Networking opportunities\n- An exhibition of the latest medical technologies\n\nThis is a unique platform to learn, share, and advocate for a better future. Registration is now open for all members."
+    },
+    "item6": {
+      "title": "Free Medical Checkup Campaign",
+      "excerpt": "Free medical checkups and consultations available for all registered hemophilia patients this month.",
+      "content": "As part of our ongoing commitment to preventative care, we are launching a 'Free Medical Checkup Month'. All registered members of the society are invited to visit our designated centers for a comprehensive health assessment.\n\nThe checkup includes:\n- Joint health assessment\n- Inhibitor screening\n- Dental checkup\n- General physical examination\n\nEarly detection of issues can significantly improve long-term health outcomes. We encourage everyone to take advantage of this free service. Please contact your local center to book an appointment."
+    }
+  },
+  "contact": {
+    "title": "Contact Us",
+    "address": "Address",
+    "address_text": "Birjand, Motahhari St., Motahhari 3, No. 28",
+    "phone": "Phone",
+    "email": "Email",
+    "form_title": "Contact Form",
+    "name": "Full Name",
+    "email_label": "Email",
+    "message": "Message",
+    "send": "Send Message"
+  },
+  "footer": {
+    "description": "With over 50 years of experience, the Birjand Hemophilia Society stands alongside hemophilia patients and their families.",
+    "quick_links": "Quick Links",
+    "contact_info": "Contact Information",
+    "social": "Social Media",
+    "rights": "All rights reserved."
+  },
+  "timeline": {
+    "badge": "Our History",
+    "title": "Our Journey Through The Years",
+    "description": "Explore the milestones, events, and programs that have shaped our mission to support hemophilia patients in Birjand region over the years.",
+    "ongoing": {
+      "title": "Ongoing Activities",
+      "items": [
+        { "title": "Math Remedial Classes", "time": "Every Thursday Morning", "description": "Weekly math classes for hemophilia students in a friendly environment." },
+        { "title": "Hospital Visits", "time": "", "description": "Continuous visits to hospitalized patients to monitor treatment and needs." },
+        { "title": "Warm Meal Program", "time": "Mondays", "description": "Distribution of warm meals on 'Kindness Mondays' by Fatemiyeh Charity." }
+      ]
+    },
+    "may": {
+      "title": "May 2025",
+      "items": [
+         { "title": "Appreciation of Volunteer Teachers", "time": "May 1st", "description": "Ceremony to thank volunteer teachers cooperating with the society's educational programs." }
+      ]
+    },
+    "august": {
+       "title": "August 2025",
+       "items": [
+          { "title": "Family Walk 'Life Flows with Hope'", "time": "August 1st", "description": "Morning walk event in Tohid Park on the occasion of Hemophilia Support Week." },
+          { "title": "Workshop 'Understanding and Caring for Hemophilia'", "time": "", "description": "Specialized physiotherapy workshop and corrective exercises training for patients and families." },
+          { "title": "Workshop 'Public Speaking and Self-Confidence'", "time": "", "description": "Training course for mothers and children to boost self-confidence." },
+          { "title": "Online Contest 'Hemophilia Knowledge'", "time": "", "description": "Online competition with prizes aimed at increasing public awareness." }
+       ]
+    },
+    "september": {
+        "title": "September 2025",
+        "items": [
+            { "title": "Appreciation of Pharmacists", "time": "August 27th", "description": "Appreciating the efforts of Vali-e-Asr Hospital pharmacy staff on Pharmacist's Day." },
+            { "title": "Stationery Distribution", "time": "", "description": "Distribution of 110 stationery packages among students." }
+        ]
+    },
+    "october": {
+        "title": "October 2025",
+        "items": [
+            { "title": "Commemoration of the Society's Benefactor", "time": "", "description": "9th anniversary of the passing of Mrs. Sedigheh Bolandi." },
+            { "title": "Creativity and Sewing Classes", "time": "", "description": "Art and Tirco sewing workshops." }
+        ]
+    },
+    "november": {
+        "title": "November 2025",
+        "items": [
+            { "title": "Media Literacy Workshop", "time": "November 5th", "description": "Staff participation in a workshop aimed at improving media literacy." },
+            { "title": "Hemophilia Athletes Shine", "time": "", "description": "First place in darts and petanque by Mr. Mojtaba Haghpazir and Seyed Kazem Hosseinkia, and second place in petanque by Mr. Mohsen Haghpazir in national championships." },
+            { "title": "Appreciation of Nurses", "time": "", "description": "Honoring the compassionate nurses of the hemophilia clinic on Nurse's Day." },
+            { "title": "2nd Course of 'Mindfulness-Based Stress Reduction'", "time": "Nov & Dec", "description": "Weekly mindfulness-based stress reduction classes taught by Dr. Mostafaei." }
+        ]
+    },
+    "december": {
+        "title": "December 2025",
+        "items": [
+            { "title": "Heater Donation", "time": "", "description": "Donation of a heater by benefactors to a needy family." }
+        ]
+    },
+    "others": {
+        "title": "Other Achievements",
+        "items": [
+            { "title": "Academic Achievement", "time": "", "description": "Ranking 2nd in the Master's entrance exam in Geriatric Health by a society member." },
+            { "title": "Distribution of Kindness Packages", "time": "", "description": "Donation of meat, shoe vouchers, and food baskets to needy families." }
+        ]
+    }
+  },
+  "gallery": {
+    "title": "Photo Gallery",
+    "description": "Explore moments from our activities, events, and the inspiring journey of supporting hemophilia patients and their families."
+  },
+  "common": {
+    "read_more": "Read More",
+    "loading": "Loading...",
+    "error": "An error has occurred",
+    "back": "Back",
+    "next": "Next"
+  }
+}
