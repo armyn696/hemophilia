@@ -82,11 +82,7 @@ export function Footer() {
                 <Phone className="w-4 h-4 flex-shrink-0 text-[#FF6B35]" />
                 <span dir="ltr">056-32212999</span>
               </li>
-              <li className="flex items-center space-x-2 rtl:space-x-reverse text-sm text-gray-400">
-                <Mail className="w-4 h-4 flex-shrink-0 text-[#FF6B35]" />
-                <span>center.hemophilia@gmail.com</span>
-              </li>
-            </ul>
+                          </ul>
           </div>
         </div>
 
