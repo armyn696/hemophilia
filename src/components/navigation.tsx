@@ -112,13 +112,14 @@ export function Navigation() {
             {/* Language Switcher */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button 
-                  variant="ghost" 
+                <Button
+                  suppressHydrationWarning
+                  variant="ghost"
                   size="sm"
                   className={cn(
                     "h-9 px-2.5 rounded-md transition-all hover:scale-105 active:scale-95",
-                    showSolidNav 
-                      ? "bg-gray-100 hover:bg-gray-200 text-foreground" 
+                    showSolidNav
+                      ? "bg-gray-100 hover:bg-gray-200 text-foreground"
                       : "bg-white/10 hover:bg-white/20 text-white backdrop-blur-sm"
                   )}
                 >
@@ -128,8 +129,8 @@ export function Navigation() {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-32 p-1 rounded-xl shadow-lg border-none bg-white/95 backdrop-blur-sm dark:bg-neutral-900/95">
-                <DropdownMenuItem 
-                  onClick={() => switchLocale('fa')} 
+                <DropdownMenuItem
+                  onClick={() => switchLocale('fa')}
                   className={cn(
                     "rounded-lg cursor-pointer flex items-center justify-between px-3 py-2 text-sm font-medium transition-colors",
                     locale === 'fa' ? "bg-primary/10 text-primary" : "hover:bg-gray-100 dark:hover:bg-neutral-800"
@@ -138,8 +139,8 @@ export function Navigation() {
                   <span>فارسی</span>
                   {locale === 'fa' && <div className="w-1.5 h-1.5 rounded-full bg-primary" />}
                 </DropdownMenuItem>
-                <DropdownMenuItem 
-                  onClick={() => switchLocale('en')} 
+                <DropdownMenuItem
+                  onClick={() => switchLocale('en')}
                   className={cn(
                     "rounded-lg cursor-pointer flex items-center justify-between px-3 py-2 text-sm font-medium transition-colors",
                     locale === 'en' ? "bg-primary/10 text-primary" : "hover:bg-gray-100 dark:hover:bg-neutral-800"
@@ -153,11 +154,11 @@ export function Navigation() {
 
             {/* Donate Button */}
             <Link href={`/${locale}/donate`}>
-              <Button 
+              <Button
                 className={cn(
                   "hidden sm:inline-flex items-center gap-2 text-sm font-medium rounded-full px-6 py-2 h-10 transition-all",
-                  showSolidNav 
-                    ? "bg-primary text-primary-foreground hover:bg-primary/90" 
+                  showSolidNav
+                    ? "bg-primary text-primary-foreground hover:bg-primary/90"
                     : "bg-white text-black hover:bg-white/90"
                 )}
               >
@@ -169,8 +170,9 @@ export function Navigation() {
             {/* Mobile Menu */}
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
               <SheetTrigger asChild>
-                <Button 
-                  variant="ghost" 
+                <Button
+                  suppressHydrationWarning
+                  variant="ghost"
                   size="icon"
                   className={cn(
                     "lg:hidden h-9 w-9",
@@ -180,7 +182,7 @@ export function Navigation() {
                   <Menu className="h-5 w-5" />
                 </Button>
               </SheetTrigger>
-              <SheetContent 
+              <SheetContent
                 side={locale === 'fa' ? 'right' : 'left'}
                 className="w-[300px] sm:w-[350px] p-0 bg-white dark:bg-neutral-900"
               >
@@ -214,8 +216,8 @@ export function Navigation() {
                           onClick={() => setIsOpen(false)}
                           className={cn(
                             "flex items-center gap-4 px-4 py-3.5 rounded-xl mb-1 transition-all",
-                            isActive 
-                              ? "bg-primary/10 text-primary font-semibold" 
+                            isActive
+                              ? "bg-primary/10 text-primary font-semibold"
                               : "text-foreground/80 hover:bg-gray-100 dark:hover:bg-neutral-800 hover:text-foreground"
                           )}
                         >

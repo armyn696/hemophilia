@@ -24,7 +24,7 @@ export default function NewsPreviewSection() {
   const locale = useLocale();
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, amount: 0.2 });
-  
+
   const [newsItems, setNewsItems] = useState<NewsItem[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -44,50 +44,90 @@ export default function NewsPreviewSection() {
     fetchNews();
   }, []);
 
-  // Duplicate items for infinite scroll
-  const duplicatedItems = newsItems.length >= 1 ? [...newsItems, ...newsItems] : newsItems;
-  
   // Card dimensions
   const cardWidth = 350;
   const cardGap = 32;
   const cardTotalWidth = cardWidth + cardGap;
+
+  // Calculate how many times to duplicate to ensure seamless infinite scroll
+  // For LTR mode we start in the middle, so we need MORE items to cover both directions
+  // Need enough items to cover viewport * 3 (left buffer + visible + right buffer)
+  const viewportBuffer = 4000; // pixels for one direction
+  const minItemsNeeded = Math.ceil((viewportBuffer * 3) / cardTotalWidth);
+  const duplicateCount = newsItems.length > 0 ? Math.max(10, Math.ceil(minItemsNeeded / newsItems.length)) : 0;
+
+  // Duplicate items for infinite scroll
+  const duplicatedItems = newsItems.length >= 1
+    ? Array(duplicateCount).fill(newsItems).flat()
+    : newsItems;
+
+  // Total width of all duplicated items
+  const totalDuplicatedWidth = cardTotalWidth * duplicatedItems.length;
+
+  // Single set width is calculated from original items
   const singleSetWidth = cardTotalWidth * newsItems.length;
-  
+
   // Motion values
   const x = useMotionValue(0);
   const [isDragging, setIsDragging] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const baseTimeRef = useRef(0);
   const baseXRef = useRef(0);
-  
+  const [isInitialized, setIsInitialized] = useState(false);
+
+  // Initialize position - always start from 0
+  useEffect(() => {
+    if (newsItems.length > 0 && singleSetWidth > 0 && !isInitialized) {
+      const isRtl = locale === 'fa';
+      console.log('[NEWS INIT]', {
+        locale,
+        isRtl,
+        singleSetWidth,
+        totalDuplicatedWidth,
+        newsItemsCount: newsItems.length,
+        duplicatedCount: duplicatedItems.length
+      });
+      x.set(0);
+      baseXRef.current = 0;
+      baseTimeRef.current = performance.now();
+      setIsInitialized(true);
+    }
+  }, [newsItems.length, singleSetWidth, locale, isInitialized, x, duplicatedItems.length, totalDuplicatedWidth]);
+
   // Auto-scroll animation
   useAnimationFrame((time) => {
-    if (isDragging || newsItems.length === 0 || singleSetWidth === 0) return;
-    
+    if (isDragging || newsItems.length === 0 || singleSetWidth === 0 || !isInitialized) return;
+
     const isRtl = locale === 'fa';
-    
+
     // Speed: 40 pixels per second
     const speed = 40 / 1000;
-    
+
     // Calculate elapsed time
     const elapsedTime = time - baseTimeRef.current;
     const scrollOffset = elapsedTime * speed;
-    
+
     // Calculate new position (always move left for LTR, right for RTL)
-    let newX = isRtl 
-      ? baseXRef.current + scrollOffset 
+    let newX = isRtl
+      ? baseXRef.current + scrollOffset
       : baseXRef.current - scrollOffset;
-    
-    // Wrap around - reset when we've scrolled one full set
-    if (!isRtl && newX <= -singleSetWidth) {
-      newX += singleSetWidth;
-      baseXRef.current += singleSetWidth;
+
+    // Simple wrap around logic - both directions wrap using singleSetWidth
+    // When we've scrolled one full set, reset back
+    if (!isRtl) {
+      // LTR: Moving left (negative) - wrap when we reach -singleSetWidth
+      while (newX <= -singleSetWidth) {
+        newX += singleSetWidth;
+        baseXRef.current += singleSetWidth;
+      }
+    } else {
+      // RTL: Moving right (positive) - wrap when we reach singleSetWidth
+      while (newX >= singleSetWidth) {
+        newX -= singleSetWidth;
+        baseXRef.current -= singleSetWidth;
+      }
     }
-    if (isRtl && newX >= singleSetWidth) {
-      newX -= singleSetWidth;
-      baseXRef.current -= singleSetWidth;
-    }
-    
+
     x.set(newX);
   });
 
@@ -119,7 +159,7 @@ export default function NewsPreviewSection() {
   }
 
   return (
-    <section 
+    <section
       ref={ref}
       className="relative pt-10 pb-20 bg-white overflow-hidden"
     >
@@ -151,78 +191,90 @@ export default function NewsPreviewSection() {
           onDragStart={() => setIsDragging(true)}
           onDragEnd={() => {
             setIsDragging(false);
-            
+
+            const isRtl = locale === 'fa';
+
             // Update refs to continue from current position
             baseTimeRef.current = performance.now();
             baseXRef.current = x.get();
-            
-            // Wrap around after manual drag
-            if (baseXRef.current < -singleSetWidth) {
-              baseXRef.current += singleSetWidth;
-              x.set(baseXRef.current);
+
+            // Wrap around after manual drag based on direction
+            if (!isRtl) {
+              // LTR: Wrap using singleSetWidth
+              while (baseXRef.current <= -singleSetWidth) {
+                baseXRef.current += singleSetWidth;
+              }
+              while (baseXRef.current > 0) {
+                baseXRef.current -= singleSetWidth;
+              }
+            } else {
+              // RTL: Wrap using singleSetWidth
+              while (baseXRef.current >= singleSetWidth) {
+                baseXRef.current -= singleSetWidth;
+              }
+              while (baseXRef.current < 0) {
+                baseXRef.current += singleSetWidth;
+              }
             }
-            if (baseXRef.current > singleSetWidth) {
-              baseXRef.current -= singleSetWidth;
-              x.set(baseXRef.current);
-            }
+            x.set(baseXRef.current);
           }}
         >
           {duplicatedItems.map((news: NewsItem, index: number) => (
-            <div 
-              key={`news-${index}`} 
+            <div
+              key={`news-${index}`}
               className="flex-shrink-0 w-[350px]"
             >
-              <Link 
+              <Link
                 href={`/${locale}/news/${news.id}`}
                 className={isDragging ? 'pointer-events-none' : ''}
               >
-              <div className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 group cursor-pointer h-full flex flex-col">
-                {/* Image */}
-                <div className="relative h-56 overflow-hidden">
-                  <Image
-                    src={news.image}
-                    alt={news.title}
-                    fill
-                    className="object-cover group-hover:scale-110 transition-transform duration-500"
-                  />
-                </div>
+                <div className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 group cursor-pointer h-full flex flex-col">
+                  {/* Image */}
+                  <div className="relative h-56 overflow-hidden">
+                    <Image
+                      src={news.image}
+                      alt={news.title}
+                      fill
+                      className="object-cover group-hover:scale-110 transition-transform duration-500"
+                    />
+                  </div>
 
-                {/* Content */}
-                <div className="p-6 flex-1 flex flex-col">
-                  {/* Category & Meta */}
-                  <div className="flex items-center justify-between mb-4">
-                    <span className="bg-[#A91D3A]/10 text-[#A91D3A] text-xs font-bold px-3 py-1 rounded-full">
-                      {news.category}
-                    </span>
-                    <div className="flex items-center gap-4 text-xs text-gray-500">
-                      <div className="flex items-center gap-1">
-                        <Calendar className="w-3 h-3" />
-                        <span>{formatDate(news.date)}</span>
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <User className="w-3 h-3" />
-                        <span>{news.author}</span>
+                  {/* Content */}
+                  <div className="p-6 flex-1 flex flex-col">
+                    {/* Category & Meta */}
+                    <div className="flex items-center justify-between mb-4">
+                      <span className="bg-[#A91D3A]/10 text-[#A91D3A] text-xs font-bold px-3 py-1 rounded-full">
+                        {news.category}
+                      </span>
+                      <div className="flex items-center gap-4 text-xs text-gray-500">
+                        <div className="flex items-center gap-1">
+                          <Calendar className="w-3 h-3" />
+                          <span>{formatDate(news.date)}</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <User className="w-3 h-3" />
+                          <span>{news.author}</span>
+                        </div>
                       </div>
                     </div>
-                  </div>
 
-                  {/* Title */}
-                  <h3 className="text-xl font-bold text-[#2C3E50] mb-3 group-hover:text-[#A91D3A] transition-colors line-clamp-2">
-                    {news.title}
-                  </h3>
+                    {/* Title */}
+                    <h3 className="text-xl font-bold text-[#2C3E50] mb-3 group-hover:text-[#A91D3A] transition-colors line-clamp-2">
+                      {news.title}
+                    </h3>
 
-                  {/* Excerpt */}
-                  <p className="text-gray-600 text-sm leading-relaxed mb-4 flex-1 line-clamp-3">
-                    {news.excerpt}
-                  </p>
+                    {/* Excerpt */}
+                    <p className="text-gray-600 text-sm leading-relaxed mb-4 flex-1 line-clamp-3">
+                      {news.excerpt}
+                    </p>
 
-                  {/* Read More */}
-                  <div className="flex items-center gap-2 text-[#A91D3A] font-semibold text-sm group-hover:gap-4 transition-all">
-                    <span>{t('read_more', { defaultValue: 'Read More' })}</span>
-                    {locale === 'fa' ? <ArrowLeft className="w-4 h-4" /> : <ArrowRight className="w-4 h-4" />}
+                    {/* Read More */}
+                    <div className="flex items-center gap-2 text-[#A91D3A] font-semibold text-sm group-hover:gap-4 transition-all">
+                      <span>{t('read_more', { defaultValue: 'Read More' })}</span>
+                      {locale === 'fa' ? <ArrowLeft className="w-4 h-4" /> : <ArrowRight className="w-4 h-4" />}
+                    </div>
                   </div>
                 </div>
-              </div>
               </Link>
             </div>
           ))}
