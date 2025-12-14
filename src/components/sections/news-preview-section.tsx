@@ -27,15 +27,23 @@ export default function NewsPreviewSection() {
 
   const [newsItems, setNewsItems] = useState<NewsItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchNews = async () => {
       try {
+        console.log('[NEWS FETCH] Starting fetch...');
         const res = await fetch('/api/news');
+        console.log('[NEWS FETCH] Response status:', res.status);
+        if (!res.ok) {
+          throw new Error(`HTTP error! status: ${res.status}`);
+        }
         const data = await res.json();
+        console.log('[NEWS FETCH] Data received:', data.length, 'items');
         setNewsItems(data);
       } catch (error) {
-        console.error('Failed to fetch news:', error);
+        console.error('[NEWS FETCH] Failed:', error);
+        setError(error instanceof Error ? error.message : 'Unknown error');
       } finally {
         setLoading(false);
       }
@@ -154,7 +162,14 @@ export default function NewsPreviewSection() {
     );
   }
 
+  // Debug: Show error if fetch failed
+  if (error) {
+    console.error('[NEWS ERROR]', error);
+    return null; // Silently fail in production, but log the error
+  }
+
   if (newsItems.length === 0) {
+    console.log('[NEWS] No items to display');
     return null; // Don't show section if no news
   }
 
