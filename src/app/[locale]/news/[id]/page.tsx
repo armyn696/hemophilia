@@ -108,7 +108,7 @@ export default function NewsDetailPage() {
           {/* Back Button */}
           <div className="mb-8">
             <Link href={`/${locale}/news`}>
-              <Button variant="ghost" className="group hover:text-[#FF6B35] hover:bg-orange-50 dark:hover:bg-neutral-900">
+              <Button variant="ghost" className="group hover:text-[#A91D3A] hover:bg-red-50 dark:hover:bg-neutral-900">
                 {isRtl ? <ArrowRight className="w-4 h-4 ml-2" /> : <ArrowLeft className="w-4 h-4 mr-2" />}
                 {isRtl ? 'بازگشت به اخبار' : 'Back to News'}
               </Button>
@@ -118,7 +118,7 @@ export default function NewsDetailPage() {
           {/* Article Header */}
           <div className="mb-8 text-center md:text-start">
             <div className="flex flex-wrap gap-4 items-center justify-center md:justify-start text-sm text-gray-500 mb-4">
-              <span className="bg-orange-100 text-[#FF6B35] px-3 py-1 rounded-full font-medium">
+              <span className="bg-red-100 text-[#A91D3A] px-3 py-1 rounded-full font-medium">
                 {newsItem.category}
               </span>
               <div className="flex items-center gap-1">
@@ -151,7 +151,7 @@ export default function NewsDetailPage() {
 
           {/* Content */}
           <article 
-            className="prose prose-lg dark:prose-invert max-w-none prose-headings:text-[#2C3E50] prose-a:text-[#FF6B35] prose-a:no-underline hover:prose-a:underline prose-img:rounded-xl prose-img:shadow-lg prose-blockquote:border-[#FF6B35] prose-blockquote:bg-orange-50 prose-blockquote:py-2 prose-blockquote:px-4 prose-blockquote:rounded-r-lg"
+            className="prose prose-lg dark:prose-invert max-w-none prose-headings:text-[#2C3E50] prose-a:text-[#A91D3A] prose-a:no-underline hover:prose-a:underline prose-img:rounded-xl prose-img:shadow-lg prose-blockquote:border-[#A91D3A] prose-blockquote:bg-red-50 prose-blockquote:py-2 prose-blockquote:px-4 prose-blockquote:rounded-r-lg"
             dangerouslySetInnerHTML={{ __html: newsItem.content }}
           />
 

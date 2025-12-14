@@ -25,7 +25,7 @@ export default function ContactPage() {
             <motion.span 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="inline-block text-[#FF6B35] font-bold text-sm md:text-base uppercase tracking-wider mb-3"
+              className="inline-block text-[#A91D3A] font-bold text-sm md:text-base uppercase tracking-wider mb-3"
             >
               {t('title')}
             </motion.span>
@@ -67,7 +67,7 @@ export default function ContactPage() {
                   <Input 
                     id="name" 
                     placeholder={isRtl ? "نام کامل خود را وارد کنید" : "Your full name"}
-                    className="h-14 rounded-xl bg-neutral-50 border-neutral-200 focus:border-[#FF6B35] focus:ring-[#FF6B35] transition-all" 
+                    className="h-14 rounded-xl bg-neutral-50 border-neutral-200 focus:border-[#A91D3A] focus:ring-[#A91D3A] transition-all" 
                   />
                 </div>
 
@@ -79,7 +79,7 @@ export default function ContactPage() {
                     id="email" 
                     type="email" 
                     placeholder={isRtl ? "ما به شما پاسخ خواهیم داد" : "We'll get back to you here"}
-                    className="h-14 rounded-xl bg-neutral-50 border-neutral-200 focus:border-[#FF6B35] focus:ring-[#FF6B35] transition-all" 
+                    className="h-14 rounded-xl bg-neutral-50 border-neutral-200 focus:border-[#A91D3A] focus:ring-[#A91D3A] transition-all" 
                   />
                 </div>
 
@@ -90,7 +90,7 @@ export default function ContactPage() {
                   <Input 
                     id="company" 
                     placeholder={isRtl ? "نماینده کدام مجموعه هستید؟" : "Let us know who you represent"}
-                    className="h-14 rounded-xl bg-neutral-50 border-neutral-200 focus:border-[#FF6B35] focus:ring-[#FF6B35] transition-all" 
+                    className="h-14 rounded-xl bg-neutral-50 border-neutral-200 focus:border-[#A91D3A] focus:ring-[#A91D3A] transition-all" 
                   />
                 </div>
 
@@ -101,7 +101,7 @@ export default function ContactPage() {
                   <Input 
                     id="subject" 
                     placeholder={isRtl ? "موضوع پیام چیست؟" : "What's this about?"}
-                    className="h-14 rounded-xl bg-neutral-50 border-neutral-200 focus:border-[#FF6B35] focus:ring-[#FF6B35] transition-all" 
+                    className="h-14 rounded-xl bg-neutral-50 border-neutral-200 focus:border-[#A91D3A] focus:ring-[#A91D3A] transition-all" 
                   />
                 </div>
 
@@ -112,14 +112,14 @@ export default function ContactPage() {
                   <textarea 
                     id="message" 
                     rows={4}
-                    className="w-full rounded-xl border border-neutral-200 bg-neutral-50 px-4 py-3 text-sm ring-offset-white placeholder:text-neutral-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF6B35] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-neutral-800 dark:bg-neutral-950 dark:ring-offset-neutral-950 dark:placeholder:text-neutral-400 dark:focus-visible:ring-neutral-300 transition-all resize-none"
+                    className="w-full rounded-xl border border-neutral-200 bg-neutral-50 px-4 py-3 text-sm ring-offset-white placeholder:text-neutral-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#A91D3A] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-neutral-800 dark:bg-neutral-950 dark:ring-offset-neutral-950 dark:placeholder:text-neutral-400 dark:focus-visible:ring-neutral-300 transition-all resize-none"
                     placeholder={isRtl ? "به ما بگویید چگونه می‌توانیم کمک کنیم" : "Tell us how we can help"}
                   />
                 </div>
 
                 <Button 
                   type="submit" 
-                  className="w-full bg-[#FF6B35] hover:bg-[#e55a2b] text-white h-14 rounded-xl text-base font-semibold shadow-lg shadow-orange-200/50 dark:shadow-none transition-all duration-300 mt-4"
+                  className="w-full bg-[#A91D3A] hover:bg-[#e55a2b] text-white h-14 rounded-xl text-base font-semibold shadow-lg shadow-red-200/50 dark:shadow-none transition-all duration-300 mt-4"
                 >
                   {t('send')}
                 </Button>
@@ -138,20 +138,20 @@ export default function ContactPage() {
                   {isRtl ? 'ارتباط مستقیم را ترجیح می‌دهید؟' : 'Prefer a Direct Approach?'}
                 </h3>
                 <div className="space-y-6">
-                  <a href="tel:+985632212999" className="flex items-center gap-4 text-neutral-600 dark:text-neutral-300 hover:text-[#FF6B35] transition-colors group">
-                    <div className="w-10 h-10 rounded-full bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center text-[#FF6B35] group-hover:scale-110 transition-transform">
+                  <a href="tel:+985632212999" className="flex items-center gap-4 text-neutral-600 dark:text-neutral-300 hover:text-[#A91D3A] transition-colors group">
+                    <div className="w-10 h-10 rounded-full bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center text-[#A91D3A] group-hover:scale-110 transition-transform">
                       <Phone className="w-5 h-5" />
                     </div>
                     <span className="font-medium text-lg" dir="ltr">056-32212999</span>
                   </a>
-                  <a href="mailto:center.hemophilia@gmail.com" className="flex items-center gap-4 text-neutral-600 dark:text-neutral-300 hover:text-[#FF6B35] transition-colors group">
-                    <div className="w-10 h-10 rounded-full bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center text-[#FF6B35] group-hover:scale-110 transition-transform">
+                  <a href="mailto:center.hemophilia@gmail.com" className="flex items-center gap-4 text-neutral-600 dark:text-neutral-300 hover:text-[#A91D3A] transition-colors group">
+                    <div className="w-10 h-10 rounded-full bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center text-[#A91D3A] group-hover:scale-110 transition-transform">
                       <Mail className="w-5 h-5" />
                     </div>
                     <span className="font-medium text-lg">center.hemophilia@gmail.com</span>
                   </a>
                   <div className="flex items-center gap-4 text-neutral-600 dark:text-neutral-300">
-                    <div className="w-10 h-10 rounded-full bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center text-[#FF6B35]">
+                    <div className="w-10 h-10 rounded-full bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center text-[#A91D3A]">
                       <Clock className="w-5 h-5" />
                     </div>
                     <span className="font-medium text-lg">

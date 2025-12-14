@@ -35,7 +35,7 @@ export default function AboutSection() {
               />
             </div>
             {/* Decorative Element */}
-            <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-[#FF6B35] rounded-full opacity-20 blur-2xl" />
+            <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-[#A91D3A] rounded-full opacity-20 blur-2xl" />
           </motion.div>
 
           {/* Content Side */}
@@ -46,7 +46,7 @@ export default function AboutSection() {
             className="space-y-6"
           >
             <div className="inline-block">
-              <span className="text-[#FF6B35] font-semibold text-sm uppercase tracking-wider">
+              <span className="text-[#A91D3A] font-semibold text-sm uppercase tracking-wider">
                 {t('badge', { defaultValue: 'About Us' })}
               </span>
             </div>
@@ -65,7 +65,7 @@ export default function AboutSection() {
 
             <Button 
               size="lg"
-              className="bg-[#FF6B35] hover:bg-[#FF6B35]/90 text-white px-8 py-6 rounded-full font-semibold shadow-lg hover:shadow-xl transition-all"
+              className="bg-[#A91D3A] hover:bg-[#A91D3A]/90 text-white px-8 py-6 rounded-full font-semibold shadow-lg hover:shadow-xl transition-all"
             >
               {t('cta', { defaultValue: 'More About Us' })}
             </Button>

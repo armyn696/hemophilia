@@ -45,7 +45,7 @@ export function Footer() {
                 href="https://www.instagram.com/skhhemophilia?igsh=d2Z6b293d3Jwc3Bh"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center text-gray-400 hover:bg-[#FF6B35] hover:text-white transition-all"
+                className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center text-gray-400 hover:bg-[#A91D3A] hover:text-white transition-all"
                 aria-label="Instagram"
               >
                 <Instagram className="w-5 h-5" />
@@ -61,7 +61,7 @@ export function Footer() {
                 <li key={link.key}>
                   <Link
                     href={link.href}
-                    className="text-sm text-gray-400 hover:text-[#FF6B35] transition-colors"
+                    className="text-sm text-gray-400 hover:text-[#A91D3A] transition-colors"
                   >
                     {tNav(link.key)}
                   </Link>
@@ -75,11 +75,11 @@ export function Footer() {
             <h3 className="font-bold text-white mb-6 text-lg">{t('contact_info')}</h3>
             <ul className="space-y-4">
               <li className="flex items-start space-x-2 rtl:space-x-reverse text-sm text-gray-400">
-                <MapPin className="w-4 h-4 mt-1 flex-shrink-0 text-[#FF6B35]" />
+                <MapPin className="w-4 h-4 mt-1 flex-shrink-0 text-[#A91D3A]" />
                 <span>{tContact('address_text')}</span>
               </li>
               <li className="flex items-center space-x-2 rtl:space-x-reverse text-sm text-gray-400">
-                <Phone className="w-4 h-4 flex-shrink-0 text-[#FF6B35]" />
+                <Phone className="w-4 h-4 flex-shrink-0 text-[#A91D3A]" />
                 <span dir="ltr">056-32212999</span>
               </li>
                           </ul>

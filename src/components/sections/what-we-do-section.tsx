@@ -39,7 +39,7 @@ export default function WhatWeDoSection() {
       iconPath: '/icons/support-services.svg',
       title: t('services.support.title', { defaultValue: 'Support Services' }),
       description: t('services.support.description', { defaultValue: 'Psychological and social counseling for patients.' }),
-      color: '#F59E0B' // Orange
+      color: '#EF4444' // Red
     },
   ];
 

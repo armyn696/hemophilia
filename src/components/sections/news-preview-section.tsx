@@ -44,65 +44,48 @@ export default function NewsPreviewSection() {
     fetchNews();
   }, []);
 
-  // Duplicate items for seamless infinite scroll only if we have 3+ items
-  const duplicatedItems = newsItems.length >= 3 ? [...newsItems, ...newsItems] : newsItems;
+  // Duplicate items for infinite scroll
+  const duplicatedItems = newsItems.length >= 1 ? [...newsItems, ...newsItems] : newsItems;
   
-  // Motion values for manual and auto scroll
+  // Card dimensions
+  const cardWidth = 350;
+  const cardGap = 32;
+  const cardTotalWidth = cardWidth + cardGap;
+  const singleSetWidth = cardTotalWidth * newsItems.length;
+  
+  // Motion values
   const x = useMotionValue(0);
   const [isDragging, setIsDragging] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
-  const dragStartTimeRef = useRef(0);
-  const dragStartXRef = useRef(0);
+  const baseTimeRef = useRef(0);
+  const baseXRef = useRef(0);
   
-  // Initialize animation start time
-  useEffect(() => {
-    dragStartTimeRef.current = performance.now();
-  }, []);
-  
-  // Auto-scroll animation (100 seconds for full cycle - half speed)
-  useAnimationFrame((t) => {
-    if (isDragging || !containerRef.current) return;
+  // Auto-scroll animation
+  useAnimationFrame((time) => {
+    if (isDragging || newsItems.length === 0 || singleSetWidth === 0) return;
     
-    const cardWidth = 350 + 32; // card width + gap
-    const totalWidth = cardWidth * newsItems.length;
     const isRtl = locale === 'fa';
     
-    // Speed: pixels per millisecond (slower = half speed)
-    const speed = totalWidth / 100000; // 100 seconds = 100000ms
+    // Speed: 40 pixels per second
+    const speed = 40 / 1000;
     
-    // Calculate elapsed time since drag ended
-    const elapsedTime = t - dragStartTimeRef.current;
-    const autoScrollOffset = elapsedTime * speed;
+    // Calculate elapsed time
+    const elapsedTime = time - baseTimeRef.current;
+    const scrollOffset = elapsedTime * speed;
     
-    // Combine manual drag position with auto-scroll
-    // For RTL, we want to move in positive direction (right)
-    // For LTR, we want to move in negative direction (left)
+    // Calculate new position (always move left for LTR, right for RTL)
     let newX = isRtl 
-      ? dragStartXRef.current + autoScrollOffset 
-      : dragStartXRef.current - autoScrollOffset;
+      ? baseXRef.current + scrollOffset 
+      : baseXRef.current - scrollOffset;
     
-    // Wrap around for infinite scroll
-    if (isRtl) {
-      // For RTL: Start at negative offset (hidden left items) and move right towards 0
-      // When newX > 0 (reached start), reset to -totalWidth
-      while (newX > 0) {
-        newX -= totalWidth;
-        dragStartXRef.current -= totalWidth;
-      }
-      while (newX < -totalWidth) {
-        newX += totalWidth;
-        dragStartXRef.current += totalWidth;
-      }
-    } else {
-      // For LTR: Start at 0 and move left towards -totalWidth
-      while (newX < -totalWidth) {
-        newX += totalWidth;
-        dragStartXRef.current += totalWidth;
-      }
-      while (newX > 0) {
-        newX -= totalWidth;
-        dragStartXRef.current -= totalWidth;
-      }
+    // Wrap around - reset when we've scrolled one full set
+    if (!isRtl && newX <= -singleSetWidth) {
+      newX += singleSetWidth;
+      baseXRef.current += singleSetWidth;
+    }
+    if (isRtl && newX >= singleSetWidth) {
+      newX -= singleSetWidth;
+      baseXRef.current -= singleSetWidth;
     }
     
     x.set(newX);
@@ -148,7 +131,7 @@ export default function NewsPreviewSection() {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <span className="text-[#FF6B35] font-semibold text-sm uppercase tracking-wider">
+          <span className="text-[#A91D3A] font-semibold text-sm uppercase tracking-wider">
             {t('badge', { defaultValue: 'News & Updates' })}
           </span>
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#2C3E50] mt-4">
@@ -166,36 +149,25 @@ export default function NewsPreviewSection() {
           dragElastic={0}
           dragMomentum={false}
           onDragStart={() => setIsDragging(true)}
-          onDragEnd={(event, info) => {
+          onDragEnd={() => {
             setIsDragging(false);
             
             // Update refs to continue from current position
-            dragStartTimeRef.current = performance.now();
-            dragStartXRef.current = x.get();
+            baseTimeRef.current = performance.now();
+            baseXRef.current = x.get();
             
             // Wrap around after manual drag
-            const cardWidth = 350 + 32;
-            const totalWidth = cardWidth * newsItems.length;
-            const isRtl = locale === 'fa';
-            
-            if (isRtl) {
-              while (dragStartXRef.current > 0) {
-                dragStartXRef.current -= totalWidth;
-              }
-              while (dragStartXRef.current < -totalWidth) {
-                dragStartXRef.current += totalWidth;
-              }
-            } else {
-              while (dragStartXRef.current < -totalWidth) {
-                dragStartXRef.current += totalWidth;
-              }
-              while (dragStartXRef.current > 0) {
-                dragStartXRef.current -= totalWidth;
-              }
+            if (baseXRef.current < -singleSetWidth) {
+              baseXRef.current += singleSetWidth;
+              x.set(baseXRef.current);
+            }
+            if (baseXRef.current > singleSetWidth) {
+              baseXRef.current -= singleSetWidth;
+              x.set(baseXRef.current);
             }
           }}
         >
-          {duplicatedItems.map((news, index) => (
+          {duplicatedItems.map((news: NewsItem, index: number) => (
             <div 
               key={`news-${index}`} 
               className="flex-shrink-0 w-[350px]"
@@ -219,7 +191,7 @@ export default function NewsPreviewSection() {
                 <div className="p-6 flex-1 flex flex-col">
                   {/* Category & Meta */}
                   <div className="flex items-center justify-between mb-4">
-                    <span className="bg-[#FF6B35]/10 text-[#FF6B35] text-xs font-bold px-3 py-1 rounded-full">
+                    <span className="bg-[#A91D3A]/10 text-[#A91D3A] text-xs font-bold px-3 py-1 rounded-full">
                       {news.category}
                     </span>
                     <div className="flex items-center gap-4 text-xs text-gray-500">
@@ -235,7 +207,7 @@ export default function NewsPreviewSection() {
                   </div>
 
                   {/* Title */}
-                  <h3 className="text-xl font-bold text-[#2C3E50] mb-3 group-hover:text-[#FF6B35] transition-colors line-clamp-2">
+                  <h3 className="text-xl font-bold text-[#2C3E50] mb-3 group-hover:text-[#A91D3A] transition-colors line-clamp-2">
                     {news.title}
                   </h3>
 
@@ -245,7 +217,7 @@ export default function NewsPreviewSection() {
                   </p>
 
                   {/* Read More */}
-                  <div className="flex items-center gap-2 text-[#FF6B35] font-semibold text-sm group-hover:gap-4 transition-all">
+                  <div className="flex items-center gap-2 text-[#A91D3A] font-semibold text-sm group-hover:gap-4 transition-all">
                     <span>{t('read_more', { defaultValue: 'Read More' })}</span>
                     {locale === 'fa' ? <ArrowLeft className="w-4 h-4" /> : <ArrowRight className="w-4 h-4" />}
                   </div>

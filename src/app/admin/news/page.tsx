@@ -71,7 +71,7 @@ export default function AdminNews() {
 
             {loading ? (
                 <div className="flex justify-center p-12">
-                    <Loader2 className="w-8 h-8 animate-spin text-orange-500" />
+                    <Loader2 className="w-8 h-8 animate-spin text-red-500" />
                 </div>
             ) : news.length === 0 ? (
                 <div className="text-center py-12 text-gray-500">

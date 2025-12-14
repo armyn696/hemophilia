@@ -66,7 +66,7 @@ export default function NewsPage() {
 
       {/* Hero Section */}
       <section className="relative pt-32 pb-16 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-orange-50 to-[#FFF8F3] dark:from-neutral-900 dark:to-neutral-950" />
+        <div className="absolute inset-0 bg-gradient-to-b from-red-50 to-[#FDF2F4] dark:from-neutral-900 dark:to-neutral-950" />
         <div className="container relative mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -85,7 +85,7 @@ export default function NewsPage() {
       </section>
 
       {/* Search and Filter Section */}
-      <section className="py-8 border-y border-orange-100 dark:border-neutral-800 bg-white dark:bg-neutral-900 z-30">
+      <section className="py-8 border-y border-red-100 dark:border-neutral-800 bg-white dark:bg-neutral-900 z-30">
         <div className="container mx-auto px-4">
           <div className="max-w-7xl mx-auto">
             <div className="flex flex-col md:flex-row gap-6 items-center justify-between">
@@ -97,8 +97,8 @@ export default function NewsPage() {
                     onClick={() => setSelectedCategory(category.id)}
                     variant="ghost"
                     className={`rounded-full px-6 py-2 font-medium transition-all ${selectedCategory === category.id
-                      ? 'bg-[#FF6B35] text-white shadow-md hover:bg-[#e55a2b] hover:text-white'
-                      : 'bg-white dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 hover:bg-orange-50 dark:hover:bg-neutral-800 border border-neutral-200 dark:border-neutral-700'
+                      ? 'bg-[#A91D3A] text-white shadow-md hover:bg-[#e55a2b] hover:text-white'
+                      : 'bg-white dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 hover:bg-red-50 dark:hover:bg-neutral-800 border border-neutral-200 dark:border-neutral-700'
                       }`}
                   >
                     {category.label}
@@ -116,7 +116,7 @@ export default function NewsPage() {
                   placeholder={t('search_placeholder', { defaultValue: 'Search news...' })}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className={`w-full py-6 text-base rounded-full border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 focus:ring-[#FF6B35] focus:border-[#FF6B35] ${locale === 'fa' ? 'pl-12 pr-6' : 'pr-12 pl-6'}`}
+                  className={`w-full py-6 text-base rounded-full border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 focus:ring-[#A91D3A] focus:border-[#A91D3A] ${locale === 'fa' ? 'pl-12 pr-6' : 'pr-12 pl-6'}`}
                 />
               </div>
             </div>
@@ -130,7 +130,7 @@ export default function NewsPage() {
           <div className="max-w-7xl mx-auto">
             {loading ? (
               <div className="flex justify-center py-20">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#FF6B35]"></div>
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#A91D3A]"></div>
               </div>
             ) : filteredNews.length === 0 ? (
               <div className="text-center py-20 bg-white dark:bg-neutral-900 rounded-3xl border border-dashed border-neutral-300 dark:border-neutral-700">
@@ -143,7 +143,7 @@ export default function NewsPage() {
                 <Button
                   variant="link"
                   onClick={() => { setSearchQuery(''); setSelectedCategory('all'); }}
-                  className="text-[#FF6B35] mt-2"
+                  className="text-[#A91D3A] mt-2"
                 >
                   {locale === 'fa' ? 'پاک کردن فیلترها' : 'Clear filters'}
                 </Button>
@@ -168,7 +168,7 @@ export default function NewsPage() {
                             className="object-cover group-hover:scale-110 transition-transform duration-700"
                           />
                           <div className={`absolute top-4 ${locale === 'fa' ? 'right-4' : 'left-4'}`}>
-                            <span className="bg-white/90 dark:bg-neutral-900/90 backdrop-blur-sm text-[#FF6B35] text-xs font-bold px-3 py-1.5 rounded-full shadow-sm border border-orange-100 dark:border-neutral-800">
+                            <span className="bg-white/90 dark:bg-neutral-900/90 backdrop-blur-sm text-[#A91D3A] text-xs font-bold px-3 py-1.5 rounded-full shadow-sm border border-red-100 dark:border-neutral-800">
                               {categories.find(c => c.id === news.category)?.label}
                             </span>
                           </div>
@@ -190,7 +190,7 @@ export default function NewsPage() {
                           </div>
 
                           {/* Title */}
-                          <h3 className="text-xl font-bold text-neutral-800 dark:text-neutral-100 mb-3 group-hover:text-[#FF6B35] transition-colors line-clamp-2 leading-tight">
+                          <h3 className="text-xl font-bold text-neutral-800 dark:text-neutral-100 mb-3 group-hover:text-[#A91D3A] transition-colors line-clamp-2 leading-tight">
                             {news.title}
                           </h3>
 
@@ -201,7 +201,7 @@ export default function NewsPage() {
 
                           {/* Read More */}
                           <div className="flex items-center justify-between pt-4 border-t border-neutral-100 dark:border-neutral-800 mt-auto">
-                            <div className="flex items-center gap-2 text-[#FF6B35] font-bold text-sm group-hover:gap-3 transition-all">
+                            <div className="flex items-center gap-2 text-[#A91D3A] font-bold text-sm group-hover:gap-3 transition-all">
                               <span>{t('read_more', { defaultValue: 'Read More' })}</span>
                               {locale === 'fa' ? <ArrowRight className="w-4 h-4 rotate-180" /> : <ArrowRight className="w-4 h-4" />}
                             </div>

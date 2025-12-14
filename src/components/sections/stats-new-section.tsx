@@ -36,7 +36,7 @@ export default function StatsNewSection() {
             className="space-y-8"
           >
             <div className="inline-block">
-              <span className="text-[#FF6B35] font-semibold text-sm uppercase tracking-wider">
+              <span className="text-[#A91D3A] font-semibold text-sm uppercase tracking-wider">
                 {t('badge', { defaultValue: 'Our Impact' })}
               </span>
             </div>
@@ -86,7 +86,7 @@ export default function StatsNewSection() {
               />
             </div>
             {/* Decorative circles */}
-            <div className="absolute -top-6 -left-6 w-24 h-24 border-4 border-[#FF6B35] rounded-full opacity-30" />
+            <div className="absolute -top-6 -left-6 w-24 h-24 border-4 border-[#A91D3A] rounded-full opacity-30" />
             <div className="absolute -bottom-8 -right-8 w-32 h-32 bg-blue-500 rounded-full opacity-10 blur-2xl" />
           </motion.div>
         </div>

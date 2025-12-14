@@ -63,7 +63,7 @@ export default function ImpactSection() {
   const isRtl = locale === 'fa';
 
   return (
-    <section ref={ref} className="pt-24 pb-12 bg-[#FFF8F3]">
+    <section ref={ref} className="pt-24 pb-12 bg-[#FDF2F4]">
       <div className="container mx-auto px-4 max-w-7xl">
         {/* Header */}
         <motion.div
@@ -75,11 +75,11 @@ export default function ImpactSection() {
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#2C3E50]">
             {isRtl ? (
               <>
-                کمک شما <span className="text-[#FF6B35]">کجا</span> می‌رود؟
+                کمک شما <span className="text-[#A91D3A]">کجا</span> می‌رود؟
               </>
             ) : (
               <>
-                Where Your <span className="text-[#FF6B35]">Support</span> Creates Change
+                Where Your <span className="text-[#A91D3A]">Support</span> Creates Change
               </>
             )}
           </h2>
@@ -123,7 +123,7 @@ export default function ImpactSection() {
             initial={{ opacity: 0, y: 30 }}
             animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="bg-[#FFF8F3] rounded-2xl overflow-hidden row-span-2 group flex flex-col shadow-sm hover:shadow-xl transition-shadow duration-300 border border-orange-100"
+            className="bg-[#FDF2F4] rounded-2xl overflow-hidden row-span-2 group flex flex-col shadow-sm hover:shadow-xl transition-shadow duration-300 border border-red-100"
           >
             <div className="relative flex-1 min-h-[280px] overflow-hidden">
               <Image
@@ -142,7 +142,7 @@ export default function ImpactSection() {
                 {isRtl ? impactAreas[2].descFa : impactAreas[2].descEn}
               </p>
               <Link href={`/${locale}/donate`}>
-                <Button className="bg-[#FF6B35] hover:bg-[#E55A2B] text-white rounded-full px-8 py-3 font-medium shadow-lg shadow-orange-200/50">
+                <Button className="bg-[#A91D3A] hover:bg-[#8B1538] text-white rounded-full px-8 py-3 font-medium shadow-lg shadow-red-200/50">
                   {isRtl ? 'همراه ما شوید' : 'Join Our Team'}
                 </Button>
               </Link>
@@ -154,7 +154,7 @@ export default function ImpactSection() {
             initial={{ opacity: 0, y: 30 }}
             animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
             transition={{ duration: 0.5, delay: 0.3 }}
-            className="bg-[#FFF8F3] rounded-2xl overflow-hidden group shadow-sm hover:shadow-xl transition-shadow duration-300 border border-orange-100"
+            className="bg-[#FDF2F4] rounded-2xl overflow-hidden group shadow-sm hover:shadow-xl transition-shadow duration-300 border border-red-100"
           >
             <div className="relative h-52 overflow-hidden">
               <Image
@@ -180,7 +180,7 @@ export default function ImpactSection() {
             initial={{ opacity: 0, y: 30 }}
             animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
             transition={{ duration: 0.5, delay: 0.4 }}
-            className="bg-[#FFF8F3] rounded-2xl overflow-hidden group shadow-sm hover:shadow-xl transition-shadow duration-300 border border-orange-100"
+            className="bg-[#FDF2F4] rounded-2xl overflow-hidden group shadow-sm hover:shadow-xl transition-shadow duration-300 border border-red-100"
           >
             <div className="relative h-52 overflow-hidden">
               <Image
@@ -206,7 +206,7 @@ export default function ImpactSection() {
             initial={{ opacity: 0, y: 30 }}
             animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
             transition={{ duration: 0.5, delay: 0.5 }}
-            className="bg-[#FFF8F3] rounded-2xl overflow-hidden group shadow-sm hover:shadow-xl transition-shadow duration-300 border border-orange-100"
+            className="bg-[#FDF2F4] rounded-2xl overflow-hidden group shadow-sm hover:shadow-xl transition-shadow duration-300 border border-red-100"
           >
             <div className="relative h-52 overflow-hidden">
               <Image

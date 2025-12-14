@@ -40,7 +40,7 @@ export default function DonateNewSection() {
         >
           {/* Badge */}
           <div className="inline-block">
-            <span className="text-[#FF6B35] font-semibold text-sm uppercase tracking-wider">
+            <span className="text-[#A91D3A] font-semibold text-sm uppercase tracking-wider">
               {t('badge', { defaultValue: 'Donation' })}
             </span>
           </div>
@@ -60,7 +60,7 @@ export default function DonateNewSection() {
                   type="number"
                   value={amount}
                   onChange={(e) => setAmount(e.target.value)}
-                  className="pl-12 pr-4 py-6 text-2xl font-bold text-center bg-white/95 border-2 border-white rounded-full shadow-lg focus:ring-4 focus:ring-[#FF6B35]/30"
+                  className="pl-12 pr-4 py-6 text-2xl font-bold text-center bg-white/95 border-2 border-white rounded-full shadow-lg focus:ring-4 focus:ring-[#A91D3A]/30"
                   placeholder="100"
                 />
               </div>
@@ -98,7 +98,7 @@ export default function DonateNewSection() {
             >
               <Button
                 size="lg"
-                className="px-12 py-7 bg-[#FF6B35] hover:bg-[#FF6B35]/90 text-white text-xl font-bold rounded-full shadow-2xl hover:shadow-[#FF6B35]/50 transition-all"
+                className="px-12 py-7 bg-[#A91D3A] hover:bg-[#A91D3A]/90 text-white text-xl font-bold rounded-full shadow-2xl hover:shadow-[#A91D3A]/50 transition-all"
               >
                 {t('donate_button', { defaultValue: 'Donate Now' })}
               </Button>

@@ -26,26 +26,26 @@ export default function TimelineSection() {
     <div className="grid md:grid-cols-2 gap-6 md:gap-8 items-start">
       <div dir={isRtl ? "rtl" : "ltr"} className={`relative ${isRtl ? "text-right" : "text-left"}`}>
         {/* Vertical dashed line */}
-        <div className={`absolute top-4 bottom-4 ${isRtl ? "right-[19px]" : "left-[19px]"} w-0.5 bg-gradient-to-b from-orange-200/50 via-orange-200/50 to-transparent dark:from-neutral-800`} />
+        <div className={`absolute top-4 bottom-4 ${isRtl ? "right-[19px]" : "left-[19px]"} w-0.5 bg-gradient-to-b from-red-200/50 via-red-200/50 to-transparent dark:from-neutral-800`} />
         
         <div className="flex flex-col gap-6">
           {items.map((item, index) => (
             <div key={index} className="relative group">
               {/* Custom Marker */}
               <div className={`absolute top-5 ${isRtl ? "right-[11px]" : "left-[11px]"} z-10`}>
-                <div className="w-5 h-5 rounded-full bg-[#FFF8F3] dark:bg-neutral-950 border-2 border-orange-200 group-hover:border-[#FF6B35] group-hover:scale-110 transition-all duration-300 flex items-center justify-center">
-                  <div className="w-2 h-2 rounded-full bg-orange-300 group-hover:bg-[#FF6B35] transition-colors duration-300" />
+                <div className="w-5 h-5 rounded-full bg-[#FDF2F4] dark:bg-neutral-950 border-2 border-red-200 group-hover:border-[#A91D3A] group-hover:scale-110 transition-all duration-300 flex items-center justify-center">
+                  <div className="w-2 h-2 rounded-full bg-red-300 group-hover:bg-[#A91D3A] transition-colors duration-300" />
                 </div>
               </div>
 
               {/* Card Content */}
-              <div className={`${isRtl ? "mr-8 md:mr-10" : "ml-8 md:ml-10"} bg-white dark:bg-neutral-900 p-5 rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 border border-orange-100/50 dark:border-neutral-800 group-hover:border-orange-200/80 dark:group-hover:border-orange-900/30`}>
-                <h3 className="font-bold text-lg text-neutral-800 dark:text-neutral-200 mb-2 group-hover:text-[#FF6B35] transition-colors">
+              <div className={`${isRtl ? "mr-8 md:mr-10" : "ml-8 md:ml-10"} bg-white dark:bg-neutral-900 p-5 rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 border border-red-100/50 dark:border-neutral-800 group-hover:border-red-200/80 dark:group-hover:border-red-900/30`}>
+                <h3 className="font-bold text-lg text-neutral-800 dark:text-neutral-200 mb-2 group-hover:text-[#A91D3A] transition-colors">
                   {item.title}
                 </h3>
                 
                 {item.time && (
-                  <div className="flex items-center gap-1.5 text-xs font-semibold text-[#FF6B35] mb-3 bg-orange-50 dark:bg-orange-950/20 w-fit px-2.5 py-1 rounded-md">
+                  <div className="flex items-center gap-1.5 text-xs font-semibold text-[#A91D3A] mb-3 bg-red-50 dark:bg-red-950/20 w-fit px-2.5 py-1 rounded-md">
                     <CalendarDays className="w-3.5 h-3.5" />
                     {item.time}
                   </div>
@@ -82,9 +82,9 @@ export default function TimelineSection() {
   });
 
   return (
-    <section className="relative bg-[#FFF8F3]">
+    <section className="relative bg-[#FDF2F4]">
       <div className="max-w-7xl mx-auto pt-20 pb-8 px-4 md:px-8 lg:px-10">
-        <span className="text-[#FF6B35] font-semibold text-sm uppercase tracking-wider block text-center md:text-start">
+        <span className="text-[#A91D3A] font-semibold text-sm uppercase tracking-wider block text-center md:text-start">
           {t('badge')}
         </span>
         <h2 className="text-lg md:text-4xl mb-4 mt-4 text-[#2C3E50] max-w-4xl font-bold text-center md:text-start">

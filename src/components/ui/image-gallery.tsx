@@ -64,7 +64,7 @@ export function ImageGallery() {
 
 	// Loading state - AFTER all hooks
 	if (loading) {
-		return <div className="flex justify-center p-20"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500"></div></div>;
+		return <div className="flex justify-center p-20"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-500"></div></div>;
 	}
 
 	// Distribute images into columns for masonry layout

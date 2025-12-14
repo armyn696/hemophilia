@@ -20,7 +20,7 @@ export default function ProgramsSection() {
       description: t('program1.description', { defaultValue: 'Providing essential medications and medical supplies for hemophilia patients.' }),
       raised: 5670000,
       goal: 8000000,
-      badgeColor: '#FF6B35'
+      badgeColor: '#A91D3A'
     },
     {
       image: 'https://images.unsplash.com/photo-1509062522246-3755977927d7?q=80&w=2032',
@@ -29,7 +29,7 @@ export default function ProgramsSection() {
       description: t('program2.description', { defaultValue: 'Educational workshops and training sessions for patients and families.' }),
       raised: 12500000,
       goal: 15000000,
-      badgeColor: '#FF6B35'
+      badgeColor: '#A91D3A'
     },
     {
       image: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?q=80&w=2070',
@@ -38,7 +38,7 @@ export default function ProgramsSection() {
       description: t('program3.description', { defaultValue: 'Counseling and mental health support for patients and their families.' }),
       raised: 8940000,
       goal: 12000000,
-      badgeColor: '#FF6B35'
+      badgeColor: '#A91D3A'
     },
   ];
 
@@ -63,7 +63,7 @@ export default function ProgramsSection() {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <span className="text-[#FF6B35] font-semibold text-sm uppercase tracking-wider">
+          <span className="text-[#A91D3A] font-semibold text-sm uppercase tracking-wider">
             {t('badge', { defaultValue: 'Support Our Programs' })}
           </span>
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#2C3E50] mt-4">

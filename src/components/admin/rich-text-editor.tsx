@@ -60,7 +60,7 @@ export default function RichTextEditor({ content, onChange, placeholder }: RichT
       Link.configure({
         openOnClick: false,
         HTMLAttributes: {
-          class: 'text-[#FF6B35] underline hover:text-[#e55a2b]',
+          class: 'text-[#A91D3A] underline hover:text-[#e55a2b]',
         },
       }),
       Image.configure({

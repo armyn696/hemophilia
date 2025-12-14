@@ -4,21 +4,22 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useTranslations, useLocale } from 'next-intl';
-import { Menu, Globe, Heart } from 'lucide-react';
+import { Menu, Globe, Heart, X, Home, Info, Briefcase, GraduationCap, Newspaper, Images, Phone } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import {
-  Sheet,
-  SheetContent,
-  SheetTrigger,
-  SheetClose,
-} from '@/components/ui/sheet';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '@/components/ui/sheet';
 import { usePathname, useRouter } from 'next/navigation';
 
 export function Navigation() {
@@ -46,13 +47,13 @@ export function Navigation() {
   const showSolidNav = true;
 
   const navItems = [
-    { key: 'home', href: `/${locale}` },
-    { key: 'about', href: `/${locale}/about` },
-    { key: 'services', href: `/${locale}/services` },
-    { key: 'education', href: `/${locale}/education` },
-    { key: 'news', href: `/${locale}/news` },
-    { key: 'gallery', href: `/${locale}/gallery` },
-    { key: 'contact', href: `/${locale}/contact` },
+    { key: 'home', href: `/${locale}`, icon: Home },
+    { key: 'about', href: `/${locale}/about`, icon: Info },
+    { key: 'services', href: `/${locale}/services`, icon: Briefcase },
+    { key: 'education', href: `/${locale}/education`, icon: GraduationCap },
+    { key: 'news', href: `/${locale}/news`, icon: Newspaper },
+    { key: 'gallery', href: `/${locale}/gallery`, icon: Images },
+    { key: 'contact', href: `/${locale}/contact`, icon: Phone },
   ];
 
   const switchLocale = (newLocale: string) => {
@@ -107,7 +108,7 @@ export function Navigation() {
           </div>
 
           {/* Right Side Actions */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-1.5 md:gap-4">
             {/* Language Switcher */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -115,19 +116,37 @@ export function Navigation() {
                   variant="ghost" 
                   size="sm"
                   className={cn(
-                    "h-9 px-3 text-sm font-medium transition-colors",
-                    showSolidNav ? "text-foreground/70 hover:text-foreground hover:bg-accent" : "text-white/80 hover:text-white hover:bg-white/10"
+                    "h-9 px-2.5 rounded-md transition-all hover:scale-105 active:scale-95",
+                    showSolidNav 
+                      ? "bg-gray-100 hover:bg-gray-200 text-foreground" 
+                      : "bg-white/10 hover:bg-white/20 text-white backdrop-blur-sm"
                   )}
                 >
-                  {locale === 'fa' ? 'FA' : 'EN'}
+                  <span className={cn("text-xs font-bold", locale === 'fa' ? "font-vazir" : "font-sans")}>
+                    {locale === 'fa' ? 'فارسی' : 'English'}
+                  </span>
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem onClick={() => switchLocale('fa')} className="text-sm">
-                  فارسی
+              <DropdownMenuContent align="end" className="w-32 p-1 rounded-xl shadow-lg border-none bg-white/95 backdrop-blur-sm dark:bg-neutral-900/95">
+                <DropdownMenuItem 
+                  onClick={() => switchLocale('fa')} 
+                  className={cn(
+                    "rounded-lg cursor-pointer flex items-center justify-between px-3 py-2 text-sm font-medium transition-colors",
+                    locale === 'fa' ? "bg-primary/10 text-primary" : "hover:bg-gray-100 dark:hover:bg-neutral-800"
+                  )}
+                >
+                  <span>فارسی</span>
+                  {locale === 'fa' && <div className="w-1.5 h-1.5 rounded-full bg-primary" />}
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => switchLocale('en')} className="text-sm">
-                  English
+                <DropdownMenuItem 
+                  onClick={() => switchLocale('en')} 
+                  className={cn(
+                    "rounded-lg cursor-pointer flex items-center justify-between px-3 py-2 text-sm font-medium transition-colors",
+                    locale === 'en' ? "bg-primary/10 text-primary" : "hover:bg-gray-100 dark:hover:bg-neutral-800"
+                  )}
+                >
+                  <span>English</span>
+                  {locale === 'en' && <div className="w-1.5 h-1.5 rounded-full bg-primary" />}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -149,38 +168,79 @@ export function Navigation() {
 
             {/* Mobile Menu */}
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
-              <SheetTrigger asChild className="lg:hidden">
+              <SheetTrigger asChild>
                 <Button 
                   variant="ghost" 
                   size="icon"
                   className={cn(
-                    "h-9 w-9 transition-colors",
+                    "lg:hidden h-9 w-9",
                     showSolidNav ? "text-foreground" : "text-white"
                   )}
                 >
                   <Menu className="h-5 w-5" />
                 </Button>
               </SheetTrigger>
-              <SheetContent side={locale === 'fa' ? 'right' : 'left'}>
-                <div className="flex flex-col space-y-6 mt-12">
-                  {navItems.map((item) => (
-                    <SheetClose asChild key={item.key}>
-                      <Link
-                        href={item.href}
-                        className="text-xl font-bold transition-colors hover:text-primary"
-                      >
-                        {t(item.key)}
-                      </Link>
-                    </SheetClose>
-                  ))}
-                  <SheetClose asChild>
-                    <Link href={`/${locale}/donate`}>
-                      <Button className="w-full mt-4 flex items-center justify-center gap-2" size="lg">
-                        <Heart className="w-5 h-5" />
-                        <span>{t('donate')}</span>
-                      </Button>
-                    </Link>
-                  </SheetClose>
+              <SheetContent 
+                side={locale === 'fa' ? 'right' : 'left'}
+                className="w-[300px] sm:w-[350px] p-0 bg-white dark:bg-neutral-900"
+              >
+                {/* Header */}
+                <SheetHeader className="p-6 border-b bg-gray-50 dark:bg-neutral-800">
+                  <SheetTitle className="flex items-center gap-3">
+                    <div className="relative w-10 h-10">
+                      <Image
+                        src="/logo.png"
+                        alt="Logo"
+                        fill
+                        className="object-contain"
+                      />
+                    </div>
+                    <span className="font-bold text-lg text-foreground">
+                      {locale === 'fa' ? 'کانون هموفیلی' : 'Hemophilia Society'}
+                    </span>
+                  </SheetTitle>
+                </SheetHeader>
+
+                {/* Navigation Links */}
+                <div className="flex flex-col h-[calc(100%-180px)] overflow-y-auto bg-white dark:bg-neutral-900">
+                  <nav className="p-4">
+                    {navItems.map((item) => {
+                      const Icon = item.icon;
+                      const isActive = pathname === item.href;
+                      return (
+                        <Link
+                          key={item.key}
+                          href={item.href}
+                          onClick={() => setIsOpen(false)}
+                          className={cn(
+                            "flex items-center gap-4 px-4 py-3.5 rounded-xl mb-1 transition-all",
+                            isActive 
+                              ? "bg-primary/10 text-primary font-semibold" 
+                              : "text-foreground/80 hover:bg-gray-100 dark:hover:bg-neutral-800 hover:text-foreground"
+                          )}
+                        >
+                          <Icon className="w-5 h-5" />
+                          <span className="text-base">{t(item.key)}</span>
+                          {isActive && (
+                            <div className={cn(
+                              "w-2 h-2 rounded-full bg-primary",
+                              locale === 'fa' ? 'mr-auto' : 'ml-auto'
+                            )} />
+                          )}
+                        </Link>
+                      );
+                    })}
+                  </nav>
+                </div>
+
+                {/* Bottom Donate Button */}
+                <div className="absolute bottom-0 left-0 right-0 p-4 border-t bg-white dark:bg-neutral-900">
+                  <Link href={`/${locale}/donate`} onClick={() => setIsOpen(false)}>
+                    <Button className="w-full h-12 text-base font-semibold rounded-xl gap-2">
+                      <Heart className="w-5 h-5" />
+                      {t('donate')}
+                    </Button>
+                  </Link>
                 </div>
               </SheetContent>
             </Sheet>
