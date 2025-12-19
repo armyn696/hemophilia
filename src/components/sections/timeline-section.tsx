@@ -11,14 +11,14 @@ export default function TimelineSection() {
   const isRtl = locale === 'fa';
 
   const sectionImages: Record<string, string> = {
-    ongoing: "https://images.unsplash.com/photo-1509062522246-3755977927d7?q=80&w=2032",
+    ongoing: "/images/کلاسهای ریاضی2.jpg",
     may: "https://images.unsplash.com/photo-1524178232363-1fb2b075b955?q=80&w=2070",
-    august: "https://images.unsplash.com/photo-1472653431158-6364773b2a56?q=80&w=2069",
+    august: "/images/کارگاه سواد رسانه2.jpg",
     september: "https://images.unsplash.com/photo-1585435557343-3b092031a831?q=80&w=2070",
     october: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?q=80&w=2032",
-    november: "https://images.unsplash.com/photo-1551076805-e1869033e561?q=80&w=2064",
+    november: "/images/فیزیوتراپی1.jpg",
     december: "https://images.unsplash.com/photo-1515978445540-23bd71e8f988?q=80&w=2069",
-    others: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=2070"
+    others: "/images/ورزشکاران.jpg"
   };
 
   // Helper function to render activities list
@@ -27,7 +27,7 @@ export default function TimelineSection() {
       <div dir={isRtl ? "rtl" : "ltr"} className={`relative ${isRtl ? "text-right" : "text-left"}`}>
         {/* Vertical dashed line */}
         <div className={`absolute top-4 bottom-4 ${isRtl ? "right-[19px]" : "left-[19px]"} w-0.5 bg-gradient-to-b from-red-200/50 via-red-200/50 to-transparent dark:from-neutral-800`} />
-        
+
         <div className="flex flex-col gap-6">
           {items.map((item, index) => (
             <div key={index} className="relative group">
@@ -43,14 +43,14 @@ export default function TimelineSection() {
                 <h3 className="font-bold text-lg text-neutral-800 dark:text-neutral-200 mb-2 group-hover:text-[#A91D3A] transition-colors">
                   {item.title}
                 </h3>
-                
+
                 {item.time && (
                   <div className="flex items-center gap-1.5 text-xs font-semibold text-[#A91D3A] mb-3 bg-red-50 dark:bg-red-950/20 w-fit px-2.5 py-1 rounded-md">
                     <CalendarDays className="w-3.5 h-3.5" />
                     {item.time}
                   </div>
                 )}
-                
+
                 <p className="text-neutral-600 dark:text-neutral-400 text-sm leading-relaxed">
                   {item.description}
                 </p>
@@ -61,10 +61,10 @@ export default function TimelineSection() {
       </div>
       <div className="relative h-64 md:h-96 rounded-2xl overflow-hidden shadow-xl order-first md:order-last group">
         <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent z-10" />
-        <Image 
-          src={image} 
-          alt="Timeline Event" 
-          fill 
+        <Image
+          src={image}
+          alt="Timeline Event"
+          fill
           className="object-cover hover:scale-105 transition-transform duration-700"
         />
       </div>

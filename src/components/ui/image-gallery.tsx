@@ -76,7 +76,7 @@ export function ImageGallery() {
 	return (
 		<>
 			<div className="relative flex w-full flex-col items-center justify-center py-10 px-4">
-				<div className="mx-auto grid w-full max-w-5xl gap-4 sm:grid-cols-2 lg:grid-cols-3">
+				<div className="mx-auto grid w-full max-w-5xl gap-4 grid-cols-3">
 					{columns.map((columnImages, colIndex) => (
 						<div key={colIndex} className="grid gap-4">
 							{columnImages.map((image, imgIndex) => {

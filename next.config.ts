@@ -25,6 +25,32 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  async redirects() {
+    return [
+      {
+        source: '/:path*',
+        has: [
+          {
+            type: 'host',
+            value: 'hemophiliaskh.ir',
+          },
+        ],
+        destination: 'https://hemophiliaskh.com/:path*',
+        permanent: true,
+      },
+      {
+        source: '/:path*',
+        has: [
+          {
+            type: 'host',
+            value: 'www.hemophiliaskh.ir',
+          },
+        ],
+        destination: 'https://hemophiliaskh.com/:path*',
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default withNextIntl(nextConfig);
