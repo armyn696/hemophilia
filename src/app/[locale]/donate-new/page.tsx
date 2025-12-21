@@ -44,171 +44,160 @@ export default function DonateNewPage() {
   };
 
   return (
-      <div className={`h-screen flex overflow-hidden ${isRtl ? 'flex-row-reverse' : 'flex-row'}`}>
-        {/* Left Side - Form */}
-        <div className="w-full lg:w-1/2 h-full overflow-hidden flex items-center justify-center bg-gradient-to-b from-orange-50 to-white p-4 lg:p-6">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="w-full max-w-xl relative pt-8"
-          >
-            {/* Back to Home - Absolute */}
-            <div className={`absolute top-0 ${isRtl ? 'right-0' : 'left-0'}`}>
-              <Link
-                href={`/${locale}`}
-                className="inline-flex items-center gap-2 text-sm text-gray-400 hover:text-gray-800 transition-colors"
-                title={locale === 'fa' ? 'بازگشت به صفحه اصلی' : 'Back to home'}
-              >
-                <Heart className="w-4 h-4" />
-                <span className="hidden sm:inline">{locale === 'fa' ? 'صفحه اصلی' : 'Home'}</span>
-              </Link>
+    <div className={`h-screen flex overflow-hidden ${isRtl ? 'flex-row-reverse' : 'flex-row'}`}>
+      {/* Left Side - Form */}
+      <div className="w-full lg:w-1/2 h-full overflow-hidden flex items-center justify-center bg-[#FDFBF7] p-4 lg:p-8">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5 }}
+          className="w-full max-w-[480px] bg-white rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.05)] border border-neutral-100 p-8 lg:p-10 relative"
+        >
+          {/* Back to Home - Absolute */}
+          <div className={`absolute top-6 ${isRtl ? 'right-8' : 'left-8'}`}>
+            <Link
+              href={`/${locale}`}
+              className="inline-flex items-center gap-2 text-sm text-gray-400 hover:text-[#FF6B35] transition-colors group"
+            >
+              <Heart className="w-4 h-4" />
+              <span className="opacity-0 group-hover:opacity-100 transition-opacity">{locale === 'fa' ? 'صفحه اصلی' : 'Home'}</span>
+            </Link>
+          </div>
+
+          <div className="space-y-6">
+            {/* Logo & Header */}
+            <div className="text-center space-y-3">
+              <div className="flex justify-center">
+                <div className="w-14 h-14 bg-gradient-to-br from-[#FF6B35] to-[#FF8F65] rounded-2xl flex items-center justify-center shadow-lg transform -rotate-3">
+                  <Heart className="w-7 h-7 text-white" fill="white" />
+                </div>
+              </div>
+              <div className="space-y-1">
+                <h1 className="text-2xl font-bold text-gray-900 tracking-tight">
+                  {locale === 'fa' ? 'کمک به کانون هموفیلی' : 'Support Hemophilia Society'}
+                </h1>
+                <p className="text-gray-500 text-sm">
+                  {locale === 'fa' 
+                    ? 'با کمک شما، زندگی بیماران را تغییر می‌دهیم'
+                    : 'Your donation changes lives'}
+                </p>
+              </div>
             </div>
 
-            {/* Decorative Frame */}
-            <div className="absolute -inset-4 sm:-inset-6 border border-neutral-200/50 pointer-events-none" />
-            
-            <div className="space-y-3 lg:space-y-5">
-              {/* Logo & Header */}
-              <div className="text-center space-y-2">
-                <div className="flex justify-center">
-                  <div className="w-12 h-12 bg-gradient-to-br from-[#FF6B35] to-[#FF8F65] rounded-xl flex items-center justify-center shadow-lg">
-                    <Heart className="w-6 h-6 text-white" fill="white" />
-                  </div>
+            {/* Amount Selection */}
+            <div className="space-y-3">
+              <div className="flex justify-between items-center px-1">
+                <Label className="text-gray-800 font-semibold text-sm">
+                  {locale === 'fa' ? 'مبلغ کمک (تومان)' : 'Donation Amount'}
+                </Label>
+              </div>
+              <div className="grid grid-cols-3 gap-2">
+                {donationAmounts.slice(0, 5).map((amount) => (
+                  <button
+                    key={amount}
+                    onClick={() => handleAmountSelect(amount)}
+                    className={`py-2 px-1 rounded-xl text-xs font-bold transition-all border-2 ${
+                      selectedAmount === amount
+                        ? 'border-[#FF6B35] bg-orange-50 text-[#FF6B35]'
+                        : 'border-gray-50 bg-gray-50/50 hover:border-gray-200 text-gray-600'
+                    }`}
+                  >
+                    {formatCurrency(amount)}
+                  </button>
+                ))}
+                <div className="col-span-1">
+                  <Input
+                    type="number"
+                    placeholder={locale === 'fa' ? 'دلخواه...' : 'Custom...'}
+                    value={customAmount}
+                    onChange={(e) => handleCustomAmountChange(e.target.value)}
+                    className="h-[38px] text-center text-xs font-bold border-2 border-gray-50 bg-gray-50/50 focus:border-[#FF6B35] rounded-xl"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Anonymous Donation Toggle */}
+            <div className="flex items-center justify-between p-3 bg-neutral-50/80 rounded-2xl border border-neutral-100">
+              <div className="flex items-center gap-3">
+                <div className={`p-2 rounded-xl ${isAnonymous ? 'bg-[#FF6B35]/10' : 'bg-white shadow-sm'}`}>
+                  <UserX className={`w-4 h-4 ${isAnonymous ? 'text-[#FF6B35]' : 'text-gray-400'}`} />
                 </div>
                 <div>
-                  <h1 className="text-2xl font-bold text-gray-900">
-                    {locale === 'fa' ? 'کمک به کانون هموفیلی' : 'Support Hemophilia Society'}
-                  </h1>
-                  <p className="text-gray-500 text-sm">
-                    {locale === 'fa' 
-                      ? 'با کمک شما، زندگی بیماران را تغییر می‌دهیم'
-                      : 'Your donation changes lives'}
+                  <p className="font-semibold text-gray-900 text-[13px]">
+                    {locale === 'fa' ? 'کمک به صورت ناشناس' : 'Donate Anonymously'}
+                  </p>
+                  <p className="text-[11px] text-gray-500">
+                    {locale === 'fa' ? 'هویت شما محفوظ می‌ماند' : 'Your identity will be protected'}
                   </p>
                 </div>
               </div>
+              <Switch
+                checked={isAnonymous}
+                onCheckedChange={setIsAnonymous}
+                className="data-[state=checked]:bg-[#FF6B35]"
+              />
+            </div>
 
-              {/* Amount Selection */}
-              <div className="space-y-1.5">
-                <Label className="text-gray-700 font-medium text-xs">
-                  {locale === 'fa' ? 'مبلغ کمک (تومان)' : 'Donation Amount'}
-                </Label>
-                <div className="grid grid-cols-3 gap-2">
-                  {donationAmounts.slice(0, 6).map((amount) => (
-                    <button
-                      key={amount}
-                      onClick={() => handleAmountSelect(amount)}
-                      className={`py-1.5 px-3 rounded-xl text-xs font-medium transition-all border-2 ${
-                        selectedAmount === amount
-                          ? 'border-[#FF6B35] bg-orange-50 text-[#FF6B35]'
-                          : 'border-gray-200 hover:border-gray-300 text-gray-700'
-                      }`}
-                    >
-                      {formatCurrency(amount)}
-                    </button>
-                  ))}
-                  <div className="col-span-3">
-                    <Input
-                      type="number"
-                      placeholder={locale === 'fa' ? 'مبلغ دلخواه...' : 'Custom amount...'}
-                      value={customAmount}
-                      onChange={(e) => handleCustomAmountChange(e.target.value)}
-                      className="h-10 text-center text-base border-2 border-gray-200 focus:border-[#FF6B35] rounded-xl"
-                    />
-                  </div>
+            {/* Donor Info - Simplified grid */}
+            {!isAnonymous && (
+              <div className="space-y-3">
+                <div className="space-y-1.5">
+                  <Input
+                    type="text"
+                    placeholder={locale === 'fa' ? 'نام و نام خانوادگی' : 'Full Name'}
+                    value={donorName}
+                    onChange={(e) => setDonorName(e.target.value)}
+                    className="h-11 bg-gray-50/30 border-gray-100 focus:border-[#FF6B35] rounded-xl px-4"
+                  />
+                </div>
+                <div className="grid grid-cols-2 gap-3">
+                  <Input
+                    type="tel"
+                    placeholder={locale === 'fa' ? 'شماره تماس' : 'Phone'}
+                    value={donorPhone}
+                    onChange={(e) => setDonorPhone(e.target.value)}
+                    className="h-11 bg-gray-50/30 border-gray-100 focus:border-[#FF6B35] rounded-xl px-4"
+                  />
+                  <Input
+                    type="email"
+                    placeholder={locale === 'fa' ? 'ایمیل (اختیاری)' : 'Email'}
+                    value={donorEmail}
+                    onChange={(e) => setDonorEmail(e.target.value)}
+                    className="h-11 bg-gray-50/30 border-gray-100 focus:border-[#FF6B35] rounded-xl px-4"
+                  />
                 </div>
               </div>
+            )}
 
-              {/* Anonymous Donation Toggle */}
-              <div className="flex items-center justify-between p-2 bg-gray-50 rounded-xl border border-gray-100">
-                <div className="flex items-center gap-3">
-                  <div className={`p-1.5 rounded-lg ${isAnonymous ? 'bg-[#FF6B35]/10' : 'bg-gray-200'}`}>
-                    <UserX className={`w-4 h-4 ${isAnonymous ? 'text-[#FF6B35]' : 'text-gray-500'}`} />
-                  </div>
-                  <div>
-                    <p className="font-medium text-gray-900 text-xs">
-                      {locale === 'fa' ? 'کمک ناشناس' : 'Anonymous Donation'}
-                    </p>
-                    <p className="text-[10px] text-gray-500">
-                      {locale === 'fa' ? 'اطلاعات شما نمایش داده نمی‌شود' : 'Your info will be hidden'}
-                    </p>
-                  </div>
-                </div>
-                <Switch
-                  checked={isAnonymous}
-                  onCheckedChange={setIsAnonymous}
-                  className="scale-75 data-[state=checked]:bg-[#FF6B35]"
-                />
-              </div>
-
-              {/* Donor Info - Hidden when anonymous */}
-              {!isAnonymous && (
-                <div className="grid grid-cols-2 gap-2">
-                  <div className="col-span-2 space-y-1">
-                    <Label className="text-gray-700 font-medium text-xs">
-                      {locale === 'fa' ? 'نام و نام خانوادگی' : 'Full Name'}
-                    </Label>
-                    <Input
-                      type="text"
-                      placeholder={locale === 'fa' ? 'نام شما...' : 'Your name...'}
-                      value={donorName}
-                      onChange={(e) => setDonorName(e.target.value)}
-                      className="h-9 text-sm border-2 border-gray-200 focus:border-[#FF6B35] rounded-xl"
-                    />
-                  </div>
-                  <div className="space-y-1">
-                    <Label className="text-gray-700 font-medium text-xs">
-                      {locale === 'fa' ? 'شماره تماس' : 'Phone Number'}
-                    </Label>
-                    <Input
-                      type="tel"
-                      placeholder={locale === 'fa' ? '09123456789' : '+1234567890'}
-                      value={donorPhone}
-                      onChange={(e) => setDonorPhone(e.target.value)}
-                      className="h-9 text-sm border-2 border-gray-200 focus:border-[#FF6B35] rounded-xl"
-                    />
-                  </div>
-                  <div className="space-y-1">
-                    <Label className="text-gray-700 font-medium text-xs">
-                      {locale === 'fa' ? 'ایمیل (اختیاری)' : 'Email (optional)'}
-                    </Label>
-                    <Input
-                      type="email"
-                      placeholder={locale === 'fa' ? 'email@example.com' : 'email@example.com'}
-                      value={donorEmail}
-                      onChange={(e) => setDonorEmail(e.target.value)}
-                      className="h-9 text-sm border-2 border-gray-200 focus:border-[#FF6B35] rounded-xl"
-                    />
-                  </div>
-                </div>
-              )}
-
-              {/* Submit Button */}
+            {/* Submit Button */}
+            <div className="pt-2">
               <Button
-                className="w-full h-12 text-base font-semibold bg-gradient-to-r from-[#FF6B35] to-[#FF8F65] hover:from-[#E55A2B] hover:to-[#FF6B35] rounded-xl shadow-lg shadow-orange-100"
+                className="w-full h-14 text-base font-bold bg-gradient-to-r from-[#FF6B35] to-[#FF8F65] hover:opacity-90 rounded-2xl shadow-[0_10px_25px_-5px_rgba(255,107,53,0.4)] transition-all active:scale-[0.98]"
                 disabled={getFinalAmount() === 0}
               >
-                <CreditCard className="w-4 h-4 ml-2" />
+                <CreditCard className="w-5 h-5 ml-2" />
                 {locale === 'fa' 
                   ? `پرداخت ${formatCurrency(getFinalAmount())} تومان`
                   : `Donate ${formatCurrency(getFinalAmount())}`
                 }
               </Button>
+            </div>
 
-              {/* Trust Badges */}
-              <div className="flex items-center justify-center gap-6 text-gray-400 text-[10px]">
-                <div className="flex items-center gap-1">
-                  <CheckCircle2 className="w-3 h-3" />
-                  <span>{locale === 'fa' ? 'پرداخت امن' : 'Secure'}</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <CheckCircle2 className="w-3 h-3" />
-                  <span>{locale === 'fa' ? 'رسید آنلاین' : 'Receipt'}</span>
-                </div>
+            {/* Small Footer Trust */}
+            <div className="flex items-center justify-center gap-6 pt-1">
+              <div className="flex items-center gap-1.5 grayscale opacity-60">
+                <div className="w-1.5 h-1.5 rounded-full bg-green-500" />
+                <span className="text-[10px] font-medium text-gray-500 tracking-wider uppercase">Secure Payment</span>
+              </div>
+              <div className="flex items-center gap-1.5 grayscale opacity-60">
+                <div className="w-1.5 h-1.5 rounded-full bg-blue-500" />
+                <span className="text-[10px] font-medium text-gray-500 tracking-wider uppercase">Direct Impact</span>
               </div>
             </div>
-          </motion.div>
-        </div>
+          </div>
+        </motion.div>
+      </div>
   
         {/* Right Side - Image */}
         <div className="hidden lg:block w-1/2 relative">
