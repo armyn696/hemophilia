@@ -4,15 +4,20 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 
 export async function GET() {
-    const categories = await prisma.galleryCategory.findMany({
-        orderBy: { createdAt: 'desc' },
-        include: {
-            _count: {
-                select: { images: true }
+    try {
+        const categories = await prisma.galleryCategory.findMany({
+            orderBy: { createdAt: 'desc' },
+            include: {
+                _count: {
+                    select: { images: true }
+                }
             }
-        }
-    });
-    return NextResponse.json(categories);
+        });
+        return NextResponse.json(categories);
+    } catch (error: any) {
+        console.error('Error fetching categories:', error);
+        return NextResponse.json({ error: error.message }, { status: 500 });
+    }
 }
 
 export async function POST(request: Request) {
