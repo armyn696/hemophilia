@@ -55,15 +55,15 @@ transition={{ duration: 0.6 }}
 className="w-full max-w-lg bg-white rounded-[2.5rem] shadow-[0_20px_50px_rgba(255,107,53,0.1)] p-6 lg:p-8 relative"
 >
 {/* Back to Home - Absolute */}
-<div className={`absolute top-6 ${isRtl ? 'right-8' : 'left-8'}`}>
+<div className="absolute top-6 left-8">
 <Link
 href={`/${locale}`}
 className="inline-flex items-center gap-2 text-sm text-gray-400 hover:text-gray-800 transition-colors"
 >
                   {isRtl ? (
                     <>
-                      <span>بازگشت</span>
                       <ArrowLeft className="w-4 h-4" />
+                      <span>بازگشت</span>
                     </>
                   ) : (
                     <>
