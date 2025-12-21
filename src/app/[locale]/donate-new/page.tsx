@@ -46,37 +46,49 @@ export default function DonateNewPage() {
   return (
     <div className={`h-screen flex overflow-hidden ${isRtl ? 'flex-row-reverse' : 'flex-row'}`}>
       {/* Left Side - Form */}
-      <div className="w-full lg:w-1/2 h-full overflow-hidden flex items-center justify-center bg-[#FDFBF7] p-4 lg:p-8">
+      <div className="w-full lg:w-1/2 h-full overflow-hidden flex items-center justify-center bg-[#FDFBF7] p-4 lg:p-8 relative">
+        {/* Decorative Grid Lines */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808008_1px,transparent_1px),linear-gradient(to_bottom,#80808008_1px,transparent_1px)] bg-[size:32px_32px]"></div>
+        
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5 }}
-          className="w-full max-w-[480px] bg-white rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.05)] border border-neutral-100 p-8 lg:p-10 relative"
+          className="w-full max-w-[480px] bg-white rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.05)] border border-neutral-100 p-8 lg:p-10 relative z-10"
         >
           {/* Back to Home - Absolute */}
-          <div className={`absolute top-6 ${isRtl ? 'right-8' : 'left-8'}`}>
+          <div className={`absolute top-8 ${isRtl ? 'right-10' : 'left-10'}`}>
             <Link
               href={`/${locale}`}
-              className="inline-flex items-center gap-2 text-sm text-gray-400 hover:text-[#FF6B35] transition-colors group"
+              className="inline-flex items-center gap-2 text-sm text-gray-400 hover:text-gray-900 transition-colors group"
             >
-              <Heart className="w-4 h-4" />
-              <span className="opacity-0 group-hover:opacity-100 transition-opacity">{locale === 'fa' ? 'صفحه اصلی' : 'Home'}</span>
+              {isRtl ? (
+                <>
+                  <ArrowLeft className="w-4 h-4 ml-1" />
+                  <span className="text-xs font-medium">بازگشت به صفحه اصلی</span>
+                </>
+              ) : (
+                <>
+                  <ArrowLeft className="w-4 h-4 mr-1" />
+                  <span className="text-xs font-medium">Back to Home</span>
+                </>
+              )}
             </Link>
           </div>
 
-          <div className="space-y-6">
+          <div className="space-y-6 pt-4">
             {/* Logo & Header */}
             <div className="text-center space-y-3">
               <div className="flex justify-center">
-                <div className="w-14 h-14 bg-gradient-to-br from-[#FF6B35] to-[#FF8F65] rounded-2xl flex items-center justify-center shadow-lg transform -rotate-3">
-                  <Heart className="w-7 h-7 text-white" fill="white" />
+                <div className="w-16 h-16 bg-gradient-to-br from-[#FF6B35] to-[#FF8F65] rounded-[1.25rem] flex items-center justify-center shadow-lg transform -rotate-3">
+                  <Heart className="w-8 h-8 text-white" fill="white" />
                 </div>
               </div>
               <div className="space-y-1">
-                <h1 className="text-2xl font-bold text-gray-900 tracking-tight">
+                <h1 className="text-2xl font-black text-gray-900 tracking-tight">
                   {locale === 'fa' ? 'کمک به کانون هموفیلی' : 'Support Hemophilia Society'}
                 </h1>
-                <p className="text-gray-500 text-sm">
+                <p className="text-gray-500 text-sm font-medium">
                   {locale === 'fa' 
                     ? 'با کمک شما، زندگی بیماران را تغییر می‌دهیم'
                     : 'Your donation changes lives'}
@@ -87,19 +99,34 @@ export default function DonateNewPage() {
             {/* Amount Selection */}
             <div className="space-y-3">
               <div className="flex justify-between items-center px-1">
-                <Label className="text-gray-800 font-semibold text-sm">
-                  {locale === 'fa' ? 'مبلغ کمک (تومان)' : 'Donation Amount'}
+                <Label className="text-gray-800 font-bold text-sm">
+                  {locale === 'fa' ? 'مبلغ کمک (تومان)' : 'Donation Amount (Toman)'}
                 </Label>
               </div>
-              <div className="grid grid-cols-3 gap-2">
-                {donationAmounts.slice(0, 5).map((amount) => (
+              <div className="grid grid-cols-3 gap-3">
+                {donationAmounts.slice(0, 3).map((amount) => (
                   <button
                     key={amount}
                     onClick={() => handleAmountSelect(amount)}
-                    className={`py-2 px-1 rounded-xl text-xs font-bold transition-all border-2 ${
+                    className={`py-3 px-1 rounded-2xl text-[13px] font-black transition-all border-2 ${
                       selectedAmount === amount
-                        ? 'border-[#FF6B35] bg-orange-50 text-[#FF6B35]'
-                        : 'border-gray-50 bg-gray-50/50 hover:border-gray-200 text-gray-600'
+                        ? 'border-[#FF6B35] bg-white text-[#FF6B35] shadow-sm'
+                        : 'border-gray-50 bg-gray-50/50 hover:border-gray-100 text-gray-600'
+                    }`}
+                  >
+                    {formatCurrency(amount)}
+                  </button>
+                ))}
+              </div>
+              <div className="grid grid-cols-3 gap-3">
+                {donationAmounts.slice(3, 5).map((amount) => (
+                  <button
+                    key={amount}
+                    onClick={() => handleAmountSelect(amount)}
+                    className={`py-3 px-1 rounded-2xl text-[13px] font-black transition-all border-2 ${
+                      selectedAmount === amount
+                        ? 'border-[#FF6B35] bg-white text-[#FF6B35] shadow-sm'
+                        : 'border-gray-50 bg-gray-50/50 hover:border-gray-100 text-gray-600'
                     }`}
                   >
                     {formatCurrency(amount)}
@@ -108,27 +135,27 @@ export default function DonateNewPage() {
                 <div className="col-span-1">
                   <Input
                     type="number"
-                    placeholder={locale === 'fa' ? 'دلخواه...' : 'Custom...'}
+                    placeholder={locale === 'fa' ? 'مبلغ دلخواه...' : 'Custom...'}
                     value={customAmount}
                     onChange={(e) => handleCustomAmountChange(e.target.value)}
-                    className="h-[38px] text-center text-xs font-bold border-2 border-gray-50 bg-gray-50/50 focus:border-[#FF6B35] rounded-xl"
+                    className="h-[46px] text-center text-[13px] font-black border-2 border-gray-50 bg-gray-50/50 focus:border-[#FF6B35] rounded-2xl"
                   />
                 </div>
               </div>
             </div>
 
             {/* Anonymous Donation Toggle */}
-            <div className="flex items-center justify-between p-3 bg-neutral-50/80 rounded-2xl border border-neutral-100">
+            <div className="flex items-center justify-between p-4 bg-gray-50/50 rounded-[1.5rem] border border-gray-100/50">
               <div className="flex items-center gap-3">
-                <div className={`p-2 rounded-xl ${isAnonymous ? 'bg-[#FF6B35]/10' : 'bg-white shadow-sm'}`}>
-                  <UserX className={`w-4 h-4 ${isAnonymous ? 'text-[#FF6B35]' : 'text-gray-400'}`} />
+                <div className={`p-2.5 rounded-xl transition-colors ${isAnonymous ? 'bg-[#FF6B35]/10' : 'bg-white shadow-sm border border-gray-100'}`}>
+                  <UserX className={`w-5 h-5 ${isAnonymous ? 'text-[#FF6B35]' : 'text-gray-400'}`} />
                 </div>
                 <div>
-                  <p className="font-semibold text-gray-900 text-[13px]">
-                    {locale === 'fa' ? 'کمک به صورت ناشناس' : 'Donate Anonymously'}
+                  <p className="font-bold text-gray-900 text-sm">
+                    {locale === 'fa' ? 'کمک ناشناس' : 'Anonymous'}
                   </p>
-                  <p className="text-[11px] text-gray-500">
-                    {locale === 'fa' ? 'هویت شما محفوظ می‌ماند' : 'Your identity will be protected'}
+                  <p className="text-[11px] text-gray-500 font-medium tracking-tight">
+                    {locale === 'fa' ? 'نام شما نمایش داده نمی‌شود' : 'Your name won\'t be shown'}
                   </p>
                 </div>
               </div>
@@ -139,33 +166,46 @@ export default function DonateNewPage() {
               />
             </div>
 
-            {/* Donor Info - Simplified grid */}
+            {/* Donor Info */}
             {!isAnonymous && (
-              <div className="space-y-3">
-                <div className="space-y-1.5">
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <Label className="text-gray-800 font-bold text-sm px-1">
+                    {locale === 'fa' ? 'نام و نام خانوادگی' : 'Full Name'}
+                  </Label>
                   <Input
                     type="text"
-                    placeholder={locale === 'fa' ? 'نام و نام خانوادگی' : 'Full Name'}
+                    placeholder={locale === 'fa' ? 'نام شما...' : 'Your name...'}
                     value={donorName}
                     onChange={(e) => setDonorName(e.target.value)}
-                    className="h-11 bg-gray-50/30 border-gray-100 focus:border-[#FF6B35] rounded-xl px-4"
+                    className="h-12 bg-white border-2 border-gray-100 focus:border-[#FF6B35] rounded-2xl px-5 text-sm font-medium"
                   />
                 </div>
-                <div className="grid grid-cols-2 gap-3">
-                  <Input
-                    type="tel"
-                    placeholder={locale === 'fa' ? 'شماره تماس' : 'Phone'}
-                    value={donorPhone}
-                    onChange={(e) => setDonorPhone(e.target.value)}
-                    className="h-11 bg-gray-50/30 border-gray-100 focus:border-[#FF6B35] rounded-xl px-4"
-                  />
-                  <Input
-                    type="email"
-                    placeholder={locale === 'fa' ? 'ایمیل (اختیاری)' : 'Email'}
-                    value={donorEmail}
-                    onChange={(e) => setDonorEmail(e.target.value)}
-                    className="h-11 bg-gray-50/30 border-gray-100 focus:border-[#FF6B35] rounded-xl px-4"
-                  />
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label className="text-gray-800 font-bold text-sm px-1">
+                      {locale === 'fa' ? 'شماره تماس' : 'Phone'}
+                    </Label>
+                    <Input
+                      type="tel"
+                      placeholder="09123456789"
+                      value={donorPhone}
+                      onChange={(e) => setDonorPhone(e.target.value)}
+                      className="h-12 bg-white border-2 border-gray-100 focus:border-[#FF6B35] rounded-2xl px-5 text-sm font-medium"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-gray-800 font-bold text-sm px-1">
+                      {locale === 'fa' ? 'ایمیل (اختیاری)' : 'Email'}
+                    </Label>
+                    <Input
+                      type="email"
+                      placeholder="Email@example.com"
+                      value={donorEmail}
+                      onChange={(e) => setDonorEmail(e.target.value)}
+                      className="h-12 bg-white border-2 border-gray-100 focus:border-[#FF6B35] rounded-2xl px-5 text-sm font-medium"
+                    />
+                  </div>
                 </div>
               </div>
             )}
@@ -173,26 +213,26 @@ export default function DonateNewPage() {
             {/* Submit Button */}
             <div className="pt-2">
               <Button
-                className="w-full h-14 text-base font-bold bg-gradient-to-r from-[#FF6B35] to-[#FF8F65] hover:opacity-90 rounded-2xl shadow-[0_10px_25px_-5px_rgba(255,107,53,0.4)] transition-all active:scale-[0.98]"
+                className="w-full h-[60px] text-lg font-black bg-[#FF6B35] hover:bg-[#FF8F65] text-white rounded-2xl shadow-[0_12px_30px_-10px_rgba(255,107,53,0.5)] transition-all active:scale-[0.98] border-b-4 border-black/10"
                 disabled={getFinalAmount() === 0}
               >
                 <CreditCard className="w-5 h-5 ml-2" />
                 {locale === 'fa' 
                   ? `پرداخت ${formatCurrency(getFinalAmount())} تومان`
-                  : `Donate ${formatCurrency(getFinalAmount())}`
+                  : `Pay ${formatCurrency(getFinalAmount())} Toman`
                 }
               </Button>
             </div>
 
             {/* Small Footer Trust */}
-            <div className="flex items-center justify-center gap-6 pt-1">
-              <div className="flex items-center gap-1.5 grayscale opacity-60">
-                <div className="w-1.5 h-1.5 rounded-full bg-green-500" />
-                <span className="text-[10px] font-medium text-gray-500 tracking-wider uppercase">Secure Payment</span>
-              </div>
-              <div className="flex items-center gap-1.5 grayscale opacity-60">
+            <div className="flex items-center justify-center gap-8 pt-2">
+              <div className="flex items-center gap-2 grayscale group hover:grayscale-0 transition-all opacity-40 hover:opacity-100">
+                <span className="text-[10px] font-black text-gray-500 tracking-widest uppercase">Direct Impact</span>
                 <div className="w-1.5 h-1.5 rounded-full bg-blue-500" />
-                <span className="text-[10px] font-medium text-gray-500 tracking-wider uppercase">Direct Impact</span>
+              </div>
+              <div className="flex items-center gap-2 grayscale group hover:grayscale-0 transition-all opacity-40 hover:opacity-100">
+                <span className="text-[10px] font-black text-gray-500 tracking-widest uppercase">Secure Payment</span>
+                <div className="w-1.5 h-1.5 rounded-full bg-green-500" />
               </div>
             </div>
           </div>
