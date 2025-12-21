@@ -163,7 +163,7 @@ export default function AdminGallery() {
     };
 
     const handleDeleteCategory = async (id: string) => {
-        if (!confirm(isRTL ? 'آیا مطمئن هستید؟ فقط دسته‌های خالی را می‌توان حذف کرد.' : 'Are you sure? Only empty categories can be deleted.')) return;
+        if (!confirm(isRTL ? 'آیا از حذف این دسته‌بندی مطمئن هستید؟ تصاویر آن به بخش "بدون دسته‌بندی" منتقل می‌شوند.' : 'Are you sure you want to delete this category? Its images will be moved to "No Category".')) return;
 
         try {
             const res = await fetch(`/api/gallery/categories?id=${id}`, {

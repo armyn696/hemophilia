@@ -60,14 +60,11 @@ export async function DELETE(request: Request) {
         return NextResponse.json({ error: 'ID required' }, { status: 400 });
     }
 
-    // Check if category has images
-    const imagesCount = await prisma.galleryImage.count({
-        where: { categoryId: id }
+    // Move images to "Uncategorized" (set categoryId to null)
+    await prisma.galleryImage.updateMany({
+        where: { categoryId: id },
+        data: { categoryId: null }
     });
-
-    if (imagesCount > 0) {
-        return NextResponse.json({ error: 'Category is not empty' }, { status: 400 });
-    }
 
     await prisma.galleryCategory.delete({
         where: { id },
