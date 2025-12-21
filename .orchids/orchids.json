@@ -1,0 +1,7 @@
+{
+  "projectId": "4ce5685c-2986-4c0f-88b8-64263159636c",
+  "createdAt": 1766313782481,
+  "startupCommands": [
+    "bun install; npx prisma generate; bun run dev"
+  ]
+}
