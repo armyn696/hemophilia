@@ -3,18 +3,16 @@ import { prisma } from '@/lib/prisma';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 
-export async function GET(request: Request) {
-    const { searchParams } = new URL(request.url);
-    const categoryId = searchParams.get('categoryId');
-
-    const where = categoryId ? { categoryId } : {};
-
-    const images = await prisma.galleryImage.findMany({
-        where,
+export async function GET() {
+    const categories = await prisma.galleryCategory.findMany({
         orderBy: { createdAt: 'desc' },
-        include: { category: true }
+        include: {
+            _count: {
+                select: { images: true }
+            }
+        }
     });
-    return NextResponse.json(images);
+    return NextResponse.json(categories);
 }
 
 export async function POST(request: Request) {
@@ -24,18 +22,17 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json();
-    const { src, alt, categoryId } = body;
+    const { name, nameFa } = body;
 
-    const image = await prisma.galleryImage.create({
-        data: {
-            src,
-            alt,
-            categoryId: categoryId || null
-        },
-        include: { category: true }
+    if (!name) {
+        return NextResponse.json({ error: 'Name is required' }, { status: 400 });
+    }
+
+    const category = await prisma.galleryCategory.create({
+        data: { name, nameFa },
     });
 
-    return NextResponse.json(image);
+    return NextResponse.json(category);
 }
 
 export async function DELETE(request: Request) {
@@ -51,7 +48,16 @@ export async function DELETE(request: Request) {
         return NextResponse.json({ error: 'ID required' }, { status: 400 });
     }
 
-    await prisma.galleryImage.delete({
+    // Check if category has images
+    const imagesCount = await prisma.galleryImage.count({
+        where: { categoryId: id }
+    });
+
+    if (imagesCount > 0) {
+        return NextResponse.json({ error: 'Category is not empty' }, { status: 400 });
+    }
+
+    await prisma.galleryCategory.delete({
         where: { id },
     });
 

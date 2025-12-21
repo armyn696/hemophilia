@@ -386,6 +386,7 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 export const ModelName = {
   User: 'User',
   News: 'News',
+  GalleryCategory: 'GalleryCategory',
   GalleryImage: 'GalleryImage'
 } as const
 
@@ -402,7 +403,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "news" | "galleryImage"
+    modelProps: "user" | "news" | "galleryCategory" | "galleryImage"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -554,6 +555,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    GalleryCategory: {
+      payload: Prisma.$GalleryCategoryPayload<ExtArgs>
+      fields: Prisma.GalleryCategoryFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.GalleryCategoryFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GalleryCategoryPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.GalleryCategoryFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GalleryCategoryPayload>
+        }
+        findFirst: {
+          args: Prisma.GalleryCategoryFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GalleryCategoryPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.GalleryCategoryFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GalleryCategoryPayload>
+        }
+        findMany: {
+          args: Prisma.GalleryCategoryFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GalleryCategoryPayload>[]
+        }
+        create: {
+          args: Prisma.GalleryCategoryCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GalleryCategoryPayload>
+        }
+        createMany: {
+          args: Prisma.GalleryCategoryCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.GalleryCategoryCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GalleryCategoryPayload>[]
+        }
+        delete: {
+          args: Prisma.GalleryCategoryDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GalleryCategoryPayload>
+        }
+        update: {
+          args: Prisma.GalleryCategoryUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GalleryCategoryPayload>
+        }
+        deleteMany: {
+          args: Prisma.GalleryCategoryDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.GalleryCategoryUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.GalleryCategoryUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GalleryCategoryPayload>[]
+        }
+        upsert: {
+          args: Prisma.GalleryCategoryUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GalleryCategoryPayload>
+        }
+        aggregate: {
+          args: Prisma.GalleryCategoryAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateGalleryCategory>
+        }
+        groupBy: {
+          args: Prisma.GalleryCategoryGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.GalleryCategoryGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.GalleryCategoryCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.GalleryCategoryCountAggregateOutputType> | number
+        }
+      }
+    }
     GalleryImage: {
       payload: Prisma.$GalleryImagePayload<ExtArgs>
       fields: Prisma.GalleryImageFieldRefs
@@ -693,10 +768,21 @@ export const NewsScalarFieldEnum = {
 export type NewsScalarFieldEnum = (typeof NewsScalarFieldEnum)[keyof typeof NewsScalarFieldEnum]
 
 
+export const GalleryCategoryScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  nameFa: 'nameFa',
+  createdAt: 'createdAt'
+} as const
+
+export type GalleryCategoryScalarFieldEnum = (typeof GalleryCategoryScalarFieldEnum)[keyof typeof GalleryCategoryScalarFieldEnum]
+
+
 export const GalleryImageScalarFieldEnum = {
   id: 'id',
   src: 'src',
   alt: 'alt',
+  categoryId: 'categoryId',
   createdAt: 'createdAt'
 } as const
 
@@ -855,6 +941,7 @@ export type PrismaClientOptions = ({
 export type GlobalOmitConfig = {
   user?: Prisma.UserOmit
   news?: Prisma.NewsOmit
+  galleryCategory?: Prisma.GalleryCategoryOmit
   galleryImage?: Prisma.GalleryImageOmit
 }
 

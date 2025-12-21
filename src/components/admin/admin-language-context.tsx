@@ -40,6 +40,13 @@ const translations: Record<Language, Record<string, string>> = {
         totalNews: 'کل اخبار',
         totalImages: 'کل تصاویر',
         recentActivity: 'فعالیت‌های اخیر',
+        categories: 'دسته‌بندی‌ها',
+        addCategory: 'افزودن دسته‌بندی',
+        categoryNameEn: 'نام (انگلیسی)',
+        categoryNameFa: 'نام (فارسی)',
+        selectCategory: 'انتخاب دسته‌بندی',
+        all: 'همه',
+        noCategory: 'بدون دسته‌بندی',
     },
     en: {
         adminPanel: 'Admin Panel',
@@ -69,6 +76,13 @@ const translations: Record<Language, Record<string, string>> = {
         totalNews: 'Total News',
         totalImages: 'Total Images',
         recentActivity: 'Recent Activity',
+        categories: 'Categories',
+        addCategory: 'Add Category',
+        categoryNameEn: 'Name (English)',
+        categoryNameFa: 'Name (Persian)',
+        selectCategory: 'Select Category',
+        all: 'All',
+        noCategory: 'No Category',
     },
 };
 

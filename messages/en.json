@@ -258,10 +258,12 @@
         ]
     }
   },
-  "gallery": {
-    "title": "Photo Gallery",
-    "description": "Explore moments from our activities, events, and the inspiring journey of supporting hemophilia patients and their families."
-  },
+    "gallery": {
+      "title": "Photo Gallery",
+      "description": "Explore moments from our activities, events, and the inspiring journey of supporting hemophilia patients and their families.",
+      "all": "All"
+    },
+
   "common": {
     "read_more": "Read More",
     "loading": "Loading...",

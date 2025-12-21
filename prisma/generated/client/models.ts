@@ -10,5 +10,6 @@
  */
 export type * from './models/User'
 export type * from './models/News'
+export type * from './models/GalleryCategory'
 export type * from './models/GalleryImage'
 export type * from './commonInputTypes'

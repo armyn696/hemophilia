@@ -27,9 +27,19 @@ model News {
   updatedAt DateTime @updatedAt
 }
 
+model GalleryCategory {
+  id        String         @id @default(cuid())
+  name      String         @unique
+  nameFa    String?
+  images    GalleryImage[]
+  createdAt DateTime       @default(now())
+}
+
 model GalleryImage {
-  id        String   @id @default(cuid())
-  src       String
-  alt       String
-  createdAt DateTime @default(now())
+  id         String           @id @default(cuid())
+  src        String
+  alt        String
+  categoryId String?
+  category   GalleryCategory? @relation(fields: [categoryId], references: [id])
+  createdAt  DateTime         @default(now())
 }

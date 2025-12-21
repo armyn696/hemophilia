@@ -50,6 +50,11 @@ export type User = Prisma.UserModel
  */
 export type News = Prisma.NewsModel
 /**
+ * Model GalleryCategory
+ * 
+ */
+export type GalleryCategory = Prisma.GalleryCategoryModel
+/**
  * Model GalleryImage
  * 
  */
