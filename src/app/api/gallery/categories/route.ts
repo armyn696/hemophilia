@@ -26,18 +26,25 @@ export async function POST(request: Request) {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const body = await request.json();
-    const { name, nameFa } = body;
+    try {
+        const body = await request.json();
+        const { name, nameFa } = body;
 
-    if (!name) {
-        return NextResponse.json({ error: 'Name is required' }, { status: 400 });
+        console.log('Creating category:', { name, nameFa });
+
+        if (!name) {
+            return NextResponse.json({ error: 'Name is required' }, { status: 400 });
+        }
+
+        const category = await prisma.galleryCategory.create({
+            data: { name, nameFa },
+        });
+
+        return NextResponse.json(category);
+    } catch (error: any) {
+        console.error('Error creating category:', error);
+        return NextResponse.json({ error: error.message }, { status: 500 });
     }
-
-    const category = await prisma.galleryCategory.create({
-        data: { name, nameFa },
-    });
-
-    return NextResponse.json(category);
 }
 
 export async function DELETE(request: Request) {

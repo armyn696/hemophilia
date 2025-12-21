@@ -4,17 +4,22 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 
 export async function GET(request: Request) {
-    const { searchParams } = new URL(request.url);
-    const categoryId = searchParams.get('categoryId');
+    try {
+        const { searchParams } = new URL(request.url);
+        const categoryId = searchParams.get('categoryId');
 
-    const where = categoryId ? { categoryId } : {};
+        const where = categoryId ? { categoryId } : {};
 
-    const images = await prisma.galleryImage.findMany({
-        where,
-        orderBy: { createdAt: 'desc' },
-        include: { category: true }
-    });
-    return NextResponse.json(images);
+        const images = await prisma.galleryImage.findMany({
+            where,
+            orderBy: { createdAt: 'desc' },
+            include: { category: true }
+        });
+        return NextResponse.json(images);
+    } catch (error: any) {
+        console.error('Error fetching gallery images:', error);
+        return NextResponse.json({ error: error.message }, { status: 500 });
+    }
 }
 
 export async function POST(request: Request) {
@@ -23,19 +28,24 @@ export async function POST(request: Request) {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const body = await request.json();
-    const { src, alt, categoryId } = body;
+    try {
+        const body = await request.json();
+        const { src, alt, categoryId } = body;
 
-    const image = await prisma.galleryImage.create({
-        data: {
-            src,
-            alt,
-            categoryId: categoryId || null
-        },
-        include: { category: true }
-    });
+        const image = await prisma.galleryImage.create({
+            data: {
+                src,
+                alt,
+                categoryId: categoryId || null
+            },
+            include: { category: true }
+        });
 
-    return NextResponse.json(image);
+        return NextResponse.json(image);
+    } catch (error: any) {
+        console.error('Error creating gallery image:', error);
+        return NextResponse.json({ error: error.message }, { status: 500 });
+    }
 }
 
 export async function DELETE(request: Request) {
