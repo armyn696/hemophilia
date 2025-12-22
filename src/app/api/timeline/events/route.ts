@@ -4,11 +4,13 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 
 export async function GET() {
-    const news = await prisma.news.findMany({
-        orderBy: { date: 'desc' },
-        include: { category: true },
+    const events = await prisma.timelineEvent.findMany({
+        include: {
+            period: true
+        },
+        orderBy: { order: 'asc' }
     });
-    return NextResponse.json(news);
+    return NextResponse.json(events);
 }
 
 export async function POST(request: Request) {
@@ -18,25 +20,23 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json();
-    const { title, titleEn, excerpt, excerptEn, content, contentEn, image, categoryId, date, dateFa } = body;
+    const { title, titleEn, description, descriptionEn, date, dateEn, image, periodId, order } = body;
 
-    const news = await prisma.news.create({
+    const event = await prisma.timelineEvent.create({
         data: {
             title,
             titleEn,
-            excerpt,
-            excerptEn,
-            content,
-            contentEn,
+            description,
+            descriptionEn,
+            date,
+            dateEn,
             image,
-            categoryId: categoryId || null,
-            date: new Date(date),
-            dateFa,
-            author: session.user?.name || 'Admin',
-        },
+            periodId,
+            order: order || 0
+        }
     });
 
-    return NextResponse.json(news);
+    return NextResponse.json(event);
 }
 
 export async function DELETE(request: Request) {
@@ -52,8 +52,8 @@ export async function DELETE(request: Request) {
         return NextResponse.json({ error: 'ID required' }, { status: 400 });
     }
 
-    await prisma.news.delete({
-        where: { id },
+    await prisma.timelineEvent.delete({
+        where: { id }
     });
 
     return NextResponse.json({ success: true });

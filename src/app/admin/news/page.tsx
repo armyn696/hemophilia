@@ -11,12 +11,20 @@ import { format } from 'date-fns';
 import { faIR } from 'date-fns/locale';
 import { useAdminLanguage } from '@/components/admin/admin-language-context';
 
+interface NewsCategory {
+    id: string;
+    name: string;
+    nameFa: string;
+}
+
 interface NewsItem {
     id: string;
     title: string;
+    titleEn?: string;
     date: string;
+    dateFa?: string;
     image: string;
-    category: string;
+    category?: NewsCategory | null;
 }
 
 export default function AdminNews() {
@@ -91,14 +99,16 @@ export default function AdminNews() {
                                     />
                                 </div>
                                 <div className={`flex-1 min-w-0 py-4 ${isRTL ? 'text-right' : ''}`}>
-                                    <h3 className="font-semibold text-lg truncate">{item.title}</h3>
+                                    <h3 className="font-semibold text-lg truncate">
+                                        {isRTL ? item.title : (item.titleEn || item.title)}
+                                    </h3>
                                     <div className={`flex items-center gap-4 text-sm text-muted-foreground mt-1 ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
                                         <span className="capitalize px-2 py-0.5 bg-gray-100 dark:bg-neutral-800 rounded-full text-xs">
-                                            {item.category}
+                                            {item.category ? (isRTL ? item.category.nameFa : item.category.name) : ''}
                                         </span>
                                         <div className={`flex items-center gap-1 ${isRTL ? 'flex-row-reverse' : ''}`}>
                                             <Calendar className="w-3 h-3" />
-                                            <span>{format(new Date(item.date), 'MMM d, yyyy', isRTL ? { locale: faIR } : undefined)}</span>
+                                            <span>{(isRTL && item.dateFa) ? item.dateFa : format(new Date(item.date), 'MMM d, yyyy')}</span>
                                         </div>
                                     </div>
                                 </div>

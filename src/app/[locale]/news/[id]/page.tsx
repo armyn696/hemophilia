@@ -10,14 +10,24 @@ import { Navigation } from '@/components/navigation';
 import { Footer } from '@/components/footer';
 import { Button } from '@/components/ui/button';
 
+interface NewsCategory {
+  id: string;
+  name: string;
+  nameFa: string;
+}
+
 interface NewsItem {
   id: string;
   title: string;
+  titleEn?: string;
   excerpt: string;
+  excerptEn?: string;
   content: string;
+  contentEn?: string;
   image: string;
-  category: string;
+  category?: NewsCategory | null;
   date: string;
+  dateFa?: string;
   author: string;
 }
 
@@ -56,7 +66,8 @@ export default function NewsDetailPage() {
     }
   }, [id]);
 
-  const formatDate = (dateString: string) => {
+  const formatDate = (dateString: string, dateFa?: string) => {
+    if (locale === 'fa' && dateFa) return dateFa;
     const date = new Date(dateString);
     return new Intl.DateTimeFormat(locale, {
       year: 'numeric',
@@ -102,7 +113,7 @@ export default function NewsDetailPage() {
   return (
     <div className="min-h-screen flex flex-col bg-[#FFF8F3] dark:bg-neutral-950">
       <Navigation />
-      
+
       <main className="flex-1 pt-28 pb-16 px-4 md:px-8">
         <div className="max-w-4xl mx-auto">
           {/* Back Button */}
@@ -119,20 +130,20 @@ export default function NewsDetailPage() {
           <div className="mb-8 text-center md:text-start">
             <div className="flex flex-wrap gap-4 items-center justify-center md:justify-start text-sm text-gray-500 mb-4">
               <span className="bg-red-100 text-[#A91D3A] px-3 py-1 rounded-full font-medium">
-                {newsItem.category}
+                {newsItem.category ? (isRtl ? newsItem.category.nameFa : newsItem.category.name) : ''}
               </span>
               <div className="flex items-center gap-1">
                 <Calendar className="w-4 h-4" />
-                <span>{formatDate(newsItem.date)}</span>
+                <span>{formatDate(newsItem.date, newsItem.dateFa)}</span>
               </div>
               <div className="flex items-center gap-1">
                 <User className="w-4 h-4" />
                 <span>{newsItem.author}</span>
               </div>
             </div>
-            
+
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#2C3E50] dark:text-white leading-tight mb-6">
-              {newsItem.title}
+              {isRtl ? newsItem.title : (newsItem.titleEn || newsItem.title)}
             </h1>
           </div>
 
@@ -150,18 +161,18 @@ export default function NewsDetailPage() {
           </div>
 
           {/* Content */}
-          <article 
+          <article
             className="prose prose-lg dark:prose-invert max-w-none prose-headings:text-[#2C3E50] prose-a:text-[#A91D3A] prose-a:no-underline hover:prose-a:underline prose-img:rounded-xl prose-img:shadow-lg prose-blockquote:border-[#A91D3A] prose-blockquote:bg-red-50 prose-blockquote:py-2 prose-blockquote:px-4 prose-blockquote:rounded-r-lg"
-            dangerouslySetInnerHTML={{ __html: newsItem.content }}
+            dangerouslySetInnerHTML={{ __html: isRtl ? newsItem.content : (newsItem.contentEn || newsItem.content) }}
           />
 
           {/* Share/Footer area could go here */}
           <div className="mt-12 pt-8 border-t border-neutral-200 dark:border-neutral-800">
-             {/* Placeholder for share buttons or related news */}
+            {/* Placeholder for share buttons or related news */}
           </div>
         </div>
       </main>
-      
+
       <Footer />
     </div>
   );

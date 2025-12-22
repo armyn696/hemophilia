@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { LayoutDashboard, Image as ImageIcon, Newspaper, Home, Languages } from 'lucide-react';
+import { LayoutDashboard, Image as ImageIcon, Newspaper, Home, Languages, History, Tag } from 'lucide-react';
 import { useAdminLanguage } from './admin-language-context';
 import LogoutButton from './logout-button';
 
@@ -11,7 +11,9 @@ export function AdminSidebarContent({ onClose }: { onClose?: () => void }) {
     const navItems = [
         { href: '/admin', label: t('dashboard'), icon: LayoutDashboard },
         { href: '/admin/news', label: t('news'), icon: Newspaper },
+        { href: '/admin/news-categories', label: t('newsCategories'), icon: Tag },
         { href: '/admin/gallery', label: t('gallery'), icon: ImageIcon },
+        { href: '/admin/timeline', label: t('timeline'), icon: History },
     ];
 
     return (

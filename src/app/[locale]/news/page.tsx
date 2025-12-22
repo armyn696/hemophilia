@@ -45,13 +45,17 @@ export default function NewsPage() {
   }, []);
 
   const filteredNews = allNews.filter(news => {
-    const matchesCategory = selectedCategory === 'all' || news.category === selectedCategory;
-    const matchesSearch = news.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      news.excerpt.toLowerCase().includes(searchQuery.toLowerCase());
+    const categoryName = news.category?.name || '';
+    const matchesCategory = selectedCategory === 'all' || categoryName === selectedCategory;
+    const title = locale === 'fa' ? news.title : (news.titleEn || news.title);
+    const excerpt = locale === 'fa' ? news.excerpt : (news.excerptEn || news.excerpt);
+    const matchesSearch = title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      excerpt.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesCategory && matchesSearch;
   });
 
-  const formatDate = (dateString: string) => {
+  const formatDate = (dateString: string, dateFa?: string) => {
+    if (locale === 'fa' && dateFa) return dateFa;
     const date = new Date(dateString);
     return new Intl.DateTimeFormat(locale, {
       year: 'numeric',
@@ -169,7 +173,7 @@ export default function NewsPage() {
                           />
                           <div className={`absolute top-4 ${locale === 'fa' ? 'right-4' : 'left-4'}`}>
                             <span className="bg-white/90 dark:bg-neutral-900/90 backdrop-blur-sm text-[#A91D3A] text-xs font-bold px-3 py-1.5 rounded-full shadow-sm border border-red-100 dark:border-neutral-800">
-                              {categories.find(c => c.id === news.category)?.label}
+                              {news.category ? (locale === 'fa' ? news.category.nameFa : news.category.name) : ''}
                             </span>
                           </div>
                         </div>
@@ -180,7 +184,7 @@ export default function NewsPage() {
                           <div className="flex items-center gap-4 text-xs font-medium text-neutral-400 mb-4">
                             <div className="flex items-center gap-1.5">
                               <Calendar className="w-3.5 h-3.5" />
-                              <span>{formatDate(news.date)}</span>
+                              <span>{formatDate(news.date, news.dateFa)}</span>
                             </div>
                             <div className="w-1 h-1 rounded-full bg-neutral-300 dark:bg-neutral-700" />
                             <div className="flex items-center gap-1.5">
@@ -191,12 +195,12 @@ export default function NewsPage() {
 
                           {/* Title */}
                           <h3 className="text-xl font-bold text-neutral-800 dark:text-neutral-100 mb-3 group-hover:text-[#A91D3A] transition-colors line-clamp-2 leading-tight">
-                            {news.title}
+                            {locale === 'fa' ? news.title : (news.titleEn || news.title)}
                           </h3>
 
                           {/* Excerpt */}
                           <p className="text-neutral-500 dark:text-neutral-400 text-sm leading-relaxed mb-6 flex-1 line-clamp-3">
-                            {news.excerpt}
+                            {locale === 'fa' ? news.excerpt : (news.excerptEn || news.excerpt)}
                           </p>
 
                           {/* Read More */}

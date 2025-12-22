@@ -8,14 +8,24 @@ import Link from 'next/link';
 import { Calendar, User, ArrowRight, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
+interface NewsCategory {
+  id: string;
+  name: string;
+  nameFa: string;
+}
+
 interface NewsItem {
   id: string;
   title: string;
+  titleEn?: string;
   excerpt: string;
+  excerptEn?: string;
   content: string;
+  contentEn?: string;
   image: string;
-  category: string;
+  category?: NewsCategory | null;
   date: string;
+  dateFa?: string;
   author: string;
 }
 
@@ -139,7 +149,8 @@ export default function NewsPreviewSection() {
     x.set(newX);
   });
 
-  const formatDate = (dateString: string) => {
+  const formatDate = (dateString: string, dateFa?: string) => {
+    if (locale === 'fa' && dateFa) return dateFa;
     const date = new Date(dateString);
     return new Intl.DateTimeFormat(locale, {
       year: 'numeric',
@@ -259,12 +270,12 @@ export default function NewsPreviewSection() {
                     {/* Category & Meta */}
                     <div className="flex items-center justify-between mb-4">
                       <span className="bg-[#A91D3A]/10 text-[#A91D3A] text-xs font-bold px-3 py-1 rounded-full">
-                        {news.category}
+                        {news.category ? (locale === 'fa' ? news.category.nameFa : news.category.name) : ''}
                       </span>
                       <div className="flex items-center gap-4 text-xs text-gray-500">
                         <div className="flex items-center gap-1">
                           <Calendar className="w-3 h-3" />
-                          <span>{formatDate(news.date)}</span>
+                          <span>{formatDate(news.date, news.dateFa)}</span>
                         </div>
                         <div className="flex items-center gap-1">
                           <User className="w-3 h-3" />
@@ -275,12 +286,12 @@ export default function NewsPreviewSection() {
 
                     {/* Title */}
                     <h3 className="text-xl font-bold text-[#2C3E50] mb-3 group-hover:text-[#A91D3A] transition-colors line-clamp-2">
-                      {news.title}
+                      {locale === 'fa' ? news.title : (news.titleEn || news.title)}
                     </h3>
 
                     {/* Excerpt */}
                     <p className="text-gray-600 text-sm leading-relaxed mb-4 flex-1 line-clamp-3">
-                      {news.excerpt}
+                      {locale === 'fa' ? news.excerpt : (news.excerptEn || news.excerpt)}
                     </p>
 
                     {/* Read More */}

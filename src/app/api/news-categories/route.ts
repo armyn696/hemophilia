@@ -4,11 +4,10 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 
 export async function GET() {
-    const news = await prisma.news.findMany({
-        orderBy: { date: 'desc' },
-        include: { category: true },
+    const categories = await prisma.newsCategory.findMany({
+        orderBy: { createdAt: 'asc' },
     });
-    return NextResponse.json(news);
+    return NextResponse.json(categories);
 }
 
 export async function POST(request: Request) {
@@ -18,25 +17,23 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json();
-    const { title, titleEn, excerpt, excerptEn, content, contentEn, image, categoryId, date, dateFa } = body;
+    const { name, nameFa } = body;
 
-    const news = await prisma.news.create({
-        data: {
-            title,
-            titleEn,
-            excerpt,
-            excerptEn,
-            content,
-            contentEn,
-            image,
-            categoryId: categoryId || null,
-            date: new Date(date),
-            dateFa,
-            author: session.user?.name || 'Admin',
-        },
-    });
+    if (!name || !nameFa) {
+        return NextResponse.json({ error: 'Both name and nameFa are required' }, { status: 400 });
+    }
 
-    return NextResponse.json(news);
+    try {
+        const category = await prisma.newsCategory.create({
+            data: { name, nameFa },
+        });
+        return NextResponse.json(category);
+    } catch (error: any) {
+        if (error.code === 'P2002') {
+            return NextResponse.json({ error: 'Category name already exists' }, { status: 400 });
+        }
+        throw error;
+    }
 }
 
 export async function DELETE(request: Request) {
@@ -52,7 +49,7 @@ export async function DELETE(request: Request) {
         return NextResponse.json({ error: 'ID required' }, { status: 400 });
     }
 
-    await prisma.news.delete({
+    await prisma.newsCategory.delete({
         where: { id },
     });
 

@@ -6,6 +6,7 @@ import { Navigation } from '@/components/navigation';
 import { Footer } from '@/components/footer';
 
 export default function HomePage() {
+  // Re-rendering to fix category object error
   return (
     <div className="min-h-screen flex flex-col">
       <Navigation />
