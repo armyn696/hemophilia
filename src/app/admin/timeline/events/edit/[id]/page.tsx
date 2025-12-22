@@ -25,6 +25,7 @@ export default async function EditEventPage({ params }: EditEventPageProps) {
         description: event.description,
         descriptionEn: event.descriptionEn || '',
         date: event.date || '',
+        dateEn: event.dateEn || '',
         image: event.image || '',
         periodId: event.periodId,
         order: event.order,

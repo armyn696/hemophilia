@@ -18,10 +18,19 @@ export default async function EditNewsPage({ params }: EditNewsPageProps) {
         notFound();
     }
 
-    // Convert Date to string for the form
+    // Convert Date to string and handle nulls for the form
     const formattedNews = {
-        ...news,
+        id: news.id,
+        title: news.title,
+        titleEn: news.titleEn || undefined,
+        excerpt: news.excerpt,
+        excerptEn: news.excerptEn || undefined,
+        content: news.content,
+        contentEn: news.contentEn || undefined,
+        image: news.image,
+        categoryId: news.categoryId || undefined,
         date: news.date.toISOString(),
+        dateFa: news.dateFa || undefined,
     };
 
     return (
