@@ -24,6 +24,7 @@ import {
   Redo,
   Upload,
   Loader2,
+  ArrowLeftRight,
 } from 'lucide-react';
 import {
   Dialog,
@@ -38,9 +39,11 @@ interface RichTextEditorProps {
   content: string;
   onChange: (content: string) => void;
   placeholder?: string;
+  direction?: 'rtl' | 'ltr';
+  onDirectionChange?: (direction: 'rtl' | 'ltr') => void;
 }
 
-export default function RichTextEditor({ content, onChange, placeholder }: RichTextEditorProps) {
+export default function RichTextEditor({ content, onChange, placeholder, direction = 'rtl', onDirectionChange }: RichTextEditorProps) {
   const [linkUrl, setLinkUrl] = useState('');
   const [imageUrl, setImageUrl] = useState('');
   const [youtubeUrl, setYoutubeUrl] = useState('');
@@ -86,9 +89,11 @@ export default function RichTextEditor({ content, onChange, placeholder }: RichT
     editorProps: {
       attributes: {
         class: 'prose prose-sm max-w-none focus:outline-none min-h-[300px] px-4 py-3',
+        dir: direction,
+        style: direction === 'rtl' ? 'text-align: right;' : 'text-align: left;',
       },
     },
-  });
+  }, [direction]);
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files?.[0]) return;
@@ -153,6 +158,23 @@ export default function RichTextEditor({ content, onChange, placeholder }: RichT
     <div className="border rounded-xl overflow-hidden bg-[#FFF8F3]">
       {/* Toolbar */}
       <div className="flex flex-wrap items-center gap-1 p-2 border-b bg-white">
+        {/* Direction Toggle */}
+        {onDirectionChange && (
+          <>
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              onClick={() => onDirectionChange(direction === 'rtl' ? 'ltr' : 'rtl')}
+              className="h-8 px-2 text-xs gap-1 font-medium"
+              title={direction === 'rtl' ? 'تغییر به چپ به راست' : 'Change to Right-to-Left'}
+            >
+              <ArrowLeftRight className="w-4 h-4" />
+              {direction.toUpperCase()}
+            </Button>
+            <div className="w-px h-6 bg-gray-300 mx-1" />
+          </>
+        )}
         {/* Text Formatting */}
         <Button
           type="button"

@@ -9,7 +9,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Loader2, Upload, Calendar } from 'lucide-react';
+import { Loader2, Upload, Calendar, ArrowLeftRight } from 'lucide-react';
 import Image from 'next/image';
 import { toast } from 'sonner';
 import RichTextEditor from './rich-text-editor';
@@ -47,6 +47,40 @@ export default function NewsForm({ initialData }: NewsFormProps) {
     const [uploading, setUploading] = useState(false);
     const [categories, setCategories] = useState<NewsCategory[]>([]);
     const [loadingCategories, setLoadingCategories] = useState(true);
+
+    // Direction states for each field (auto-detect + manual override)
+    const [directions, setDirections] = useState({
+        title: 'rtl' as 'rtl' | 'ltr',
+        excerpt: 'rtl' as 'rtl' | 'ltr',
+        content: 'rtl' as 'rtl' | 'ltr',
+        titleEn: 'ltr' as 'rtl' | 'ltr',
+        excerptEn: 'ltr' as 'rtl' | 'ltr',
+        contentEn: 'ltr' as 'rtl' | 'ltr',
+    });
+
+    // Detect if text starts with RTL character (Persian/Arabic)
+    const detectDirection = (text: string): 'rtl' | 'ltr' => {
+        const rtlRegex = /^[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF]/;
+        const trimmed = text.trim();
+        if (trimmed.length === 0) return 'rtl'; // default for empty
+        return rtlRegex.test(trimmed) ? 'rtl' : 'ltr';
+    };
+
+    // Handle text change with auto-detection
+    const handleTextChange = (field: 'title' | 'excerpt' | 'titleEn' | 'excerptEn' | 'content' | 'contentEn', value: string) => {
+        setFormData({ ...formData, [field]: value });
+        // Auto-detect direction based on content (only for title and excerpt, content is handled manually usually but auto-detect helps)
+        const detected = detectDirection(value);
+        setDirections(prev => ({ ...prev, [field]: detected }));
+    };
+
+    // Toggle direction manually
+    const toggleDirection = (field: 'title' | 'excerpt' | 'titleEn' | 'excerptEn' | 'content' | 'contentEn') => {
+        setDirections(prev => ({
+            ...prev,
+            [field]: prev[field] === 'rtl' ? 'ltr' : 'rtl'
+        }));
+    };
 
     // Parse initial Persian date
     const getInitialPersianDate = () => {
@@ -91,26 +125,49 @@ export default function NewsForm({ initialData }: NewsFormProps) {
     };
 
     const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (!e.target.files?.[0]) return;
+        console.log('[News Form] ===== Upload started =====');
+
+        if (!e.target.files?.[0]) {
+            console.log('[News Form] No file selected');
+            return;
+        }
 
         setUploading(true);
         const file = e.target.files[0];
+
+        console.log('[News Form] File selected:', {
+            name: file.name,
+            type: file.type,
+            size: `${(file.size / 1024).toFixed(2)} KB`
+        });
+
         const uploadFormData = new FormData();
         uploadFormData.append('file', file);
 
         try {
+            console.log('[News Form] Sending upload request to /api/upload...');
             const res = await fetch('/api/upload', {
                 method: 'POST',
                 body: uploadFormData,
             });
 
-            if (!res.ok) throw new Error('Upload failed');
+            console.log('[News Form] Response status:', res.status, res.statusText);
 
-            const { url } = await res.json();
-            setFormData({ ...formData, image: url });
+            if (!res.ok) {
+                const errorData = await res.json().catch(() => ({}));
+                console.error('[News Form] Upload failed:', errorData);
+                throw new Error(errorData.error || `Upload failed: ${res.status}`);
+            }
+
+            const data = await res.json();
+            console.log('[News Form] ✓ Upload successful! Response:', data);
+
+            setFormData({ ...formData, image: data.url });
             toast.success(isRTL ? 'تصویر آپلود شد' : 'Image uploaded');
-        } catch (error) {
-            toast.error(isRTL ? 'خطا در آپلود تصویر' : 'Failed to upload image');
+            console.log('[News Form] ===== Upload finished successfully =====');
+        } catch (error: any) {
+            console.error('[News Form] ❌ Upload error:', error.message);
+            toast.error(isRTL ? `خطا در آپلود تصویر: ${error.message}` : `Failed to upload image: ${error.message}`);
         } finally {
             setUploading(false);
         }
@@ -266,26 +323,54 @@ export default function NewsForm({ initialData }: NewsFormProps) {
                             </div>
 
                             <div className="space-y-2">
-                                <Label htmlFor="title">عنوان (فارسی) *</Label>
+                                <div className="flex items-center justify-between">
+                                    <Label htmlFor="title">عنوان (فارسی) *</Label>
+                                    <Button
+                                        type="button"
+                                        variant="ghost"
+                                        size="sm"
+                                        onClick={() => toggleDirection('title')}
+                                        className="h-6 px-2 text-xs gap-1"
+                                        title={`جهت فعلی: ${directions.title.toUpperCase()} - کلیک برای تغییر`}
+                                    >
+                                        <ArrowLeftRight className="w-3 h-3" />
+                                        {directions.title.toUpperCase()}
+                                    </Button>
+                                </div>
                                 <Input
                                     id="title"
                                     value={formData.title}
-                                    onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                                    onChange={(e) => handleTextChange('title', e.target.value)}
                                     required
-                                    dir="rtl"
+                                    dir={directions.title}
+                                    className={directions.title === 'rtl' ? 'text-right' : 'text-left'}
                                     placeholder="عنوان خبر به فارسی..."
                                 />
                             </div>
 
                             <div className="space-y-2">
-                                <Label htmlFor="excerpt">خلاصه (فارسی) *</Label>
+                                <div className="flex items-center justify-between">
+                                    <Label htmlFor="excerpt">خلاصه (فارسی) *</Label>
+                                    <Button
+                                        type="button"
+                                        variant="ghost"
+                                        size="sm"
+                                        onClick={() => toggleDirection('excerpt')}
+                                        className="h-6 px-2 text-xs gap-1"
+                                        title={`جهت فعلی: ${directions.excerpt.toUpperCase()} - کلیک برای تغییر`}
+                                    >
+                                        <ArrowLeftRight className="w-3 h-3" />
+                                        {directions.excerpt.toUpperCase()}
+                                    </Button>
+                                </div>
                                 <Textarea
                                     id="excerpt"
                                     value={formData.excerpt}
-                                    onChange={(e) => setFormData({ ...formData, excerpt: e.target.value })}
+                                    onChange={(e) => handleTextChange('excerpt', e.target.value)}
                                     required
                                     rows={3}
-                                    dir="rtl"
+                                    dir={directions.excerpt}
+                                    className={directions.excerpt === 'rtl' ? 'text-right' : 'text-left'}
                                     placeholder="خلاصه کوتاه از خبر..."
                                 />
                             </div>
@@ -294,8 +379,10 @@ export default function NewsForm({ initialData }: NewsFormProps) {
                                 <Label htmlFor="content">محتوا (فارسی) *</Label>
                                 <RichTextEditor
                                     content={formData.content}
-                                    onChange={(content) => setFormData({ ...formData, content })}
+                                    onChange={(content) => handleTextChange('content', content)}
                                     placeholder="محتوای کامل خبر به فارسی..."
+                                    direction={directions.content}
+                                    onDirectionChange={(dir) => toggleDirection('content')}
                                 />
                             </div>
                         </TabsContent>
@@ -318,24 +405,52 @@ export default function NewsForm({ initialData }: NewsFormProps) {
                             </div>
 
                             <div className="space-y-2">
-                                <Label htmlFor="titleEn">Title (English)</Label>
+                                <div className="flex items-center justify-between">
+                                    <Label htmlFor="titleEn">Title (English)</Label>
+                                    <Button
+                                        type="button"
+                                        variant="ghost"
+                                        size="sm"
+                                        onClick={() => toggleDirection('titleEn')}
+                                        className="h-6 px-2 text-xs gap-1"
+                                        title={`Current direction: ${directions.titleEn.toUpperCase()} - Click to change`}
+                                    >
+                                        <ArrowLeftRight className="w-3 h-3" />
+                                        {directions.titleEn.toUpperCase()}
+                                    </Button>
+                                </div>
                                 <Input
                                     id="titleEn"
                                     value={formData.titleEn}
-                                    onChange={(e) => setFormData({ ...formData, titleEn: e.target.value })}
-                                    dir="ltr"
+                                    onChange={(e) => handleTextChange('titleEn', e.target.value)}
+                                    dir={directions.titleEn}
+                                    className={directions.titleEn === 'rtl' ? 'text-right' : 'text-left'}
                                     placeholder="News title in English..."
                                 />
                             </div>
 
                             <div className="space-y-2">
-                                <Label htmlFor="excerptEn">Excerpt (English)</Label>
+                                <div className="flex items-center justify-between">
+                                    <Label htmlFor="excerptEn">Excerpt (English)</Label>
+                                    <Button
+                                        type="button"
+                                        variant="ghost"
+                                        size="sm"
+                                        onClick={() => toggleDirection('excerptEn')}
+                                        className="h-6 px-2 text-xs gap-1"
+                                        title={`Current direction: ${directions.excerptEn.toUpperCase()} - Click to change`}
+                                    >
+                                        <ArrowLeftRight className="w-3 h-3" />
+                                        {directions.excerptEn.toUpperCase()}
+                                    </Button>
+                                </div>
                                 <Textarea
                                     id="excerptEn"
                                     value={formData.excerptEn}
-                                    onChange={(e) => setFormData({ ...formData, excerptEn: e.target.value })}
+                                    onChange={(e) => handleTextChange('excerptEn', e.target.value)}
                                     rows={3}
-                                    dir="ltr"
+                                    dir={directions.excerptEn}
+                                    className={directions.excerptEn === 'rtl' ? 'text-right' : 'text-left'}
                                     placeholder="Brief summary of the news..."
                                 />
                             </div>
@@ -344,8 +459,10 @@ export default function NewsForm({ initialData }: NewsFormProps) {
                                 <Label htmlFor="contentEn">Content (English)</Label>
                                 <RichTextEditor
                                     content={formData.contentEn}
-                                    onChange={(content) => setFormData({ ...formData, contentEn: content })}
+                                    onChange={(content) => handleTextChange('contentEn', content)}
                                     placeholder="Full news content in English..."
+                                    direction={directions.contentEn}
+                                    onDirectionChange={(dir) => toggleDirection('contentEn')}
                                 />
                             </div>
                         </TabsContent>
