@@ -1,6 +1,4 @@
 import { NextResponse } from 'next/server';
-import { writeFile, mkdir, access, constants } from 'fs/promises';
-import { join } from 'path';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 
@@ -34,62 +32,31 @@ export async function POST(request: Request) {
             size: `${(file.size / 1024).toFixed(2)} KB`
         });
 
-        // Convert to buffer
-        console.log('[Upload API] Converting file to buffer...');
+        // Check file size (limit to 5MB for database storage)
+        const maxSize = 5 * 1024 * 1024; // 5MB
+        if (file.size > maxSize) {
+            console.log('[Upload API] ❌ File too large:', file.size);
+            return NextResponse.json({
+                error: 'فایل بیش از حد بزرگ است (حداکثر 5MB)',
+                details: 'File size exceeds 5MB limit'
+            }, { status: 400 });
+        }
+
+        // Convert to buffer and then to base64
+        console.log('[Upload API] Converting file to base64...');
         const bytes = await file.arrayBuffer();
         const buffer = Buffer.from(bytes);
-        console.log('[Upload API] ✓ Buffer created, size:', buffer.length, 'bytes');
+        const base64 = buffer.toString('base64');
 
-        // Create unique filename
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
-        const filename = file.name.replace(/\.[^/.]+$/, "") + '-' + uniqueSuffix + '.' + file.name.split('.').pop();
-        console.log('[Upload API] Generated filename:', filename);
+        // Create data URL
+        const mimeType = file.type || 'image/jpeg';
+        const dataUrl = `data:${mimeType};base64,${base64}`;
 
-        // Get upload directory path
-        const uploadDir = join(process.cwd(), 'public', 'uploads');
-        console.log('[Upload API] Upload directory:', uploadDir);
+        console.log('[Upload API] ✓ Base64 conversion complete');
+        console.log('[Upload API] Data URL length:', dataUrl.length, 'characters');
+        console.log('[Upload API] ===== Upload finished successfully =====');
 
-        // Ensure uploads directory exists
-        try {
-            console.log('[Upload API] Creating upload directory if not exists...');
-            await mkdir(uploadDir, { recursive: true });
-            console.log('[Upload API] ✓ Upload directory ready');
-        } catch (mkdirError: any) {
-            console.log('[Upload API] Note during mkdir:', mkdirError.message);
-        }
-
-        // Check directory permissions
-        try {
-            await access(uploadDir, constants.W_OK);
-            console.log('[Upload API] ✓ Directory is writable');
-        } catch (accessError: any) {
-            console.log('[Upload API] ❌ Directory not writable:', accessError.message);
-            return NextResponse.json({
-                error: 'Upload directory not writable',
-                details: accessError.message
-            }, { status: 500 });
-        }
-
-        // Write file
-        const filePath = join(uploadDir, filename);
-        console.log('[Upload API] Writing file to:', filePath);
-
-        try {
-            await writeFile(filePath, buffer);
-            console.log('[Upload API] ✓ File written successfully');
-        } catch (writeError: any) {
-            console.log('[Upload API] ❌ Failed to write file:', writeError.message);
-            return NextResponse.json({
-                error: 'Failed to write file',
-                details: writeError.message
-            }, { status: 500 });
-        }
-
-        const url = `/uploads/${filename}`;
-        console.log('[Upload API] ✓ Upload complete! URL:', url);
-        console.log('[Upload API] ===== Upload request finished successfully =====');
-
-        return NextResponse.json({ url });
+        return NextResponse.json({ url: dataUrl });
 
     } catch (error: any) {
         console.error('[Upload API] ❌ Unexpected error:', error);
