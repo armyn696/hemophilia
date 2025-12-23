@@ -201,74 +201,195 @@
     "ongoing": {
       "title": "Ongoing Activities",
       "items": [
-        { "title": "Math Remedial Classes", "time": "Every Thursday Morning", "description": "Weekly math classes for hemophilia students in a friendly environment." },
-        { "title": "Hospital Visits", "time": "", "description": "Continuous visits to hospitalized patients to monitor treatment and needs." },
-        { "title": "Warm Meal Program", "time": "Mondays", "description": "Distribution of warm meals on 'Kindness Mondays' by Fatemiyeh Charity." }
+        {
+          "title": "Math Remedial Classes",
+          "time": "Every Thursday Morning",
+          "description": "Weekly math classes for hemophilia students in a friendly environment."
+        },
+        {
+          "title": "Hospital Visits",
+          "time": "",
+          "description": "Continuous visits to hospitalized patients to monitor treatment and needs."
+        },
+        {
+          "title": "Warm Meal Program",
+          "time": "Mondays",
+          "description": "Distribution of warm meals on 'Kindness Mondays' by Fatemiyeh Charity."
+        }
       ]
     },
     "may": {
       "title": "May 2025",
       "items": [
-         { "title": "Appreciation of Volunteer Teachers", "time": "May 1st", "description": "Ceremony to thank volunteer teachers cooperating with the society's educational programs." }
+        {
+          "title": "Appreciation of Volunteer Teachers",
+          "time": "May 1st",
+          "description": "Ceremony to thank volunteer teachers cooperating with the society's educational programs."
+        }
       ]
     },
     "august": {
-       "title": "August 2025",
-       "items": [
-          { "title": "Family Walk 'Life Flows with Hope'", "time": "August 1st", "description": "Morning walk event in Tohid Park on the occasion of Hemophilia Support Week." },
-          { "title": "Workshop 'Understanding and Caring for Hemophilia'", "time": "", "description": "Specialized physiotherapy workshop and corrective exercises training for patients and families." },
-          { "title": "Workshop 'Public Speaking and Self-Confidence'", "time": "", "description": "Training course for mothers and children to boost self-confidence." },
-          { "title": "Online Contest 'Hemophilia Knowledge'", "time": "", "description": "Online competition with prizes aimed at increasing public awareness." }
-       ]
+      "title": "August 2025",
+      "items": [
+        {
+          "title": "Family Walk 'Life Flows with Hope'",
+          "time": "August 1st",
+          "description": "Morning walk event in Tohid Park on the occasion of Hemophilia Support Week."
+        },
+        {
+          "title": "Workshop 'Understanding and Caring for Hemophilia'",
+          "time": "",
+          "description": "Specialized physiotherapy workshop and corrective exercises training for patients and families."
+        },
+        {
+          "title": "Workshop 'Public Speaking and Self-Confidence'",
+          "time": "",
+          "description": "Training course for mothers and children to boost self-confidence."
+        },
+        {
+          "title": "Online Contest 'Hemophilia Knowledge'",
+          "time": "",
+          "description": "Online competition with prizes aimed at increasing public awareness."
+        }
+      ]
     },
     "september": {
-        "title": "September 2025",
-        "items": [
-            { "title": "Appreciation of Pharmacists", "time": "August 27th", "description": "Appreciating the efforts of Vali-e-Asr Hospital pharmacy staff on Pharmacist's Day." },
-            { "title": "Stationery Distribution", "time": "", "description": "Distribution of 110 stationery packages among students." }
-        ]
+      "title": "September 2025",
+      "items": [
+        {
+          "title": "Appreciation of Pharmacists",
+          "time": "August 27th",
+          "description": "Appreciating the efforts of Vali-e-Asr Hospital pharmacy staff on Pharmacist's Day."
+        },
+        {
+          "title": "Stationery Distribution",
+          "time": "",
+          "description": "Distribution of 110 stationery packages among students."
+        }
+      ]
     },
     "october": {
-        "title": "October 2025",
-        "items": [
-            { "title": "Commemoration of the Society's Benefactor", "time": "", "description": "9th anniversary of the passing of Mrs. Sedigheh Bolandi." },
-            { "title": "Creativity and Sewing Classes", "time": "", "description": "Art and Tirco sewing workshops." }
-        ]
+      "title": "October 2025",
+      "items": [
+        {
+          "title": "Commemoration of the Society's Benefactor",
+          "time": "",
+          "description": "9th anniversary of the passing of Mrs. Sedigheh Bolandi."
+        },
+        {
+          "title": "Creativity and Sewing Classes",
+          "time": "",
+          "description": "Art and Tirco sewing workshops."
+        }
+      ]
     },
     "november": {
-        "title": "November 2025",
-        "items": [
-            { "title": "Media Literacy Workshop", "time": "November 5th", "description": "Staff participation in a workshop aimed at improving media literacy." },
-            { "title": "Hemophilia Athletes Shine", "time": "", "description": "First place in darts and petanque by Mr. Mojtaba Haghpazir and Seyed Kazem Hosseinkia, and second place in petanque by Mr. Mohsen Haghpazir in national championships." },
-            { "title": "Appreciation of Nurses", "time": "", "description": "Honoring the compassionate nurses of the hemophilia clinic on Nurse's Day." },
-            { "title": "2nd Course of 'Mindfulness-Based Stress Reduction'", "time": "Nov & Dec", "description": "Weekly mindfulness-based stress reduction classes taught by Dr. Mostafaei." }
-        ]
+      "title": "November 2025",
+      "items": [
+        {
+          "title": "Media Literacy Workshop",
+          "time": "November 5th",
+          "description": "Staff participation in a workshop aimed at improving media literacy."
+        },
+        {
+          "title": "Hemophilia Athletes Shine",
+          "time": "",
+          "description": "First place in darts and petanque by Mr. Mojtaba Haghpazir and Seyed Kazem Hosseinkia, and second place in petanque by Mr. Mohsen Haghpazir in national championships."
+        },
+        {
+          "title": "Appreciation of Nurses",
+          "time": "",
+          "description": "Honoring the compassionate nurses of the hemophilia clinic on Nurse's Day."
+        },
+        {
+          "title": "2nd Course of 'Mindfulness-Based Stress Reduction'",
+          "time": "Nov & Dec",
+          "description": "Weekly mindfulness-based stress reduction classes taught by Dr. Mostafaei."
+        }
+      ]
     },
     "december": {
-        "title": "December 2025",
-        "items": [
-            { "title": "Heater Donation", "time": "", "description": "Donation of a heater by benefactors to a needy family." }
-        ]
+      "title": "December 2025",
+      "items": [
+        {
+          "title": "Heater Donation",
+          "time": "",
+          "description": "Donation of a heater by benefactors to a needy family."
+        }
+      ]
     },
     "others": {
-        "title": "Other Achievements",
-        "items": [
-            { "title": "Academic Achievement", "time": "", "description": "Ranking 2nd in the Master's entrance exam in Geriatric Health by a society member." },
-            { "title": "Distribution of Kindness Packages", "time": "", "description": "Donation of meat, shoe vouchers, and food baskets to needy families." }
-        ]
+      "title": "Other Achievements",
+      "items": [
+        {
+          "title": "Academic Achievement",
+          "time": "",
+          "description": "Ranking 2nd in the Master's entrance exam in Geriatric Health by a society member."
+        },
+        {
+          "title": "Distribution of Kindness Packages",
+          "time": "",
+          "description": "Donation of meat, shoe vouchers, and food baskets to needy families."
+        }
+      ]
     }
   },
-    "gallery": {
-      "title": "Photo Gallery",
-      "description": "Explore moments from our activities, events, and the inspiring journey of supporting hemophilia patients and their families.",
-      "all": "All"
-    },
-
+  "gallery": {
+    "title": "Photo Gallery",
+    "description": "Explore moments from our activities, events, and the inspiring journey of supporting hemophilia patients and their families.",
+    "all": "All"
+  },
   "common": {
     "read_more": "Read More",
     "loading": "Loading...",
     "error": "An error has occurred",
     "back": "Back",
     "next": "Next"
+  },
+  "aboutPage": {
+    "title": "About Us",
+    "history_title": "Our History",
+    "history_p1": "South Khorasan Hemophilia Society began its informal activities in the Spring of 2002 as the 'Hemophilia Branch of Special Patients'.",
+    "history_p2": "Following the establishment of South Khorasan province and addressing numerous medical and welfare needs of patients, the Birjand representative office of the Iran Hemophilia Society officially started its operations in 2004 under its supervision.",
+    "mission_title": "Our Goal and Path",
+    "mission_text": "From the beginning, with the support of the noble and charitable people of the province, the society has worked to reduce the problems of hemophilia patients and provide them with a dignified life, ensuring that no patient in South Khorasan feels alone.",
+    "nature_text": "South Khorasan Hemophilia Society is a non-governmental, non-profit, and charitable organization serving as the representative office of the Iran Hemophilia Society. All activities are conducted within the country's legal framework with official permits.",
+    "nature_team": "Alongside patients, families, physicians, donors, and volunteers, we strive to provide a safe, hopeful, and sustainable platform for improving the quality of life for our patients.",
+    "activities_title": "Areas of Activity",
+    "activity1": {
+      "title": "Education",
+      "desc": "Educating patients and their families about the disease, care, and prevention of complications."
+    },
+    "activity2": {
+      "title": "Medical Follow-up",
+      "desc": "Tracking medical and pharmaceutical issues and coordinating with relevant health centers."
+    },
+    "activity3": {
+      "title": "Social Support",
+      "desc": "Providing social and livelihood support for patients and families in need."
+    },
+    "activity4": {
+      "title": "Empowerment",
+      "desc": "Academic, vocational, and social empowerment for patients, especially children and adolescents."
+    },
+    "activity5": {
+      "title": "Counseling",
+      "desc": "Addressing mental and psychological issues through counseling and emotional support."
+    },
+    "activity6": {
+      "title": "Awareness",
+      "desc": "Increasing public awareness and promoting a culture of empathy and support for patients."
+    },
+    "quote": "We believe hemophilia is not just a disease; it is a path that, with awareness, support, and empathy, can be traveled with hope and peace.",
+    "donation_title": "Your Support and Participation",
+    "donation_text": "Since our budget is funded by voluntary donations from charitable individuals, your contribution can play an effective role in providing medicine and treatment.",
+    "bank_info": {
+      "bank_name": "Bank Melli Iran",
+      "account_name": "South Khorasan Hemophilia Society",
+      "account_number": "00717414",
+      "account_type": "Siba Checking Account"
+    },
+    "closing": "South Khorasan Hemophilia Society strives to be the voice of hemophilia patients in the province and ease the path of their lives.",
+    "footer_quote": "Life flows with hope; and we stand by the patients."
   }
 }

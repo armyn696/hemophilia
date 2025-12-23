@@ -21,6 +21,10 @@ export async function generateMetadata({
       locale === 'fa'
         ? 'حامی بیماران هموفیلی و خانواده‌هایشان'
         : 'Supporting hemophilia patients and their families',
+    icons: {
+      icon: '/logo.png',
+      apple: '/logo.png',
+    },
   };
 }
 
