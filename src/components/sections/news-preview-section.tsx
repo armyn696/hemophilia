@@ -1,10 +1,10 @@
 'use client';
 
 import { useTranslations, useLocale } from 'next-intl';
-import { useRef, useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Calendar, User, ArrowRight, ArrowLeft } from 'lucide-react';
+import { Calendar, ArrowRight, ArrowLeft } from 'lucide-react';
 import useEmblaCarousel from 'embla-carousel-react';
 import AutoScroll from 'embla-carousel-auto-scroll';
 
@@ -38,44 +38,43 @@ export default function NewsPreviewSection() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Embla Carousel with AutoScroll for continuous loop
+  // Create AutoScroll plugin instance with useRef to prevent recreation
+  const autoScrollOptions = useRef(
+    AutoScroll({
+      playOnInit: true,
+      stopOnInteraction: false,
+      stopOnMouseEnter: true,
+      speed: 1,
+      direction: isRtl ? 'backward' : 'forward',
+    })
+  );
+
+  // Embla Carousel setup
   const [emblaRef, emblaApi] = useEmblaCarousel(
     {
       loop: true,
       align: 'start',
-      direction: isRtl ? 'rtl' : 'ltr',
       dragFree: true,
-      containScroll: false,
+      skipSnaps: true,
+      direction: isRtl ? 'rtl' : 'ltr',
     },
-    [
-      AutoScroll({
-        playOnInit: true,
-        stopOnInteraction: false,
-        stopOnMouseEnter: true,
-        speed: 1, // Adjust speed (pixels per frame approx)
-      }),
-    ]
+    [autoScrollOptions.current]
   );
 
-  const scrollPrev = useCallback(() => {
-    if (!emblaApi) return;
-    const autoScroll = emblaApi.plugins().autoScroll;
-    if (!autoScroll) return;
+  // Reinitialize when locale changes
+  useEffect(() => {
+    if (emblaApi) {
+      emblaApi.reInit({
+        loop: true,
+        align: 'start',
+        dragFree: true,
+        skipSnaps: true,
+        direction: isRtl ? 'rtl' : 'ltr',
+      });
+    }
+  }, [emblaApi, isRtl]);
 
-    // If not playing, or moving forward, switch to move backward
-    if (!autoScroll.isPlaying()) autoScroll.play();
-    // AutoScroll doesn't have a simple "reverse" method in v8 same way, 
-    // but negative speed makes it go other way. 
-    // However, simplest UX for buttons with AutoScroll is usually just "scrollPrev" standard method
-    // which temporarily overrides auto-scroll.
-    emblaApi.scrollPrev();
-  }, [emblaApi]);
-
-  const scrollNext = useCallback(() => {
-    if (!emblaApi) return;
-    emblaApi.scrollNext();
-  }, [emblaApi]);
-
+  // Fetch news
   useEffect(() => {
     fetch('/api/news')
       .then((res) => {
@@ -115,29 +114,42 @@ export default function NewsPreviewSection() {
 
   return (
     <section className="py-20 bg-white overflow-hidden relative">
+      {/* Header */}
       <div className="container mx-auto px-4 mb-10 text-center">
-        <div className="flex flex-col items-center justify-center gap-4">
-          <div className="w-full">
-            <span className="inline-block text-primary font-semibold text-sm tracking-wider mb-2">
-              {t('badge', { defaultValue: 'News & Updates' })}
-            </span>
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 leading-tight">
-              {t('title', { defaultValue: 'Latest News' })}
-            </h2>
-            <p className="text-gray-500 text-sm mt-3 max-w-2xl mx-auto">
-              {isRtl ? 'خبرها خودکار حرکت می‌کنند؛ با اسکرول ماوس یا کشیدن، کنترل دست شماست.' : 'News scrolls automatically; drag or scroll to control.'}
-            </p>
-          </div>
-        </div>
+        <span className="inline-block text-primary font-semibold text-sm tracking-wider mb-2">
+          {t('badge', { defaultValue: 'News & Updates' })}
+        </span>
+        <h2 className="text-3xl md:text-4xl font-bold text-gray-900 leading-tight">
+          {t('title', { defaultValue: 'Latest News' })}
+        </h2>
+        <p className="text-gray-500 text-sm mt-3 max-w-2xl mx-auto">
+          {isRtl
+            ? 'خبرها خودکار حرکت می‌کنند؛ با اسکرول ماوس یا کشیدن، کنترل دست شماست.'
+            : 'News scrolls automatically; drag or scroll to control.'}
+        </p>
       </div>
 
-      <div className="embla relative" ref={emblaRef}>
-        <div className="embla__container flex touch-pan-y">
+      {/* Embla Carousel */}
+      <div
+        className="overflow-hidden cursor-grab active:cursor-grabbing"
+        ref={emblaRef}
+        dir={isRtl ? 'rtl' : 'ltr'}
+      >
+        <div
+          className="flex"
+          style={{
+            touchAction: 'pan-y pinch-zoom',
+            marginLeft: 'calc(var(--slide-spacing) * -1)',
+          }}
+        >
           {newsItems.map((news) => (
             <div
               key={news.id}
-              className="embla__slide flex-none w-[300px] sm:w-[350px] px-3"
-              style={{ minWidth: 0 }}
+              className="flex-shrink-0 flex-grow-0 pl-6"
+              style={{
+                flexBasis: 'min(100%, 350px)',
+                minWidth: 0,
+              }}
             >
               <Link href={`/${locale}/news/${news.id}`} className="block h-full group">
                 <article className="h-full bg-white border border-gray-100 rounded-3xl overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col hover:-translate-y-1">
@@ -172,9 +184,9 @@ export default function NewsPreviewSection() {
                       {locale === 'fa' ? news.excerpt : news.excerptEn || news.excerpt}
                     </p>
 
-                    <div className="flex items-center text-primary font-bold text-sm tracking-wide group/btn">
+                    <div className="flex items-center text-primary font-bold text-sm tracking-wide">
                       {t('read_more', { defaultValue: 'Read More' })}
-                      <span className="mx-2 transform group-hover/btn:translate-x-1 rtl:group-hover/btn:-translate-x-1 transition-transform">
+                      <span className="mx-2">
                         {isRtl ? <ArrowLeft className="w-4 h-4" /> : <ArrowRight className="w-4 h-4" />}
                       </span>
                     </div>
@@ -186,6 +198,7 @@ export default function NewsPreviewSection() {
         </div>
       </div>
 
+      {/* View All Button */}
       <div className="text-center mt-12">
         <Link href={`/${locale}/news`}>
           <button className="bg-gray-900 hover:bg-gray-800 text-white px-8 py-3 rounded-full font-medium transition-colors shadow-lg hover:shadow-xl">

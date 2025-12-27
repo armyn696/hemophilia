@@ -91,7 +91,7 @@ export default function ImpactSection() {
         </motion.div>
 
         {/* Bento Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 md:gap-5">
           {/* Top Left Card */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -99,7 +99,7 @@ export default function ImpactSection() {
             transition={{ duration: 0.5, delay: 0.1 }}
             className="bg-white rounded-2xl overflow-hidden group shadow-sm hover:shadow-xl transition-shadow duration-300 border border-neutral-100"
           >
-            <div className="relative h-52 overflow-hidden">
+            <div className="relative h-28 md:h-52 overflow-hidden">
               <Image
                 src={impactAreas[0].image}
                 alt={isRtl ? impactAreas[0].titleFa : impactAreas[0].titleEn}
@@ -108,11 +108,11 @@ export default function ImpactSection() {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
             </div>
-            <div className="p-5 bg-white">
-              <h3 className="text-lg font-bold text-[#2C3E50] mb-2">
+            <div className="p-3 md:p-5 bg-white">
+              <h3 className="text-xs md:text-lg font-bold text-[#2C3E50] mb-1 md:mb-2">
                 {isRtl ? impactAreas[0].titleFa : impactAreas[0].titleEn}
               </h3>
-              <p className="text-gray-500 text-sm leading-relaxed">
+              <p className="text-gray-500 text-xs md:text-sm leading-relaxed hidden md:block">
                 {isRtl ? impactAreas[0].descFa : impactAreas[0].descEn}
               </p>
             </div>
@@ -125,7 +125,7 @@ export default function ImpactSection() {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="bg-[#FDF2F4] rounded-2xl overflow-hidden row-span-2 group flex flex-col shadow-sm hover:shadow-xl transition-shadow duration-300 border border-red-100"
           >
-            <div className="relative flex-1 min-h-[280px] overflow-hidden">
+            <div className="relative flex-1 min-h-[140px] md:min-h-[280px] overflow-hidden">
               <Image
                 src={impactAreas[2].image}
                 alt={isRtl ? impactAreas[2].titleFa : impactAreas[2].titleEn}
@@ -135,14 +135,14 @@ export default function ImpactSection() {
               <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent" />
             </div>
             <div className="p-6 text-center bg-white">
-              <h3 className="text-lg md:text-xl font-bold text-[#2C3E50] mb-3">
+              <h3 className="text-sm md:text-lg lg:text-xl font-bold text-[#2C3E50] mb-2 md:mb-3">
                 {isRtl ? impactAreas[2].titleFa : impactAreas[2].titleEn}
               </h3>
-              <p className="text-gray-500 text-sm mb-5 leading-relaxed">
+              <p className="text-gray-500 text-xs md:text-sm mb-3 md:mb-5 leading-relaxed hidden md:block">
                 {isRtl ? impactAreas[2].descFa : impactAreas[2].descEn}
               </p>
               <Link href={`/${locale}/donate`}>
-                <Button className="bg-[#A91D3A] hover:bg-[#8B1538] text-white rounded-full px-8 py-3 font-medium shadow-lg shadow-red-200/50">
+                <Button className="bg-[#A91D3A] hover:bg-[#8B1538] text-white rounded-full px-4 md:px-8 py-2 md:py-3 text-xs md:text-sm font-medium shadow-lg shadow-red-200/50">
                   {isRtl ? 'همراه ما شوید' : 'Join Our Team'}
                 </Button>
               </Link>
@@ -156,7 +156,7 @@ export default function ImpactSection() {
             transition={{ duration: 0.5, delay: 0.3 }}
             className="bg-[#FDF2F4] rounded-2xl overflow-hidden group shadow-sm hover:shadow-xl transition-shadow duration-300 border border-red-100"
           >
-            <div className="relative h-52 overflow-hidden">
+            <div className="relative h-28 md:h-52 overflow-hidden">
               <Image
                 src={impactAreas[1].image}
                 alt={isRtl ? impactAreas[1].titleFa : impactAreas[1].titleEn}
@@ -165,11 +165,11 @@ export default function ImpactSection() {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
             </div>
-            <div className="p-5 bg-white">
-              <h3 className="text-lg font-bold text-[#2C3E50] mb-2">
+            <div className="p-3 md:p-5 bg-white">
+              <h3 className="text-xs md:text-lg font-bold text-[#2C3E50] mb-1 md:mb-2">
                 {isRtl ? impactAreas[1].titleFa : impactAreas[1].titleEn}
               </h3>
-              <p className="text-gray-500 text-sm leading-relaxed">
+              <p className="text-gray-500 text-xs md:text-sm leading-relaxed hidden md:block">
                 {isRtl ? impactAreas[1].descFa : impactAreas[1].descEn}
               </p>
             </div>
@@ -182,7 +182,7 @@ export default function ImpactSection() {
             transition={{ duration: 0.5, delay: 0.4 }}
             className="bg-[#FDF2F4] rounded-2xl overflow-hidden group shadow-sm hover:shadow-xl transition-shadow duration-300 border border-red-100"
           >
-            <div className="relative h-52 overflow-hidden">
+            <div className="relative h-28 md:h-52 overflow-hidden">
               <Image
                 src={impactAreas[3].image}
                 alt={isRtl ? impactAreas[3].titleFa : impactAreas[3].titleEn}
@@ -191,11 +191,11 @@ export default function ImpactSection() {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
             </div>
-            <div className="p-5 bg-white">
-              <h3 className="text-lg font-bold text-[#2C3E50] mb-2">
+            <div className="p-3 md:p-5 bg-white">
+              <h3 className="text-xs md:text-lg font-bold text-[#2C3E50] mb-1 md:mb-2">
                 {isRtl ? impactAreas[3].titleFa : impactAreas[3].titleEn}
               </h3>
-              <p className="text-gray-500 text-sm leading-relaxed">
+              <p className="text-gray-500 text-xs md:text-sm leading-relaxed hidden md:block">
                 {isRtl ? impactAreas[3].descFa : impactAreas[3].descEn}
               </p>
             </div>
@@ -208,7 +208,7 @@ export default function ImpactSection() {
             transition={{ duration: 0.5, delay: 0.5 }}
             className="bg-[#FDF2F4] rounded-2xl overflow-hidden group shadow-sm hover:shadow-xl transition-shadow duration-300 border border-red-100"
           >
-            <div className="relative h-52 overflow-hidden">
+            <div className="relative h-28 md:h-52 overflow-hidden">
               <Image
                 src={impactAreas[4].image}
                 alt={isRtl ? impactAreas[4].titleFa : impactAreas[4].titleEn}
@@ -217,11 +217,11 @@ export default function ImpactSection() {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
             </div>
-            <div className="p-5 bg-white">
-              <h3 className="text-lg font-bold text-[#2C3E50] mb-2">
+            <div className="p-3 md:p-5 bg-white">
+              <h3 className="text-xs md:text-lg font-bold text-[#2C3E50] mb-1 md:mb-2">
                 {isRtl ? impactAreas[4].titleFa : impactAreas[4].titleEn}
               </h3>
-              <p className="text-gray-500 text-sm leading-relaxed">
+              <p className="text-gray-500 text-xs md:text-sm leading-relaxed hidden md:block">
                 {isRtl ? impactAreas[4].descFa : impactAreas[4].descEn}
               </p>
             </div>
