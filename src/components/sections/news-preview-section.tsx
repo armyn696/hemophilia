@@ -1,7 +1,7 @@
 'use client';
 
 import { useTranslations, useLocale } from 'next-intl';
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Calendar, ArrowRight, ArrowLeft } from 'lucide-react';
@@ -38,61 +38,33 @@ export default function NewsPreviewSection() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Timer ref to manage restart delay
-  const restartTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  // Create plugin with useMemo to prevent recreation on every render
+  const plugins = useMemo(
+    () => [
+      AutoScroll({
+        playOnInit: true,
+        stopOnInteraction: false,
+        stopOnMouseEnter: true,
+        stopOnFocusIn: false,
+        speed: 1,
+        startDelay: 0,
+        direction: isRtl ? 'backward' : 'forward',
+      }),
+    ],
+    [isRtl]
+  );
 
-  // Embla Carousel setup with AutoScroll
-  const [emblaRef, emblaApi] = useEmblaCarousel(
+  // Embla Carousel setup
+  const [emblaRef] = useEmblaCarousel(
     {
       loop: true,
       align: 'start',
       dragFree: true,
       direction: isRtl ? 'rtl' : 'ltr',
+      watchDrag: true,
     },
-    [
-      AutoScroll({
-        playOnInit: true,
-        stopOnInteraction: true, // Stop on interaction, we'll restart manually
-        stopOnMouseEnter: true,
-        stopOnFocusIn: false,
-        speed: 1,
-        direction: isRtl ? 'backward' : 'forward',
-      }),
-    ]
+    plugins
   );
-
-  // Restart auto-scroll after pointer up (touch release)
-  const handlePointerUp = useCallback(() => {
-    if (!emblaApi) return;
-
-    // Clear any existing timer
-    if (restartTimerRef.current) {
-      clearTimeout(restartTimerRef.current);
-    }
-
-    // Restart auto-scroll after 2 seconds
-    restartTimerRef.current = setTimeout(() => {
-      const autoScroll = emblaApi.plugins()?.autoScroll;
-      if (autoScroll) {
-        autoScroll.play();
-      }
-    }, 2000);
-  }, [emblaApi]);
-
-  useEffect(() => {
-    if (!emblaApi) return;
-
-    // Listen for pointer up (touch release / mouse release)
-    emblaApi.on('pointerUp', handlePointerUp);
-
-    return () => {
-      emblaApi.off('pointerUp', handlePointerUp);
-      // Clear timer on cleanup
-      if (restartTimerRef.current) {
-        clearTimeout(restartTimerRef.current);
-      }
-    };
-  }, [emblaApi, handlePointerUp]);
 
   // Fetch news
   useEffect(() => {
@@ -155,7 +127,7 @@ export default function NewsPreviewSection() {
         ref={emblaRef}
         dir={isRtl ? 'rtl' : 'ltr'}
       >
-        <div className="flex">
+        <div className="flex" style={{ touchAction: 'pan-y pinch-zoom' }}>
           {newsItems.map((news) => (
             <div
               key={news.id}
