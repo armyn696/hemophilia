@@ -17,6 +17,7 @@ export function Footer() {
     { key: 'about', href: `/${locale}/about` },
     { key: 'services', href: `/${locale}/services` },
     { key: 'contact', href: `/${locale}/contact` },
+    { key: 'terms', href: `/${locale}/terms` },
   ];
 
   return (
@@ -26,8 +27,8 @@ export function Footer() {
           {/* About Section */}
           <div className="col-span-1 md:col-span-2">
             <div className="flex items-center space-x-3 rtl:space-x-reverse mb-4">
-              <Image 
-                src="/logo.png" 
+              <Image
+                src="/logo.png"
                 alt="Hemophilia Society Logo"
                 width={40}
                 height={40}
@@ -82,7 +83,7 @@ export function Footer() {
                 <Phone className="w-4 h-4 flex-shrink-0 text-[#A91D3A]" />
                 <span dir="ltr">056-32212999</span>
               </li>
-                          </ul>
+            </ul>
           </div>
         </div>
 

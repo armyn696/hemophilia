@@ -8,7 +8,8 @@
     "news": "News",
     "gallery": "Gallery",
     "contact": "Contact",
-    "donate": "Donate"
+    "donate": "Donate",
+    "terms": "Terms & Conditions"
   },
   "hero": {
     "badge": "Hope & Support",
@@ -391,5 +392,10 @@
     },
     "closing": "South Khorasan Hemophilia Society strives to be the voice of hemophilia patients in the province and ease the path of their lives.",
     "footer_quote": "Life flows with hope; and we stand by the patients."
+  },
+  "termsPage": {
+    "title": "Terms and Conditions",
+    "rule1": "Since the Iran Hemophilia Society is a non-political institution, any reflection of political positions for or against in this site is prohibited.",
+    "rule2": "Iran Hemophilia Society is a public and non-profit institution, therefore any kind of economic exploitation of the site \"s text, whether in the framework of collecting financial aid or selling products for the benefit of the institution, is possible through the official accounts of the institution. Announcing the account numbers of natural persons, including managers and employees of the institution, or any other natural or legal person is prohibited."
   }
 }
