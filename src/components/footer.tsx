@@ -34,7 +34,7 @@ export function Footer() {
                 className="w-10 h-10 object-contain brightness-0 invert"
               />
               <span className="font-bold text-lg text-white">
-                {locale === 'fa' ? 'کانون هموفیلی بیرجند' : 'Birjand Hemophilia Society'}
+                {locale === 'fa' ? 'کانون هموفیلی خراسان جنوبی' : 'South Khorasan Hemophilia Society'}
               </span>
             </div>
             <p className="text-sm text-gray-400 max-w-md leading-relaxed">
@@ -90,7 +90,7 @@ export function Footer() {
 
         <div className="text-center">
           <p className="text-sm text-gray-500">
-            {new Date().getFullYear()} © {locale === 'fa' ? 'کانون هموفیلی بیرجند' : 'Birjand Hemophilia Society'}. {t('rights')}
+            {new Date().getFullYear()} © {locale === 'fa' ? 'کانون هموفیلی خراسان جنوبی' : 'South Khorasan Hemophilia Society'}. {t('rights')}
           </p>
         </div>
       </div>

@@ -22,8 +22,8 @@ export default function HeroSection() {
     : 'Your support keeps their lives flowing';
 
   const subtitle = isRtl
-    ? 'کانون هموفیلی بیرجند کنار بیماران هموفیلی و خانواده‌هایشان می‌ایستد تا از درمان، مراقبت و یک زندگی باکیفیت محروم نمانند.'
-    : 'Birjand Hemophilia Foundation stands beside patients and their families, ensuring they receive essential treatment, care, and a dignified quality of life.';
+    ? 'کانون هموفیلی خراسان جنوبی کنار بیماران هموفیلی و خانواده‌هایشان می‌ایستد تا از درمان، مراقبت و یک زندگی باکیفیت محروم نمانند.'
+    : 'South Khorasan Hemophilia Foundation stands beside patients and their families, ensuring they receive essential treatment, care, and a dignified quality of life.';
 
   const ctaLabel = isRtl ? 'قهرمان باشید' : 'Be a hero';
 

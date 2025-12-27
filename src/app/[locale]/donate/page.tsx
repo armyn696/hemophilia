@@ -235,7 +235,7 @@ className="inline-flex items-center gap-2 text-sm text-gray-400 hover:text-gray-
               }
             </p>
             <p className="text-white/70 text-sm text-right">
-              {locale === 'fa' ? '— کانون هموفیلی بیرجند' : '— Hemophilia Society'}
+              {locale === 'fa' ? '— کانون هموفیلی خراسان جنوبی' : '— South Khorasan Hemophilia Society'}
             </p>
           </div>
         </div>

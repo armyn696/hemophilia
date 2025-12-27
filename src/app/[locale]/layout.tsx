@@ -16,7 +16,7 @@ export async function generateMetadata({
   const { locale } = await params;
 
   return {
-    title: locale === 'fa' ? 'کانون هموفیلی بیرجند' : 'Birjand Hemophilia Society',
+    title: locale === 'fa' ? 'کانون هموفیلی خراسان جنوبی' : 'South Khorasan Hemophilia Society',
     description:
       locale === 'fa'
         ? 'حامی بیماران هموفیلی و خانواده‌هایشان'

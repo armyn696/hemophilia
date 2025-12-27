@@ -3,7 +3,7 @@ import "./globals.css";
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'کانون هموفیلی بیرجند',
+  title: 'کانون هموفیلی خراسان جنوبی',
   description: 'حامی بیماران هموفیلی و خانواده‌هایشان',
   icons: {
     icon: '/logo.png',
