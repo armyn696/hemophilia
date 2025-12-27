@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { Calendar, ArrowRight, ArrowLeft } from 'lucide-react';
 import useEmblaCarousel from 'embla-carousel-react';
 import AutoScroll from 'embla-carousel-auto-scroll';
+import { useDataCache } from '@/contexts/data-cache-context';
 
 interface NewsCategory {
   id: string;
@@ -37,6 +38,9 @@ export default function NewsPreviewSection() {
   const [newsItems, setNewsItems] = useState<NewsItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  // Global data cache for persisting data across locale changes
+  const dataCache = useDataCache();
 
   // Timer ref to manage restart delay
   const restartTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -109,17 +113,31 @@ export default function NewsPreviewSection() {
     };
   }, [emblaApi, handlePointerDown, handlePointerUp]);
 
-  // Fetch news
+  // Fetch news with caching
   useEffect(() => {
+    const CACHE_KEY = 'news-items';
+
+    // Check cache first
+    const cachedData = dataCache.get<NewsItem[]>(CACHE_KEY);
+    if (cachedData) {
+      setNewsItems(cachedData);
+      setLoading(false);
+      return;
+    }
+
+    // Fetch from API
     fetch('/api/news')
       .then((res) => {
         if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
         return res.json();
       })
-      .then((data) => setNewsItems(data))
+      .then((data) => {
+        dataCache.set(CACHE_KEY, data);
+        setNewsItems(data);
+      })
       .catch((err) => setError(err instanceof Error ? err.message : 'Unknown error'))
       .finally(() => setLoading(false));
-  }, []);
+  }, [dataCache]);
 
   const formatDate = (dateString: string, dateFa?: string) => {
     if (locale === 'fa' && dateFa) return dateFa;

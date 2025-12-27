@@ -5,6 +5,7 @@ import { useTranslations, useLocale } from 'next-intl';
 import { Timeline } from '@/components/ui/timeline';
 import Image from 'next/image';
 import { CalendarDays, Loader2 } from 'lucide-react';
+import { useDataCache } from '@/contexts/data-cache-context';
 
 interface TimelineEvent {
   id: string;
@@ -31,12 +32,24 @@ export default function TimelineSection() {
   const isRtl = locale === 'fa';
   const [periods, setPeriods] = useState<TimelinePeriod[]>([]);
   const [loading, setLoading] = useState(true);
+  const dataCache = useDataCache();
 
   useEffect(() => {
+    const CACHE_KEY = 'timeline-periods';
+
+    // Check cache first
+    const cachedData = dataCache.get<TimelinePeriod[]>(CACHE_KEY);
+    if (cachedData) {
+      setPeriods(cachedData);
+      setLoading(false);
+      return;
+    }
+
     async function fetchTimeline() {
       try {
         const res = await fetch('/api/timeline/periods');
         const data = await res.json();
+        dataCache.set(CACHE_KEY, data);
         setPeriods(data);
       } catch (error) {
         console.error('Failed to load timeline');
@@ -45,7 +58,7 @@ export default function TimelineSection() {
       }
     }
     fetchTimeline();
-  }, []);
+  }, [dataCache]);
 
   // Helper function to render activities list
   const ActivityList = ({ items, image }: { items: TimelineEvent[], image?: string }) => (

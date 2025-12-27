@@ -1,6 +1,7 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Metadata } from 'next';
+import { DataCacheProvider } from '@/contexts/data-cache-context';
 
 export const metadata: Metadata = {
   title: 'کانون هموفیلی خراسان جنوبی',
@@ -29,7 +30,9 @@ export default function RootLayout({
   return (
     <html lang="fa" dir="rtl" suppressHydrationWarning>
       <body className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased`}>
-        {children}
+        <DataCacheProvider>
+          {children}
+        </DataCacheProvider>
       </body>
     </html>
   );
