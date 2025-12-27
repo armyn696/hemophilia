@@ -1,7 +1,7 @@
 'use client';
 
 import { useTranslations, useLocale } from 'next-intl';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Calendar, ArrowRight, ArrowLeft } from 'lucide-react';
@@ -38,50 +38,25 @@ export default function NewsPreviewSection() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Embla Carousel setup with AutoScroll plugin
-  const [emblaRef, emblaApi] = useEmblaCarousel(
+  // Embla Carousel setup - simplified for stability
+  const [emblaRef] = useEmblaCarousel(
     {
       loop: true,
       align: 'start',
       dragFree: true,
       direction: isRtl ? 'rtl' : 'ltr',
+      watchDrag: true,
     },
     [
       AutoScroll({
         playOnInit: true,
-        stopOnInteraction: false,
+        stopOnInteraction: true, // Stop completely on interaction - simpler behavior
         stopOnMouseEnter: true,
-        stopOnFocusIn: false,
         speed: 1,
         direction: isRtl ? 'backward' : 'forward',
       }),
     ]
   );
-
-  // Restart auto-scroll after user interaction ends
-  useEffect(() => {
-    if (!emblaApi) return;
-
-    const autoScrollPlugin = emblaApi.plugins()?.autoScroll;
-    if (!autoScrollPlugin) return;
-
-    const restartAutoScroll = () => {
-      // Small delay to ensure interaction is fully complete
-      setTimeout(() => {
-        if (autoScrollPlugin && !autoScrollPlugin.isPlaying()) {
-          autoScrollPlugin.play();
-        }
-      }, 1000);
-    };
-
-    emblaApi.on('pointerUp', restartAutoScroll);
-    emblaApi.on('settle', restartAutoScroll);
-
-    return () => {
-      emblaApi.off('pointerUp', restartAutoScroll);
-      emblaApi.off('settle', restartAutoScroll);
-    };
-  }, [emblaApi]);
 
   // Fetch news
   useEffect(() => {
@@ -111,7 +86,7 @@ export default function NewsPreviewSection() {
         <div className="container mx-auto px-4">
           <div className="flex gap-4">
             {[1, 2, 3, 4].map((i) => (
-              <div key={i} className="flex-none w-40 md:w-80 h-64 md:h-96 bg-gray-100 rounded-2xl animate-pulse" />
+              <div key={i} className="flex-none w-52 md:w-80 h-72 md:h-96 bg-gray-100 rounded-2xl animate-pulse" />
             ))}
           </div>
         </div>
@@ -140,20 +115,20 @@ export default function NewsPreviewSection() {
 
       {/* Embla Carousel */}
       <div
-        className="overflow-hidden cursor-grab active:cursor-grabbing"
+        className="overflow-hidden"
         ref={emblaRef}
         dir={isRtl ? 'rtl' : 'ltr'}
       >
-        <div className="flex touch-pan-y">
+        <div className="flex">
           {newsItems.map((news) => (
             <div
               key={news.id}
-              className="flex-none w-[160px] sm:w-[280px] md:w-[320px] lg:w-[350px] pl-3 md:pl-5"
+              className="flex-none w-[200px] sm:w-[280px] md:w-[320px] lg:w-[350px] pl-4 md:pl-5"
             >
               <Link href={`/${locale}/news/${news.id}`} className="block h-full group">
                 <article className="h-full bg-white border border-gray-100 rounded-2xl md:rounded-3xl overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col hover:-translate-y-1">
-                  {/* Image */}
-                  <div className="relative h-28 sm:h-40 md:h-52 overflow-hidden bg-gray-100">
+                  {/* Image - larger on mobile */}
+                  <div className="relative h-36 sm:h-44 md:h-52 overflow-hidden bg-gray-100">
                     <Image
                       src={news.image}
                       alt={locale === 'fa' ? news.title : news.titleEn || news.title}
@@ -169,17 +144,17 @@ export default function NewsPreviewSection() {
                   </div>
 
                   {/* Content */}
-                  <div className="p-3 md:p-6 flex flex-col flex-1">
-                    {/* Date - hidden on small mobile */}
-                    <div className="hidden sm:flex items-center gap-4 text-xs text-gray-400 mb-2 md:mb-4 font-medium">
-                      <span className="flex items-center gap-1.5 bg-gray-50 px-2 py-1 rounded-md">
+                  <div className="p-4 md:p-6 flex flex-col flex-1">
+                    {/* Date */}
+                    <div className="flex items-center gap-4 text-[10px] md:text-xs text-gray-400 mb-2 md:mb-4 font-medium">
+                      <span className="flex items-center gap-1 bg-gray-50 px-1.5 md:px-2 py-0.5 md:py-1 rounded-md">
                         <Calendar className="w-3 h-3 md:w-3.5 md:h-3.5" />
                         {formatDate(news.date, news.dateFa)}
                       </span>
                     </div>
 
                     {/* Title */}
-                    <h3 className="font-bold text-gray-900 text-sm sm:text-base md:text-xl leading-snug mb-1 md:mb-3 line-clamp-2 group-hover:text-primary transition-colors">
+                    <h3 className="font-bold text-gray-900 text-sm md:text-xl leading-snug mb-2 md:mb-3 line-clamp-2 group-hover:text-primary transition-colors">
                       {locale === 'fa' ? news.title : news.titleEn || news.title}
                     </h3>
 
