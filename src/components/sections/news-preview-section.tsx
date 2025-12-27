@@ -1,12 +1,12 @@
 'use client';
 
 import { useTranslations, useLocale } from 'next-intl';
-import { motion, useInView, useMotionValue, useAnimationFrame } from 'framer-motion';
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect, useCallback } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Calendar, User, ArrowRight, ArrowLeft } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import useEmblaCarousel from 'embla-carousel-react';
+import AutoScroll from 'embla-carousel-auto-scroll';
 
 interface NewsCategory {
   id: string;
@@ -32,298 +32,166 @@ interface NewsItem {
 export default function NewsPreviewSection() {
   const t = useTranslations('news');
   const locale = useLocale();
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, amount: 0.2 });
+  const isRtl = locale === 'fa';
 
   const [newsItems, setNewsItems] = useState<NewsItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchNews = async () => {
-      try {
-        console.log('[NEWS FETCH] Starting fetch...');
-        const res = await fetch('/api/news');
-        console.log('[NEWS FETCH] Response status:', res.status);
-        if (!res.ok) {
-          throw new Error(`HTTP error! status: ${res.status}`);
-        }
-        const data = await res.json();
-        console.log('[NEWS FETCH] Data received:', data.length, 'items');
-        setNewsItems(data);
-      } catch (error) {
-        console.error('[NEWS FETCH] Failed:', error);
-        setError(error instanceof Error ? error.message : 'Unknown error');
-      } finally {
-        setLoading(false);
-      }
-    };
+  // Embla Carousel with AutoScroll for continuous loop
+  const [emblaRef, emblaApi] = useEmblaCarousel(
+    {
+      loop: true,
+      align: 'start',
+      direction: isRtl ? 'rtl' : 'ltr',
+      dragFree: true,
+      containScroll: false,
+    },
+    [
+      AutoScroll({
+        playOnInit: true,
+        stopOnInteraction: false,
+        stopOnMouseEnter: true,
+        speed: 1, // Adjust speed (pixels per frame approx)
+      }),
+    ]
+  );
 
-    fetchNews();
+  const scrollPrev = useCallback(() => {
+    if (!emblaApi) return;
+    const autoScroll = emblaApi.plugins().autoScroll;
+    if (!autoScroll) return;
+
+    // If not playing, or moving forward, switch to move backward
+    if (!autoScroll.isPlaying()) autoScroll.play();
+    // AutoScroll doesn't have a simple "reverse" method in v8 same way, 
+    // but negative speed makes it go other way. 
+    // However, simplest UX for buttons with AutoScroll is usually just "scrollPrev" standard method
+    // which temporarily overrides auto-scroll.
+    emblaApi.scrollPrev();
+  }, [emblaApi]);
+
+  const scrollNext = useCallback(() => {
+    if (!emblaApi) return;
+    emblaApi.scrollNext();
+  }, [emblaApi]);
+
+  useEffect(() => {
+    fetch('/api/news')
+      .then((res) => {
+        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+        return res.json();
+      })
+      .then((data) => setNewsItems(data))
+      .catch((err) => setError(err instanceof Error ? err.message : 'Unknown error'))
+      .finally(() => setLoading(false));
   }, []);
-
-  // Card dimensions
-  const cardWidth = 350;
-  const cardGap = 32;
-  const cardTotalWidth = cardWidth + cardGap;
-
-  // Calculate how many times to duplicate to ensure seamless infinite scroll
-  // For LTR mode we start in the middle, so we need MORE items to cover both directions
-  // Need enough items to cover viewport * 3 (left buffer + visible + right buffer)
-  const viewportBuffer = 4000; // pixels for one direction
-  const minItemsNeeded = Math.ceil((viewportBuffer * 3) / cardTotalWidth);
-  const duplicateCount = newsItems.length > 0 ? Math.max(10, Math.ceil(minItemsNeeded / newsItems.length)) : 0;
-
-  // Duplicate items for infinite scroll
-  const duplicatedItems = newsItems.length >= 1
-    ? Array(duplicateCount).fill(newsItems).flat()
-    : newsItems;
-
-  // Total width of all duplicated items
-  const totalDuplicatedWidth = cardTotalWidth * duplicatedItems.length;
-
-  // Single set width is calculated from original items
-  const singleSetWidth = cardTotalWidth * newsItems.length;
-
-  // Motion values
-  const x = useMotionValue(0);
-  const [isDragging, setIsDragging] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const baseTimeRef = useRef(0);
-  const baseXRef = useRef(0);
-  const [isInitialized, setIsInitialized] = useState(false);
-
-  // Initialize position - always start from 0
-  useEffect(() => {
-    if (newsItems.length > 0 && singleSetWidth > 0 && !isInitialized) {
-      const isRtl = locale === 'fa';
-      console.log('[NEWS INIT]', {
-        locale,
-        isRtl,
-        singleSetWidth,
-        totalDuplicatedWidth,
-        newsItemsCount: newsItems.length,
-        duplicatedCount: duplicatedItems.length
-      });
-      x.set(0);
-      baseXRef.current = 0;
-      baseTimeRef.current = performance.now();
-      setIsInitialized(true);
-    }
-  }, [newsItems.length, singleSetWidth, locale, isInitialized, x, duplicatedItems.length, totalDuplicatedWidth]);
-
-  // Auto-scroll animation
-  useAnimationFrame((time) => {
-    if (isDragging || newsItems.length === 0 || singleSetWidth === 0 || !isInitialized) return;
-
-    const isRtl = locale === 'fa';
-
-    // Speed: 40 pixels per second
-    const speed = 40 / 1000;
-
-    // Calculate elapsed time
-    const elapsedTime = time - baseTimeRef.current;
-    const scrollOffset = elapsedTime * speed;
-
-    // Calculate new position (always move left for LTR, right for RTL)
-    let newX = isRtl
-      ? baseXRef.current + scrollOffset
-      : baseXRef.current - scrollOffset;
-
-    // Simple wrap around logic - both directions wrap using singleSetWidth
-    // When we've scrolled one full set, reset back
-    if (!isRtl) {
-      // LTR: Moving left (negative) - wrap when we reach -singleSetWidth
-      while (newX <= -singleSetWidth) {
-        newX += singleSetWidth;
-        baseXRef.current += singleSetWidth;
-      }
-    } else {
-      // RTL: Moving right (positive) - wrap when we reach singleSetWidth
-      while (newX >= singleSetWidth) {
-        newX -= singleSetWidth;
-        baseXRef.current -= singleSetWidth;
-      }
-    }
-
-    x.set(newX);
-  });
 
   const formatDate = (dateString: string, dateFa?: string) => {
     if (locale === 'fa' && dateFa) return dateFa;
     const date = new Date(dateString);
     return new Intl.DateTimeFormat(locale, {
       year: 'numeric',
-      month: 'long',
-      day: 'numeric'
+      month: 'short',
+      day: 'numeric',
     }).format(date);
   };
 
-  // Don't render carousel if no news items
   if (loading) {
     return (
-      <section ref={ref} className="relative pt-10 pb-20 bg-white overflow-hidden">
-        <div className="container mx-auto px-4 text-center">
-          <div className="animate-pulse">
-            <div className="h-4 bg-gray-200 rounded w-32 mx-auto mb-4"></div>
-            <div className="h-10 bg-gray-200 rounded w-64 mx-auto"></div>
+      <section className="py-16 bg-white overflow-hidden">
+        <div className="container mx-auto px-4">
+          <div className="flex gap-6">
+            {[1, 2, 3, 4].map((i) => (
+              <div key={i} className="flex-none w-80 h-96 bg-gray-100 rounded-2xl animate-pulse" />
+            ))}
           </div>
         </div>
       </section>
     );
   }
 
-  // Debug: Show error if fetch failed
-  if (error) {
-    console.error('[NEWS ERROR]', error);
-    return null; // Silently fail in production, but log the error
-  }
-
-  if (newsItems.length === 0) {
-    console.log('[NEWS] No items to display');
-    return null; // Don't show section if no news
-  }
+  if (error || newsItems.length === 0) return null;
 
   return (
-    <section
-      ref={ref}
-      className="relative pt-10 pb-20 bg-white overflow-hidden"
-    >
-      <div className="container mx-auto px-4">
-        {/* Section Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
-        >
-          <span className="text-[#A91D3A] font-semibold text-sm uppercase tracking-wider">
-            {t('badge', { defaultValue: 'News & Updates' })}
-          </span>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#2C3E50] mt-4">
-            {t('title', { defaultValue: 'Latest News' })}
-          </h2>
-        </motion.div>
+    <section className="py-20 bg-white overflow-hidden relative">
+      <div className="container mx-auto px-4 mb-10 text-center">
+        <div className="flex flex-col items-center justify-center gap-4">
+          <div className="w-full">
+            <span className="inline-block text-primary font-semibold text-sm tracking-wider mb-2">
+              {t('badge', { defaultValue: 'News & Updates' })}
+            </span>
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 leading-tight">
+              {t('title', { defaultValue: 'Latest News' })}
+            </h2>
+            <p className="text-gray-500 text-sm mt-3 max-w-2xl mx-auto">
+              {isRtl ? 'خبرها خودکار حرکت می‌کنند؛ با اسکرول ماوس یا کشیدن، کنترل دست شماست.' : 'News scrolls automatically; drag or scroll to control.'}
+            </p>
+          </div>
+        </div>
       </div>
 
-      {/* Infinite Scroll News Carousel */}
-      <div className="relative cursor-grab active:cursor-grabbing" ref={containerRef}>
-        <motion.div
-          className="flex gap-8 mb-12 pl-4"
-          style={{ x }}
-          drag="x"
-          dragElastic={0}
-          dragMomentum={false}
-          onDragStart={() => setIsDragging(true)}
-          onDragEnd={() => {
-            setIsDragging(false);
-
-            const isRtl = locale === 'fa';
-
-            // Update refs to continue from current position
-            baseTimeRef.current = performance.now();
-            baseXRef.current = x.get();
-
-            // Wrap around after manual drag based on direction
-            if (!isRtl) {
-              // LTR: Wrap using singleSetWidth
-              while (baseXRef.current <= -singleSetWidth) {
-                baseXRef.current += singleSetWidth;
-              }
-              while (baseXRef.current > 0) {
-                baseXRef.current -= singleSetWidth;
-              }
-            } else {
-              // RTL: Wrap using singleSetWidth
-              while (baseXRef.current >= singleSetWidth) {
-                baseXRef.current -= singleSetWidth;
-              }
-              while (baseXRef.current < 0) {
-                baseXRef.current += singleSetWidth;
-              }
-            }
-            x.set(baseXRef.current);
-          }}
-        >
-          {duplicatedItems.map((news: NewsItem, index: number) => (
+      <div className="embla relative" ref={emblaRef}>
+        <div className="embla__container flex touch-pan-y">
+          {newsItems.map((news) => (
             <div
-              key={`news-${index}`}
-              className="flex-shrink-0 w-[350px]"
+              key={news.id}
+              className="embla__slide flex-none w-[300px] sm:w-[350px] px-3"
+              style={{ minWidth: 0 }}
             >
-              <Link
-                href={`/${locale}/news/${news.id}`}
-                className={isDragging ? 'pointer-events-none' : ''}
-              >
-                <div className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 group cursor-pointer h-full flex flex-col">
-                  {/* Image */}
-                  <div className="relative h-56 overflow-hidden">
+              <Link href={`/${locale}/news/${news.id}`} className="block h-full group">
+                <article className="h-full bg-white border border-gray-100 rounded-3xl overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col hover:-translate-y-1">
+                  <div className="relative h-52 overflow-hidden bg-gray-100">
                     <Image
                       src={news.image}
-                      alt={news.title}
+                      alt={locale === 'fa' ? news.title : news.titleEn || news.title}
                       fill
-                      className="object-cover group-hover:scale-110 transition-transform duration-500"
+                      className="object-cover group-hover:scale-110 transition-transform duration-700"
                     />
+                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" />
+                    {news.category && (
+                      <span className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm text-gray-800 text-xs font-bold px-3 py-1 rounded-full shadow-sm">
+                        {locale === 'fa' ? news.category.nameFa : news.category.name}
+                      </span>
+                    )}
                   </div>
 
-                  {/* Content */}
-                  <div className="p-6 flex-1 flex flex-col">
-                    {/* Category & Meta */}
-                    <div className="flex items-center justify-between mb-4">
-                      <span className="bg-[#A91D3A]/10 text-[#A91D3A] text-xs font-bold px-3 py-1 rounded-full">
-                        {news.category ? (locale === 'fa' ? news.category.nameFa : news.category.name) : ''}
+                  <div className="p-6 flex flex-col flex-1">
+                    <div className="flex items-center gap-4 text-xs text-gray-400 mb-4 font-medium">
+                      <span className="flex items-center gap-1.5 bg-gray-50 px-2 py-1 rounded-md">
+                        <Calendar className="w-3.5 h-3.5" />
+                        {formatDate(news.date, news.dateFa)}
                       </span>
-                      <div className="flex items-center gap-4 text-xs text-gray-500">
-                        <div className="flex items-center gap-1">
-                          <Calendar className="w-3 h-3" />
-                          <span>{formatDate(news.date, news.dateFa)}</span>
-                        </div>
-                        <div className="flex items-center gap-1">
-                          <User className="w-3 h-3" />
-                          <span>{news.author}</span>
-                        </div>
-                      </div>
                     </div>
 
-                    {/* Title */}
-                    <h3 className="text-xl font-bold text-[#2C3E50] mb-3 group-hover:text-[#A91D3A] transition-colors line-clamp-2">
-                      {locale === 'fa' ? news.title : (news.titleEn || news.title)}
+                    <h3 className="font-bold text-gray-900 text-xl leading-snug mb-3 line-clamp-2 group-hover:text-primary transition-colors">
+                      {locale === 'fa' ? news.title : news.titleEn || news.title}
                     </h3>
 
-                    {/* Excerpt */}
-                    <p className="text-gray-600 text-sm leading-relaxed mb-4 flex-1 line-clamp-3">
-                      {locale === 'fa' ? news.excerpt : (news.excerptEn || news.excerpt)}
+                    <p className="text-gray-500 text-sm leading-relaxed line-clamp-2 mb-6 flex-1">
+                      {locale === 'fa' ? news.excerpt : news.excerptEn || news.excerpt}
                     </p>
 
-                    {/* Read More */}
-                    <div className="flex items-center gap-2 text-[#A91D3A] font-semibold text-sm group-hover:gap-4 transition-all">
-                      <span>{t('read_more', { defaultValue: 'Read More' })}</span>
-                      {locale === 'fa' ? <ArrowLeft className="w-4 h-4" /> : <ArrowRight className="w-4 h-4" />}
+                    <div className="flex items-center text-primary font-bold text-sm tracking-wide group/btn">
+                      {t('read_more', { defaultValue: 'Read More' })}
+                      <span className="mx-2 transform group-hover/btn:translate-x-1 rtl:group-hover/btn:-translate-x-1 transition-transform">
+                        {isRtl ? <ArrowLeft className="w-4 h-4" /> : <ArrowRight className="w-4 h-4" />}
+                      </span>
                     </div>
                   </div>
-                </div>
+                </article>
               </Link>
             </div>
           ))}
-        </motion.div>
+        </div>
       </div>
 
-      {/* View All Button */}
-      <div className="container mx-auto px-4">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-          className="text-center"
-        >
-          <Link href={`/${locale}/news`}>
-            <Button
-              size="lg"
-              className="bg-[#2C3E50] hover:bg-[#2C3E50]/90 text-white px-8 py-6 rounded-full font-semibold shadow-lg hover:shadow-xl transition-all"
-            >
-              {t('view_all', { defaultValue: 'View All News' })}
-            </Button>
-          </Link>
-        </motion.div>
+      <div className="text-center mt-12">
+        <Link href={`/${locale}/news`}>
+          <button className="bg-gray-900 hover:bg-gray-800 text-white px-8 py-3 rounded-full font-medium transition-colors shadow-lg hover:shadow-xl">
+            {t('view_all', { defaultValue: 'View All News' })}
+          </button>
+        </Link>
       </div>
     </section>
   );
