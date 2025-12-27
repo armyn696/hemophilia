@@ -1,7 +1,7 @@
 'use client';
 
 import { useTranslations, useLocale } from 'next-intl';
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Calendar, ArrowRight, ArrowLeft } from 'lucide-react';
@@ -38,41 +38,50 @@ export default function NewsPreviewSection() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Create AutoScroll plugin instance with useRef to prevent recreation
-  const autoScrollOptions = useRef(
-    AutoScroll({
-      playOnInit: true,
-      stopOnInteraction: false,
-      stopOnMouseEnter: true,
-      speed: 1,
-      direction: isRtl ? 'backward' : 'forward',
-    })
-  );
-
-  // Embla Carousel setup
+  // Embla Carousel setup with AutoScroll plugin
   const [emblaRef, emblaApi] = useEmblaCarousel(
     {
       loop: true,
       align: 'start',
       dragFree: true,
-      skipSnaps: true,
       direction: isRtl ? 'rtl' : 'ltr',
     },
-    [autoScrollOptions.current]
+    [
+      AutoScroll({
+        playOnInit: true,
+        stopOnInteraction: false,
+        stopOnMouseEnter: true,
+        stopOnFocusIn: false,
+        speed: 1,
+        direction: isRtl ? 'backward' : 'forward',
+      }),
+    ]
   );
 
-  // Reinitialize when locale changes
+  // Restart auto-scroll after user interaction ends
   useEffect(() => {
-    if (emblaApi) {
-      emblaApi.reInit({
-        loop: true,
-        align: 'start',
-        dragFree: true,
-        skipSnaps: true,
-        direction: isRtl ? 'rtl' : 'ltr',
-      });
-    }
-  }, [emblaApi, isRtl]);
+    if (!emblaApi) return;
+
+    const autoScrollPlugin = emblaApi.plugins()?.autoScroll;
+    if (!autoScrollPlugin) return;
+
+    const restartAutoScroll = () => {
+      // Small delay to ensure interaction is fully complete
+      setTimeout(() => {
+        if (autoScrollPlugin && !autoScrollPlugin.isPlaying()) {
+          autoScrollPlugin.play();
+        }
+      }, 1000);
+    };
+
+    emblaApi.on('pointerUp', restartAutoScroll);
+    emblaApi.on('settle', restartAutoScroll);
+
+    return () => {
+      emblaApi.off('pointerUp', restartAutoScroll);
+      emblaApi.off('settle', restartAutoScroll);
+    };
+  }, [emblaApi]);
 
   // Fetch news
   useEffect(() => {
@@ -98,11 +107,11 @@ export default function NewsPreviewSection() {
 
   if (loading) {
     return (
-      <section className="py-16 bg-white overflow-hidden">
+      <section className="py-12 md:py-16 bg-white overflow-hidden">
         <div className="container mx-auto px-4">
-          <div className="flex gap-6">
+          <div className="flex gap-4">
             {[1, 2, 3, 4].map((i) => (
-              <div key={i} className="flex-none w-80 h-96 bg-gray-100 rounded-2xl animate-pulse" />
+              <div key={i} className="flex-none w-40 md:w-80 h-64 md:h-96 bg-gray-100 rounded-2xl animate-pulse" />
             ))}
           </div>
         </div>
@@ -113,16 +122,16 @@ export default function NewsPreviewSection() {
   if (error || newsItems.length === 0) return null;
 
   return (
-    <section className="py-20 bg-white overflow-hidden relative">
+    <section className="py-12 md:py-20 bg-white overflow-hidden relative">
       {/* Header */}
-      <div className="container mx-auto px-4 mb-10 text-center">
-        <span className="inline-block text-primary font-semibold text-sm tracking-wider mb-2">
+      <div className="container mx-auto px-4 mb-6 md:mb-10 text-center">
+        <span className="inline-block text-primary font-semibold text-xs md:text-sm tracking-wider mb-2">
           {t('badge', { defaultValue: 'News & Updates' })}
         </span>
-        <h2 className="text-3xl md:text-4xl font-bold text-gray-900 leading-tight">
+        <h2 className="text-2xl md:text-4xl font-bold text-gray-900 leading-tight">
           {t('title', { defaultValue: 'Latest News' })}
         </h2>
-        <p className="text-gray-500 text-sm mt-3 max-w-2xl mx-auto">
+        <p className="text-gray-500 text-xs md:text-sm mt-2 md:mt-3 max-w-2xl mx-auto hidden md:block">
           {isRtl
             ? 'خبرها خودکار حرکت می‌کنند؛ با اسکرول ماوس یا کشیدن، کنترل دست شماست.'
             : 'News scrolls automatically; drag or scroll to control.'}
@@ -135,25 +144,16 @@ export default function NewsPreviewSection() {
         ref={emblaRef}
         dir={isRtl ? 'rtl' : 'ltr'}
       >
-        <div
-          className="flex"
-          style={{
-            touchAction: 'pan-y pinch-zoom',
-            marginLeft: 'calc(var(--slide-spacing) * -1)',
-          }}
-        >
+        <div className="flex touch-pan-y">
           {newsItems.map((news) => (
             <div
               key={news.id}
-              className="flex-shrink-0 flex-grow-0 pl-6"
-              style={{
-                flexBasis: 'min(100%, 350px)',
-                minWidth: 0,
-              }}
+              className="flex-none w-[160px] sm:w-[280px] md:w-[320px] lg:w-[350px] pl-3 md:pl-5"
             >
               <Link href={`/${locale}/news/${news.id}`} className="block h-full group">
-                <article className="h-full bg-white border border-gray-100 rounded-3xl overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col hover:-translate-y-1">
-                  <div className="relative h-52 overflow-hidden bg-gray-100">
+                <article className="h-full bg-white border border-gray-100 rounded-2xl md:rounded-3xl overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col hover:-translate-y-1">
+                  {/* Image */}
+                  <div className="relative h-28 sm:h-40 md:h-52 overflow-hidden bg-gray-100">
                     <Image
                       src={news.image}
                       alt={locale === 'fa' ? news.title : news.titleEn || news.title}
@@ -162,32 +162,37 @@ export default function NewsPreviewSection() {
                     />
                     <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" />
                     {news.category && (
-                      <span className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm text-gray-800 text-xs font-bold px-3 py-1 rounded-full shadow-sm">
+                      <span className="absolute top-2 right-2 md:top-4 md:right-4 bg-white/90 backdrop-blur-sm text-gray-800 text-[10px] md:text-xs font-bold px-2 md:px-3 py-0.5 md:py-1 rounded-full shadow-sm">
                         {locale === 'fa' ? news.category.nameFa : news.category.name}
                       </span>
                     )}
                   </div>
 
-                  <div className="p-6 flex flex-col flex-1">
-                    <div className="flex items-center gap-4 text-xs text-gray-400 mb-4 font-medium">
+                  {/* Content */}
+                  <div className="p-3 md:p-6 flex flex-col flex-1">
+                    {/* Date - hidden on small mobile */}
+                    <div className="hidden sm:flex items-center gap-4 text-xs text-gray-400 mb-2 md:mb-4 font-medium">
                       <span className="flex items-center gap-1.5 bg-gray-50 px-2 py-1 rounded-md">
-                        <Calendar className="w-3.5 h-3.5" />
+                        <Calendar className="w-3 h-3 md:w-3.5 md:h-3.5" />
                         {formatDate(news.date, news.dateFa)}
                       </span>
                     </div>
 
-                    <h3 className="font-bold text-gray-900 text-xl leading-snug mb-3 line-clamp-2 group-hover:text-primary transition-colors">
+                    {/* Title */}
+                    <h3 className="font-bold text-gray-900 text-sm sm:text-base md:text-xl leading-snug mb-1 md:mb-3 line-clamp-2 group-hover:text-primary transition-colors">
                       {locale === 'fa' ? news.title : news.titleEn || news.title}
                     </h3>
 
-                    <p className="text-gray-500 text-sm leading-relaxed line-clamp-2 mb-6 flex-1">
+                    {/* Excerpt - hidden on mobile */}
+                    <p className="hidden md:block text-gray-500 text-sm leading-relaxed line-clamp-2 mb-6 flex-1">
                       {locale === 'fa' ? news.excerpt : news.excerptEn || news.excerpt}
                     </p>
 
-                    <div className="flex items-center text-primary font-bold text-sm tracking-wide">
+                    {/* Read more */}
+                    <div className="flex items-center text-primary font-bold text-xs md:text-sm tracking-wide mt-auto">
                       {t('read_more', { defaultValue: 'Read More' })}
-                      <span className="mx-2">
-                        {isRtl ? <ArrowLeft className="w-4 h-4" /> : <ArrowRight className="w-4 h-4" />}
+                      <span className="mx-1 md:mx-2">
+                        {isRtl ? <ArrowLeft className="w-3 h-3 md:w-4 md:h-4" /> : <ArrowRight className="w-3 h-3 md:w-4 md:h-4" />}
                       </span>
                     </div>
                   </div>
@@ -199,9 +204,9 @@ export default function NewsPreviewSection() {
       </div>
 
       {/* View All Button */}
-      <div className="text-center mt-12">
+      <div className="text-center mt-8 md:mt-12">
         <Link href={`/${locale}/news`}>
-          <button className="bg-gray-900 hover:bg-gray-800 text-white px-8 py-3 rounded-full font-medium transition-colors shadow-lg hover:shadow-xl">
+          <button className="bg-gray-900 hover:bg-gray-800 text-white px-6 md:px-8 py-2.5 md:py-3 rounded-full text-sm md:text-base font-medium transition-colors shadow-lg hover:shadow-xl">
             {t('view_all', { defaultValue: 'View All News' })}
           </button>
         </Link>
