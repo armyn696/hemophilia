@@ -1,7 +1,7 @@
 'use client';
 
 import { useTranslations, useLocale } from 'next-intl';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Calendar, ArrowRight, ArrowLeft } from 'lucide-react';
@@ -38,25 +38,46 @@ export default function NewsPreviewSection() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Embla Carousel setup - simplified for stability
-  const [emblaRef] = useEmblaCarousel(
+  // Embla Carousel setup with AutoScroll
+  const [emblaRef, emblaApi] = useEmblaCarousel(
     {
       loop: true,
       align: 'start',
       dragFree: true,
       direction: isRtl ? 'rtl' : 'ltr',
-      watchDrag: true,
     },
     [
       AutoScroll({
         playOnInit: true,
-        stopOnInteraction: true, // Stop completely on interaction - simpler behavior
+        stopOnInteraction: true,
         stopOnMouseEnter: true,
         speed: 1,
         direction: isRtl ? 'backward' : 'forward',
       }),
     ]
   );
+
+  // Restart auto-scroll after it stops (from interaction)
+  const onAutoScrollStop = useCallback(() => {
+    if (!emblaApi) return;
+    const autoScroll = emblaApi.plugins()?.autoScroll;
+    if (!autoScroll) return;
+
+    // Wait 2 seconds then restart
+    window.setTimeout(() => {
+      autoScroll.play();
+    }, 2000);
+  }, [emblaApi]);
+
+  useEffect(() => {
+    if (!emblaApi) return;
+
+    emblaApi.on('autoScroll:stop', onAutoScrollStop);
+
+    return () => {
+      emblaApi.off('autoScroll:stop', onAutoScrollStop);
+    };
+  }, [emblaApi, onAutoScrollStop]);
 
   // Fetch news
   useEffect(() => {
@@ -127,7 +148,7 @@ export default function NewsPreviewSection() {
             >
               <Link href={`/${locale}/news/${news.id}`} className="block h-full group">
                 <article className="h-full bg-white border border-gray-100 rounded-2xl md:rounded-3xl overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col hover:-translate-y-1">
-                  {/* Image - larger on mobile */}
+                  {/* Image */}
                   <div className="relative h-36 sm:h-44 md:h-52 overflow-hidden bg-gray-100">
                     <Image
                       src={news.image}
