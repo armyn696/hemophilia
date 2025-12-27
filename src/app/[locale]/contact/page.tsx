@@ -155,7 +155,7 @@ export default function ContactPage() {
                       <Clock className="w-5 h-5" />
                     </div>
                     <span className="font-medium text-lg">
-                      {isRtl ? 'شنبه تا چهارشنبه، ۸ صبح تا ۴ عصر' : 'Saturday to Wednesday, 8 AM - 4 PM'}
+                      {isRtl ? 'شنبه تا پنج شنبه، ۸ صبح تا ۱۴' : 'Saturday to Thursday, 8 AM - 2 PM'}
                     </span>
                   </div>
                 </div>
