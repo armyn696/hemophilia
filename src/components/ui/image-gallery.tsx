@@ -147,10 +147,10 @@ export function ImageGallery() {
 								animate={{ opacity: 1, y: 0 }}
 								exit={{ opacity: 0, y: -20 }}
 								transition={{ duration: 0.4 }}
-								className="mx-auto grid w-full max-w-6xl gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
+								className="mx-auto grid w-full max-w-6xl gap-2 sm:gap-4 grid-cols-3"
 							>
 								{getColumns(galleryImages).map((columnImages, colIndex) => (
-									<div key={colIndex} className="grid gap-4 content-start">
+									<div key={colIndex} className="grid gap-2 sm:gap-4 content-start">
 										{columnImages.map((image, imgIndex) => {
 											const globalIndex = galleryImages.findIndex(img => img.src === image.src);
 											return (
