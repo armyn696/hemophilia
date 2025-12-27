@@ -1,7 +1,7 @@
 'use client';
 
 import { useTranslations, useLocale } from 'next-intl';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Calendar, ArrowRight, ArrowLeft } from 'lucide-react';
@@ -39,7 +39,8 @@ export default function NewsPreviewSection() {
   const [error, setError] = useState<string | null>(null);
 
   // Embla Carousel setup with AutoScroll
-  const [emblaRef, emblaApi] = useEmblaCarousel(
+  // stopOnInteraction: false allows dragging even when auto-scroll is active
+  const [emblaRef] = useEmblaCarousel(
     {
       loop: true,
       align: 'start',
@@ -49,35 +50,14 @@ export default function NewsPreviewSection() {
     [
       AutoScroll({
         playOnInit: true,
-        stopOnInteraction: true,
+        stopOnInteraction: false, // IMPORTANT: keeps auto-scroll running, allows drag anytime
         stopOnMouseEnter: true,
+        stopOnFocusIn: false,
         speed: 1,
         direction: isRtl ? 'backward' : 'forward',
       }),
     ]
   );
-
-  // Restart auto-scroll after it stops (from interaction)
-  const onAutoScrollStop = useCallback(() => {
-    if (!emblaApi) return;
-    const autoScroll = emblaApi.plugins()?.autoScroll;
-    if (!autoScroll) return;
-
-    // Wait 2 seconds then restart
-    window.setTimeout(() => {
-      autoScroll.play();
-    }, 2000);
-  }, [emblaApi]);
-
-  useEffect(() => {
-    if (!emblaApi) return;
-
-    emblaApi.on('autoScroll:stop', onAutoScrollStop);
-
-    return () => {
-      emblaApi.off('autoScroll:stop', onAutoScrollStop);
-    };
-  }, [emblaApi, onAutoScrollStop]);
 
   // Fetch news
   useEffect(() => {
