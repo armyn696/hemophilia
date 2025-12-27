@@ -1,7 +1,7 @@
 'use client';
 
 import { useTranslations, useLocale } from 'next-intl';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Calendar, ArrowRight, ArrowLeft } from 'lucide-react';
@@ -38,9 +38,11 @@ export default function NewsPreviewSection() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  // Timer ref to manage restart delay
+  const restartTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
   // Embla Carousel setup with AutoScroll
-  // stopOnInteraction: false allows dragging even when auto-scroll is active
-  const [emblaRef] = useEmblaCarousel(
+  const [emblaRef, emblaApi] = useEmblaCarousel(
     {
       loop: true,
       align: 'start',
@@ -50,7 +52,7 @@ export default function NewsPreviewSection() {
     [
       AutoScroll({
         playOnInit: true,
-        stopOnInteraction: false, // IMPORTANT: keeps auto-scroll running, allows drag anytime
+        stopOnInteraction: true, // Stop on interaction, we'll restart manually
         stopOnMouseEnter: true,
         stopOnFocusIn: false,
         speed: 1,
@@ -58,6 +60,39 @@ export default function NewsPreviewSection() {
       }),
     ]
   );
+
+  // Restart auto-scroll after pointer up (touch release)
+  const handlePointerUp = useCallback(() => {
+    if (!emblaApi) return;
+
+    // Clear any existing timer
+    if (restartTimerRef.current) {
+      clearTimeout(restartTimerRef.current);
+    }
+
+    // Restart auto-scroll after 2 seconds
+    restartTimerRef.current = setTimeout(() => {
+      const autoScroll = emblaApi.plugins()?.autoScroll;
+      if (autoScroll) {
+        autoScroll.play();
+      }
+    }, 2000);
+  }, [emblaApi]);
+
+  useEffect(() => {
+    if (!emblaApi) return;
+
+    // Listen for pointer up (touch release / mouse release)
+    emblaApi.on('pointerUp', handlePointerUp);
+
+    return () => {
+      emblaApi.off('pointerUp', handlePointerUp);
+      // Clear timer on cleanup
+      if (restartTimerRef.current) {
+        clearTimeout(restartTimerRef.current);
+      }
+    };
+  }, [emblaApi, handlePointerUp]);
 
   // Fetch news
   useEffect(() => {
