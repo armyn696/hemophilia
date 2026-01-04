@@ -87,37 +87,30 @@ export default function AdminGallery() {
 
         setUploading(true);
         const file = e.target.files[0];
-        const formData = new FormData();
-        formData.append('file', file);
 
         try {
-            // 1. Upload file
-            const uploadRes = await fetch('/api/upload', {
+            // Single request - upload file and save to DB together
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('alt', file.name);
+            if (uploadCategoryId !== 'none') {
+                formData.append('categoryId', uploadCategoryId);
+            }
+
+            const res = await fetch('/api/gallery', {
                 method: 'POST',
                 body: formData,
             });
 
-            if (!uploadRes.ok) throw new Error('Upload failed');
-
-            const { url } = await uploadRes.json();
-
-            // 2. Save to DB
-            const dbRes = await fetch('/api/gallery', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ 
-                    src: url, 
-                    alt: file.name,
-                    categoryId: uploadCategoryId === 'none' ? null : uploadCategoryId
-                }),
-            });
-
-            if (!dbRes.ok) throw new Error('Failed to save image');
+            if (!res.ok) {
+                const data = await res.json();
+                throw new Error(data.error || 'Upload failed');
+            }
 
             toast.success(isRTL ? 'تصویر با موفقیت آپلود شد' : 'Image uploaded successfully');
             fetchData();
-        } catch (error) {
-            toast.error(isRTL ? 'خطا در آپلود تصویر' : 'Failed to upload image');
+        } catch (error: any) {
+            toast.error(error.message || (isRTL ? 'خطا در آپلود تصویر' : 'Failed to upload image'));
         } finally {
             setUploading(false);
             e.target.value = '';
