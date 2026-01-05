@@ -110,7 +110,10 @@ function SortableEventItem({
                     variant="ghost"
                     size="icon"
                     className="h-8 w-8 text-red-500 hover:text-red-600 hover:bg-red-50"
-                    onClick={() => onDelete(event.id, periodId)}
+                    onPointerDown={(e) => {
+                        e.preventDefault();
+                        onDelete(event.id, periodId);
+                    }}
                 >
                     <Trash2 className="w-3 h-3" />
                 </Button>
@@ -209,7 +212,8 @@ function SortablePeriodCard({
                             variant="ghost"
                             size="icon"
                             className="text-red-500 hover:text-red-600 hover:bg-red-50"
-                            onClick={(e) => {
+                            onPointerDown={(e) => {
+                                e.preventDefault();
                                 e.stopPropagation();
                                 onDeletePeriod(period.id);
                             }}

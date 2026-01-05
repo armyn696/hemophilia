@@ -218,7 +218,14 @@ export default function AdminGallery() {
                                         {categories.map(cat => (
                                             <div key={cat.id} className="flex justify-between items-center bg-gray-50 p-2 rounded">
                                                 <span>{isRTL ? cat.nameFa || cat.name : cat.name}</span>
-                                                <Button size="icon" variant="ghost" onClick={() => handleDeleteCategory(cat.id)}>
+                                                <Button
+                                                    size="icon"
+                                                    variant="ghost"
+                                                    onPointerDown={(e) => {
+                                                        e.preventDefault();
+                                                        handleDeleteCategory(cat.id);
+                                                    }}
+                                                >
                                                     <Trash2 className="w-4 h-4 text-red-500" />
                                                 </Button>
                                             </div>
@@ -314,7 +321,10 @@ export default function AdminGallery() {
                                     <Button
                                         variant="destructive"
                                         size="icon"
-                                        onClick={() => handleDelete(image.id)}
+                                        onPointerDown={(e) => {
+                                            e.preventDefault();
+                                            handleDelete(image.id);
+                                        }}
                                     >
                                         <Trash2 className="w-4 h-4" />
                                     </Button>
