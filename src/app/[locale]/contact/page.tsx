@@ -144,11 +144,11 @@ export default function ContactPage() {
                     </div>
                     <span className="font-medium text-lg" dir="ltr">056-32212999</span>
                   </a>
-                  <a href="mailto:center.hemophilia@gmail.com" className="flex items-center gap-4 text-neutral-600 dark:text-neutral-300 hover:text-[#A91D3A] transition-colors group">
+                  <a href="mailto:hemophiliaskh@gmail.com" className="flex items-center gap-4 text-neutral-600 dark:text-neutral-300 hover:text-[#A91D3A] transition-colors group">
                     <div className="w-10 h-10 rounded-full bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center text-[#A91D3A] group-hover:scale-110 transition-transform">
                       <Mail className="w-5 h-5" />
                     </div>
-                    <span className="font-medium text-lg">center.hemophilia@gmail.com</span>
+                    <span className="font-medium text-lg">hemophiliaskh@gmail.com</span>
                   </a>
                   <div className="flex items-center gap-4 text-neutral-600 dark:text-neutral-300">
                     <div className="w-10 h-10 rounded-full bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center text-[#A91D3A]">
