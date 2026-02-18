@@ -184,6 +184,13 @@ export default function NewsForm({ initialData }: NewsFormProps) {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+
+        // Validate that image is uploaded
+        if (!formData.image) {
+            toast.error(isRTL ? 'لطفاً ابتدا تصویر کاور را آپلود کنید' : 'Please upload a cover image first');
+            return;
+        }
+
         setLoading(true);
 
         try {
@@ -196,7 +203,10 @@ export default function NewsForm({ initialData }: NewsFormProps) {
                 body: JSON.stringify(formData),
             });
 
-            if (!res.ok) throw new Error('Failed to save');
+            if (!res.ok) {
+                const errorData = await res.json().catch(() => ({}));
+                throw new Error(errorData.error || 'Failed to save');
+            }
 
             toast.success(initialData?.id
                 ? (isRTL ? 'خبر ویرایش شد' : 'News updated')
@@ -205,7 +215,11 @@ export default function NewsForm({ initialData }: NewsFormProps) {
             router.push('/admin/news');
             router.refresh();
         } catch (error) {
-            toast.error(isRTL ? 'خطا در ذخیره' : 'Something went wrong');
+            const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+            toast.error(isRTL
+                ? `خطا در ذخیره: ${errorMessage}`
+                : `Error saving: ${errorMessage}`
+            );
         } finally {
             setLoading(false);
         }
@@ -252,7 +266,7 @@ export default function NewsForm({ initialData }: NewsFormProps) {
                     </div>
 
                     <div className="space-y-2">
-                        <Label>{isRTL ? 'تصویر کاور' : 'Cover Image'}</Label>
+                        <Label>{isRTL ? 'تصویر کاور *' : 'Cover Image *'}</Label>
                         <div className={`flex items-center gap-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
                             {formData.image && (
                                 <div className="relative w-32 h-24 rounded-lg overflow-hidden border">
