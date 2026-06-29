@@ -84,10 +84,10 @@ export function Navigation() {
               />
             </div>
             <span className={cn(
-              "font-semibold text-xl hidden sm:inline-block transition-colors",
+              "font-semibold text-base md:text-lg xl:text-xl hidden sm:inline-block transition-colors whitespace-nowrap",
               showSolidNav ? "text-foreground" : "text-white"
             )}>
-              {locale === 'fa' ? 'کانون هموفیلی' : 'Hemophilia Society'}
+              {locale === 'fa' ? 'کانون هموفیلی خراسان جنوبی' : 'South Khorasan Hemophilia Society'}
             </span>
           </Link>
 
@@ -198,7 +198,7 @@ export function Navigation() {
                       />
                     </div>
                     <span className="font-bold text-lg text-foreground">
-                      {locale === 'fa' ? 'کانون هموفیلی' : 'Hemophilia Society'}
+                      {locale === 'fa' ? 'کانون هموفیلی خراسان جنوبی' : 'South Khorasan Hemophilia Society'}
                     </span>
                   </SheetTitle>
                 </SheetHeader>

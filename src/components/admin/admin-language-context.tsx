@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { createContext, useContext, useState, ReactNode } from 'react';
 
 type Language = 'fa' | 'en';
 
@@ -15,6 +15,7 @@ const translations: Record<Language, Record<string, string>> = {
     fa: {
         adminPanel: 'پنل مدیریت',
         dashboard: 'داشبورد',
+        services: 'خدمات',
         news: 'اخبار',
         gallery: 'گالری',
         viewSite: 'مشاهده سایت',
@@ -70,6 +71,7 @@ const translations: Record<Language, Record<string, string>> = {
     en: {
         adminPanel: 'Admin Panel',
         dashboard: 'Dashboard',
+        services: 'Services',
         news: 'News',
         gallery: 'Gallery',
         viewSite: 'View Site',
@@ -127,14 +129,14 @@ const translations: Record<Language, Record<string, string>> = {
 const AdminLanguageContext = createContext<AdminLanguageContextType | undefined>(undefined);
 
 export function AdminLanguageProvider({ children }: { children: ReactNode }) {
-    const [language, setLanguageState] = useState<Language>('fa');
-
-    useEffect(() => {
+    const [language, setLanguageState] = useState<Language>(() => {
+        if (typeof window === 'undefined') return 'fa';
         const saved = localStorage.getItem('admin-language') as Language;
         if (saved && (saved === 'fa' || saved === 'en')) {
-            setLanguageState(saved);
+            return saved;
         }
-    }, []);
+        return 'fa';
+    });
 
     const setLanguage = (lang: Language) => {
         setLanguageState(lang);

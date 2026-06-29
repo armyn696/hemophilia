@@ -82,3 +82,17 @@ model TimelineEvent {
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
 }
+
+model ServiceSection {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  title     String
+  titleEn   String?
+  summary   String
+  summaryEn String?
+  content   String
+  contentEn String?
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
