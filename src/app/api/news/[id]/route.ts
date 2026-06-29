@@ -11,14 +11,36 @@ export async function GET(
 
     const news = await prisma.news.findUnique({
         where: { id },
-        include: { category: true },
+        select: {
+            id: true,
+            title: true,
+            titleEn: true,
+            excerpt: true,
+            excerptEn: true,
+            content: true,
+            contentEn: true,
+            date: true,
+            dateFa: true,
+            categoryId: true,
+            category: true,
+            author: true,
+            createdAt: true,
+            updatedAt: true,
+        },
     });
 
     if (!news) {
         return NextResponse.json({ error: 'News not found' }, { status: 404 });
     }
 
-    return NextResponse.json(news);
+    return NextResponse.json({
+        ...news,
+        image: `/api/news/${news.id}/image`,
+    }, {
+        headers: {
+            'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=3600',
+        },
+    });
 }
 
 export async function PUT(

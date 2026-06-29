@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
+import { fileToImageUrl } from '@/lib/upload-image';
 
 export async function POST(request: Request) {
     try {
@@ -24,15 +25,10 @@ export async function POST(request: Request) {
             }, { status: 400 });
         }
 
-        // Convert to base64 data URL
-        const bytes = await file.arrayBuffer();
-        const buffer = Buffer.from(bytes);
-        const base64 = buffer.toString('base64');
-        const mimeType = file.type || 'image/jpeg';
-        const dataUrl = `data:${mimeType};base64,${base64}`;
+        const url = await fileToImageUrl(file);
 
-        return NextResponse.json({ url: dataUrl });
-    } catch (error: any) {
+        return NextResponse.json({ url });
+    } catch {
         return NextResponse.json({ error: 'Upload failed' }, { status: 500 });
     }
 }

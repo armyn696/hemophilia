@@ -219,7 +219,7 @@ className="inline-flex items-center gap-2 text-sm text-gray-400 hover:text-gray-
         {/* Right Side - Image */}
         <div className="hidden lg:block w-1/2 relative">
         <Image
-          src="/images/donate-hero.png"
+          src="/images/donate-hero.webp"
           alt="Donation"
           fill
           className="object-cover"

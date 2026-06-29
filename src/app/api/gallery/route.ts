@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
+import { fileToImageUrl } from '@/lib/upload-image';
 
 export async function GET(request: Request) {
     try {
@@ -15,9 +16,14 @@ export async function GET(request: Request) {
             orderBy: { createdAt: 'desc' },
             include: { category: true }
         });
-        return NextResponse.json(images);
-    } catch (error: any) {
-        return NextResponse.json({ error: error.message }, { status: 500 });
+        return NextResponse.json(images, {
+            headers: {
+                'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=3600',
+            },
+        });
+    } catch (error: unknown) {
+        const message = error instanceof Error ? error.message : 'Failed to load gallery';
+        return NextResponse.json({ error: message }, { status: 500 });
     }
 }
 
@@ -49,17 +55,12 @@ export async function POST(request: Request) {
                 }, { status: 400 });
             }
 
-            // Convert to base64
-            const bytes = await file.arrayBuffer();
-            const buffer = Buffer.from(bytes);
-            const base64 = buffer.toString('base64');
-            const mimeType = file.type || 'image/jpeg';
-            const dataUrl = `data:${mimeType};base64,${base64}`;
+            const imageUrl = await fileToImageUrl(file);
 
             // Save to database
             const image = await prisma.galleryImage.create({
                 data: {
-                    src: dataUrl,
+                    src: imageUrl,
                     alt: alt || file.name,
                     categoryId: categoryId && categoryId !== 'none' ? categoryId : null
                 },
@@ -83,8 +84,9 @@ export async function POST(request: Request) {
         });
 
         return NextResponse.json(image);
-    } catch (error: any) {
-        return NextResponse.json({ error: error.message }, { status: 500 });
+    } catch (error: unknown) {
+        const message = error instanceof Error ? error.message : 'Failed to save gallery image';
+        return NextResponse.json({ error: message }, { status: 500 });
     }
 }
 

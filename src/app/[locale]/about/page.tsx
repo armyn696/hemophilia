@@ -60,7 +60,7 @@ export default function AboutPage() {
                     <div className="absolute inset-0 z-0">
                         <div className="absolute inset-0 bg-black/40 z-10" />
                         <Image
-                            src="/images/hero-bg.jpg"
+                            src="/images/hero-bg.webp"
                             alt="About Us Hero"
                             fill
                             className="object-cover"

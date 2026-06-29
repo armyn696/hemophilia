@@ -12,7 +12,11 @@ export async function GET() {
         },
         orderBy: { order: 'asc' }
     });
-    return NextResponse.json(periods);
+    return NextResponse.json(periods, {
+        headers: {
+            'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=3600',
+        },
+    });
 }
 
 export async function POST(request: Request) {

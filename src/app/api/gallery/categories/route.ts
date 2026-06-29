@@ -13,10 +13,15 @@ export async function GET() {
                 }
             }
         });
-        return NextResponse.json(categories);
-    } catch (error: any) {
+        return NextResponse.json(categories, {
+            headers: {
+                'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=3600',
+            },
+        });
+    } catch (error: unknown) {
         console.error('Error fetching categories:', error);
-        return NextResponse.json({ error: error.message }, { status: 500 });
+        const message = error instanceof Error ? error.message : 'Failed to fetch categories';
+        return NextResponse.json({ error: message }, { status: 500 });
     }
 }
 
@@ -41,9 +46,10 @@ export async function POST(request: Request) {
         });
 
         return NextResponse.json(category);
-    } catch (error: any) {
+    } catch (error: unknown) {
         console.error('Error creating category:', error);
-        return NextResponse.json({ error: error.message }, { status: 500 });
+        const message = error instanceof Error ? error.message : 'Failed to create category';
+        return NextResponse.json({ error: message }, { status: 500 });
     }
 }
 

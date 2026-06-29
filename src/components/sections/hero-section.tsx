@@ -9,7 +9,7 @@ import { ImagesSlider } from '@/components/ui/images-slider';
 
 const heroImages = [
   '/images/hero-slide-1.jpg',
-  '/images/hero-slide-2.png',
+  '/images/hero-slide-2.webp',
 ];
 
 export default function HeroSection() {

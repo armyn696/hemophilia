@@ -6,9 +6,34 @@ import { authOptions } from '@/lib/auth';
 export async function GET() {
     const news = await prisma.news.findMany({
         orderBy: { date: 'desc' },
-        include: { category: true },
+        select: {
+            id: true,
+            title: true,
+            titleEn: true,
+            excerpt: true,
+            excerptEn: true,
+            content: true,
+            contentEn: true,
+            date: true,
+            dateFa: true,
+            categoryId: true,
+            category: true,
+            author: true,
+            createdAt: true,
+            updatedAt: true,
+        },
     });
-    return NextResponse.json(news);
+
+    const payload = news.map((item) => ({
+        ...item,
+        image: `/api/news/${item.id}/image`,
+    }));
+
+    return NextResponse.json(payload, {
+        headers: {
+            'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=3600',
+        },
+    });
 }
 
 export async function POST(request: Request) {
