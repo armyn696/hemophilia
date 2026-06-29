@@ -1,7 +1,7 @@
 'use client';
 
 import { useTranslations, useLocale } from 'next-intl';
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Calendar, ArrowRight, ArrowLeft } from 'lucide-react';
@@ -42,76 +42,30 @@ export default function NewsPreviewSection() {
   // Global data cache for persisting data across locale changes
   const dataCache = useDataCache();
 
-  // Timer ref to manage restart delay
-  const restartTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const autoScroll = useMemo(
+    () =>
+      AutoScroll({
+        playOnInit: true,
+        stopOnInteraction: false,
+        stopOnMouseEnter: true,
+        stopOnFocusIn: true,
+        startDelay: 0,
+        speed: 1,
+        direction: isRtl ? 'backward' : 'forward',
+      }),
+    [isRtl]
+  );
 
   // Embla Carousel setup with AutoScroll
-  const [emblaRef, emblaApi] = useEmblaCarousel(
+  const [emblaRef] = useEmblaCarousel(
     {
       loop: true,
       align: 'start',
       dragFree: true,
       direction: isRtl ? 'rtl' : 'ltr',
     },
-    [
-      AutoScroll({
-        playOnInit: true,
-        stopOnInteraction: true,
-        stopOnMouseEnter: true,
-        stopOnFocusIn: false,
-        speed: 1,
-        direction: isRtl ? 'backward' : 'forward',
-      }),
-    ]
+    [autoScroll]
   );
-
-  // Stop timer when user touches (prevents conflict if they touch during countdown)
-  const handlePointerDown = useCallback(() => {
-    if (restartTimerRef.current) {
-      clearTimeout(restartTimerRef.current);
-      restartTimerRef.current = null;
-    }
-    // Also explicitly stop if needed, though stopOnInteraction:true handles this mostly
-    const autoScroll = emblaApi?.plugins()?.autoScroll;
-    if (autoScroll && autoScroll.isPlaying()) {
-      autoScroll.stop();
-    }
-  }, [emblaApi]);
-
-  // Restart auto-scroll after pointer up
-  const handlePointerUp = useCallback(() => {
-    if (!emblaApi) return;
-
-    // Clear any existing timer just in case
-    if (restartTimerRef.current) {
-      clearTimeout(restartTimerRef.current);
-    }
-
-    // Restart auto-scroll after 2 seconds
-    restartTimerRef.current = setTimeout(() => {
-      const autoScroll = emblaApi.plugins()?.autoScroll;
-      if (autoScroll) {
-        autoScroll.play();
-      }
-    }, 2000);
-  }, [emblaApi]);
-
-  useEffect(() => {
-    if (!emblaApi) return;
-
-    emblaApi.on('pointerDown', handlePointerDown);
-    emblaApi.on('pointerUp', handlePointerUp);
-    // Also handle touch end specifically if pointer events get swallowed? 
-    // Usually embla normalizes this to pointerUp/Down.
-
-    return () => {
-      emblaApi.off('pointerDown', handlePointerDown);
-      emblaApi.off('pointerUp', handlePointerUp);
-      if (restartTimerRef.current) {
-        clearTimeout(restartTimerRef.current);
-      }
-    };
-  }, [emblaApi, handlePointerDown, handlePointerUp]);
 
   // Fetch news with caching
   useEffect(() => {
