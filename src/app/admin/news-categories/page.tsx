@@ -171,7 +171,10 @@ export default function AdminNewsCategories() {
                                         variant="ghost"
                                         size="icon"
                                         className="text-red-500 hover:text-red-600 hover:bg-red-50"
-                                        onClick={() => handleDelete(category.id)}
+                                        onPointerDown={(e) => {
+                                            e.preventDefault();
+                                            handleDelete(category.id);
+                                        }}
                                     >
                                         <Trash2 className="w-4 h-4" />
                                     </Button>
